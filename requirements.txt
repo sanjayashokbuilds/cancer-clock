@@ -1,0 +1,9 @@
+# Stage 0 only needs the test runner. Runtime code uses the standard library.
+pytest>=8.0,<9.0
+# Add and validate dependencies when their stage is implemented:
+# Stage 1: requests beautifulsoup4 pandas pyarrow openpyxl matplotlib python-dotenv
+# Stages 2-5: numpy scipy scikit-learn lightgbm
+# Stage 7: fastapi uvicorn pydantic
+# Stage 9: google-genai
+# Stage 10 (optional): psycopg[binary]
+# Frontend dependencies will live in web/package.json in Stage 8.

@@ -1,0 +1,25 @@
+# Private inputs and local environments (web uploads do NOT respect this file).
+data/raw/
+.venv/
+venv/
+node_modules/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.DS_Store
+Thumbs.db
+*.log
+*.pem
+*.key
+# Small processed parquet / output JSON files may be committed in later stages.
+# Never upload a file >= 25 MB through the GitHub web uploader.
