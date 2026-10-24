@@ -1,0 +1,6 @@
+org_code,postcode,site_name,source_url,lat,lon,location_kind,geocode_source_url,location_status,retrieved_on
+RRK,B15 2GW,Queen Elizabeth Hospital Birmingham,https://www.uhb.nhs.uk/get-in-touch/,52.451833,-1.942563,representative_main_hospital_postcode,https://api.postcodes.io/postcodes/B15%202GW,resolved,2026-10-24
+RVJ,BS10 5NB,Southmead Hospital,https://www.nbt.nhs.uk/our-hospitals/southmead-hospital-bristol,51.494806,-2.591016,representative_main_hospital_postcode,https://api.postcodes.io/postcodes/BS10%205NB,resolved,2026-10-24
+RWP,WR5 1DD,Worcestershire Royal Hospital,https://www.worcsacute.nhs.uk/~documents/route%3A/download/3401/,52.191205,-2.181154,representative_main_hospital_postcode,https://api.postcodes.io/postcodes/WR5%201DD,resolved,2026-10-24
+RAP,N18 1QX,North Middlesex University Hospital,https://www.royalfree.nhs.uk/our-locations/north-middlesex-university-hospital,51.613096,-0.073725,representative_main_hospital_postcode,https://api.postcodes.io/postcodes/N18%201QX,resolved,2026-10-24
+RY2,WA3 7PG,"Bridgewater trust address, 89 Dewhurst Road",https://www.nhs.uk/services/health-and-care-trust/bridgewater-community-healthcare-nhs-foundation-trust/RY2,53.414117,-2.527537,organisation_headquarters_postcode,https://api.postcodes.io/postcodes/WA3%207PG,resolved,2026-10-24

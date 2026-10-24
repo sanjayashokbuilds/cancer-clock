@@ -8,8 +8,8 @@ import re
 import numpy as np
 import pandas as pd
 
-from config import ROOT_DIR, START_PERIOD
-from pipeline.common import DataError, assert_unique, normal, numeric
+from config import ROOT_DIR, BACKLOG_START
+from pipeline.common import DataError, assert_unique, normal, numeric, first_release
 
 
 def week_date(value: object) -> pd.Timestamp | None:
@@ -28,16 +28,17 @@ def week_date(value: object) -> pd.Timestamp | None:
 
 def provenance(frame: pd.DataFrame, item: dict[str, str]) -> pd.DataFrame:
     """Approximate original weekly availability; retain latest source release separately."""
-    frame['published_on'] = frame.week_ending.dt.to_period('M').dt.to_timestamp() + pd.DateOffset(months=2, days=13)
+    frame['published_on'] = first_release(frame.week_ending)
     frame['publication_date_basis'] = 'assumed_observation_month_plus_2_day_14'
-    frame['source_published_on'] = pd.Timestamp(item['published_on'])
+    frame['source_published_on'] = pd.Timestamp(item.get('source_published_on', item['published_on']))
+    frame['availability_label'] = 'approximate: latest revised values'
     frame['source_url'] = item['url']
     frame['source_sha256'] = item['sha256']
     frame['historical_vintage_verified'] = False
     return frame
 
 
-def parse_workbook(path: Path, item: dict[str, str], start: str = str(START_PERIOD), end: str | None = None) -> dict[str, pd.DataFrame]:
+def parse_workbook(path: Path, item: dict[str, str], start: str = str(BACKLOG_START), end: str | None = None) -> dict[str, pd.DataFrame]:
     """Detect header positions in both official backlog sheets."""
     sheets = pd.read_excel(path, sheet_name=None, header=None, dtype=object)
     names = {name.strip().lower(): name for name in sheets}

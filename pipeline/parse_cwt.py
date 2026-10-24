@@ -21,7 +21,7 @@ BANDS = ['Within_14_days', 'In_15_to_28_days', 'In_29_to_42_days', 'In_43_to_62_
          'After_104_days', 'In_15_to_16_days', 'In_17_to_21_days', 'In_22_to_28_days', 'After_28_days']
 COUNTS = ['Total', 'Within', 'After'] + BANDS
 KEY = ['Org_Code', 'period', 'Standard_or_Item', 'Cancer_Type', 'Referral_Route_or_Stage', 'Treatment_Modality']
-PROVENANCE = ['published_on', 'publication_date_basis', 'source_url', 'source_sha256', 'source_version', 'historical_vintage_verified']
+PROVENANCE = ['source_published_on', 'availability_label', 'published_on', 'publication_date_basis', 'source_url', 'source_sha256', 'source_version', 'historical_vintage_verified']
 
 
 def legacy_header(values: list[object], standard: str) -> dict[int, str]:

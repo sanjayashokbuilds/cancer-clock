@@ -237,10 +237,10 @@
       }
     },
     "backlog_national": {
-      "rows": 153,
-      "first_period": "2023-10-01",
+      "rows": 178,
+      "first_period": "2023-04-09",
       "last_period": "2026-08-30",
-      "periods": 153,
+      "periods": 178,
       "missing_numeric_cells": {
         "total": 0,
         "no_dtt": 0,
@@ -248,15 +248,40 @@
       }
     },
     "backlog_trust": {
-      "rows": 20502,
-      "first_period": "2023-10-01",
+      "rows": 23852,
+      "first_period": "2023-04-09",
       "last_period": "2026-08-30",
-      "periods": 153,
+      "periods": 178,
       "missing_numeric_cells": {
-        "backlog": 282
+        "backlog": 298
       },
       "providers": 134,
       "providers_by_period": {
+        "2023-04-09": 134,
+        "2023-04-16": 134,
+        "2023-04-23": 134,
+        "2023-04-30": 134,
+        "2023-05-07": 134,
+        "2023-05-14": 134,
+        "2023-05-21": 134,
+        "2023-05-28": 134,
+        "2023-06-04": 134,
+        "2023-06-11": 134,
+        "2023-06-18": 134,
+        "2023-06-25": 134,
+        "2023-07-02": 134,
+        "2023-07-09": 134,
+        "2023-07-16": 134,
+        "2023-07-23": 134,
+        "2023-07-30": 134,
+        "2023-08-06": 134,
+        "2023-08-13": 134,
+        "2023-08-20": 134,
+        "2023-08-27": 134,
+        "2023-09-03": 134,
+        "2023-09-10": 134,
+        "2023-09-17": 134,
+        "2023-09-24": 134,
         "2023-10-01": 134,
         "2023-10-08": 134,
         "2023-10-15": 134,
@@ -493,6 +518,7 @@
     {
       "org_code": "RAP",
       "missing_weeks": [
+        "2023-06-25",
         "2025-01-05",
         "2025-01-12",
         "2025-01-19",
@@ -591,9 +617,16 @@
     {
       "org_code": "RBL",
       "missing_weeks": [
+        "2023-04-16",
         "2024-11-24",
         "2024-12-01",
         "2025-08-03"
+      ]
+    },
+    {
+      "org_code": "REN",
+      "missing_weeks": [
+        "2023-05-28"
       ]
     },
     {
@@ -619,6 +652,12 @@
       "missing_weeks": [
         "2024-05-19",
         "2025-06-22"
+      ]
+    },
+    {
+      "org_code": "RTH",
+      "missing_weeks": [
+        "2023-07-30"
       ]
     },
     {
@@ -651,6 +690,18 @@
     {
       "org_code": "RVY",
       "missing_weeks": [
+        "2023-07-09",
+        "2023-07-16",
+        "2023-07-23",
+        "2023-07-30",
+        "2023-08-06",
+        "2023-08-13",
+        "2023-08-20",
+        "2023-08-27",
+        "2023-09-03",
+        "2023-09-10",
+        "2023-09-17",
+        "2023-09-24",
         "2023-10-01",
         "2023-10-08",
         "2023-10-15",
@@ -1576,21 +1627,23 @@
     "DM01 includes non-cancer diagnostic demand.",
     "Source cancer labels differ between suspected and confirmed cancers; no invented mapping.",
     "CWT provider lists include independent providers; NHS trusts are not identified solely by code length.",
-    "Locations use organisation headquarters postcodes where resolved; missing coordinates remain blank.",
+    "Locations use headquarters or representative hospital postcodes; use core_trusts.csv for maps and modelling.",
     "Appearing/disappearing codes are not automatically treated as mergers."
   ],
-  "processed_file_bytes": {
-    "cwt_national.parquet": 322398,
-    "backlog_national.parquet": 14208,
-    "cwt.parquet": 9142332,
-    "dm01.parquet": 682961,
-    "cwt_first_seen.parquet": 36839,
-    "cwt_trust_month.parquet": 2468913,
-    "backlog_trust.parquet": 45742
-  },
   "locations": {
     "providers": 195,
-    "resolved": 145,
-    "note": "Organisation headquarters postcode coordinates, not all hospital sites."
+    "resolved": 150,
+    "note": "Headquarters or verified representative hospital postcode; location_kind identifies each."
+  },
+  "core_trusts": 133,
+  "core_locations_resolved": 133,
+  "processed_file_bytes": {
+    "cwt_national.parquet": 324239,
+    "backlog_national.parquet": 15872,
+    "cwt.parquet": 9150448,
+    "dm01.parquet": 685013,
+    "cwt_first_seen.parquet": 39029,
+    "cwt_trust_month.parquet": 2472168,
+    "backlog_trust.parquet": 51495
   }
 }

@@ -1,4 +1,4 @@
-# Stage 1 data dictionary
+# Data dictionary
 
 All observation dates use midnight-naive timestamps. Performance columns in CWT
 are proportions from 0 to 1. `pct_waiting_6plus` in DM01 is a percentage from 0 to
@@ -54,12 +54,10 @@ All outputs carry `source_url`, `source_sha256`, `published_on`,
 also carry their selected release status. `docs/source_manifest.csv` records
 public source links and file hashes; the raw manifest adds local cache paths.
 
-For monthly data, `published_on` is day 14 of the selected file's URL upload
-month. This can be much later than the first release of the observation because
-Final data are revisions. It is not an exact release date and may not be
-conservative within that month. For backlog weeks, the assumed date is day 14
-of observation month + 2; `source_published_on` separately records the latest
-workbook's assumed upload date.
+For **every dataset**, `published_on` is the 14th of observation month + 2.
+`source_published_on` preserves the selected file's assumed URL upload date
+separately. Neither date reconstructs original published values. The label is
+`approximate: latest revised values` and verification remains false.
 
 `available_at(dataset, as_of_date)` rejects unverified vintages by default. An
 explicit `allow_approximate=True` opts into a labelled filter using these
@@ -67,9 +65,14 @@ assumptions. It does not prove what values were known at a historical date.
 
 ## Geography and scope
 
-`trust_locations.csv` uses ODS organisation headquarters postcodes and
-postcodes.io coordinates where resolved. These are not all individual hospital
-sites, and several providers can share a postcode. Failed or retired postcodes
-remain blank. The file preserves source URLs and lookup status. CWT's Provider
-basis includes independent-sector providers; do not call every entry an NHS
-trust. No code crosswalk or merger adjustment is inferred from disappearing codes.
+`core_trusts.csv` is the shared modelling/simulation/UI universe: 133 NHS trusts
+with observed backlog from October 2023 onwards. CWT's broader provider tables
+remain available for source audit, including independent providers.
+Use `pipeline.universe.load_core_trusts()` and `core_locations()` downstream.
+
+Locations are postcode centroids: ODS headquarters or verified representative
+hospital sites (`location_kind`). Five explicit overrides retain address and
+geocoding URLs in `location_overrides.csv`. Bridgewater uses its listed trust
+address, not a supposed main hospital. All 133 core trusts have coordinates.
+RVY has 13 April–July 2023 values but none in the evaluation era: it remains in
+source data and is excluded from core/map. No code-merger crosswalk is inferred.

@@ -1,4 +1,7 @@
-# Stage 1 handoff
+# Stage 1 handoff (historical)
+
+Snapshot below describes the original Stage 1. Stage 2 corrects release timing,
+extends backlog history and supplies the core universe; see stage_2.md.
 
 The real-data pipeline is built and tested. No forecasting, simulator or web app
 has been added. Stage 0 configuration and its smoke test still run.

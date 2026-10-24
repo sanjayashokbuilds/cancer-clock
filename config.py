@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 PROJECT_NAME: str = "Cancer Clock"
-STAGE: int = 1
+STAGE: int = 2
 MIN_PYTHON: tuple[int, int] = (3, 11)
 ROOT_DIR: Path = Path(__file__).resolve().parent
 DATA_DIR: Path = ROOT_DIR / "data"
@@ -18,6 +18,8 @@ STATIC_DIR: Path = DATA_DIR / "static"
 OUTPUTS_DIR: Path = ROOT_DIR / "outputs"
 DOCS_DIR: Path = ROOT_DIR / "docs"
 START_PERIOD: date = date(2023, 10, 1)
+BACKLOG_START: date = date(2023, 4, 9)
+EVALUATION_START: date = date(2023, 10, 1)
 FORECAST_HORIZONS_WEEKS: tuple[int, ...] = (4, 8, 12)
 FORECAST_QUANTILES: tuple[float, ...] = (0.1, 0.5, 0.9)
 RANDOM_SEED: int = 42

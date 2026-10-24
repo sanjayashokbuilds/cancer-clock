@@ -69,7 +69,7 @@ def build_report(data: dict[str, pd.DataFrame], manifest: pd.DataFrame) -> dict:
         'DM01 includes non-cancer diagnostic demand.',
         'Source cancer labels differ between suspected and confirmed cancers; no invented mapping.',
         'CWT provider lists include independent providers; NHS trusts are not identified solely by code length.',
-        'Locations use organisation headquarters postcodes where resolved; missing coordinates remain blank.',
+        'Locations use headquarters or representative hospital postcodes; use core_trusts.csv for maps and modelling.',
         'Appearing/disappearing codes are not automatically treated as mergers.',
     ]
     return report

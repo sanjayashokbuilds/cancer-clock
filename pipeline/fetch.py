@@ -98,12 +98,14 @@ def candidate(dataset: str, title: str, url: str, source_page: str,
                 LOG.warning('Source page month disagrees with DM01 filename: %s. Using %s, checked against CSV Period during parsing.', title, period.date())
         else:
             period = period_from_text(title + ' ' + Path(urlparse(url).path).name)
-    published, basis = publication_date(url, period)
+    source_published, source_basis = publication_date(url, period)
+    published = (period + pd.DateOffset(months=2, days=13)).date().isoformat() if period is not None else source_published
+    basis = 'assumed_observation_month_plus_2_day_14' if period is not None else source_basis
     version = 'final' if re.search(r'\bfinal\b', title, re.I) else 'provisional' if 'provisional' in title.lower() else 'unspecified'
     return {'dataset': dataset, 'period': period.date().isoformat() if period is not None else '',
             'url': url, 'title': title, 'source_page': source_page, 'version': version,
             'format': Path(urlparse(url).path).suffix.lstrip('.'), 'published_on': published,
-            'publication_date_basis': basis, 'new_icb_structure': str('new icb structure' in title.lower()).lower()}
+            'source_published_on': source_published, 'publication_date_basis': basis, 'new_icb_structure': str('new icb structure' in title.lower()).lower()}
 
 
 def select_sources(items: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -115,7 +117,7 @@ def select_sources(items: list[dict[str, str]]) -> list[dict[str, str]]:
     for key, values in sorted(grouped.items()):
         original = [v for v in values if v['new_icb_structure'] == 'false']
         pool = original or values
-        chosen.append(max(pool, key=lambda v: (v['version'] == 'final', v['published_on'], v['url'])))
+        chosen.append(max(pool, key=lambda v: (v['version'] == 'final', v.get('source_published_on', v['published_on']), v['url'])))
     return chosen
 
 

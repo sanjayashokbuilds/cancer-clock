@@ -12,9 +12,10 @@ import tempfile
 
 import pandas as pd
 
-from config import DOCS_DIR, OUTPUTS_DIR, PROCESSED_DIR, RAW_DIR, ROOT_DIR, START_PERIOD, STATIC_DIR, check_python_version, ensure_directories
+from config import DOCS_DIR, OUTPUTS_DIR, PROCESSED_DIR, RAW_DIR, ROOT_DIR, START_PERIOD, BACKLOG_START, STATIC_DIR, check_python_version, ensure_directories
 from pipeline import parse_backlog, parse_cwt, parse_dm01
-from pipeline.common import DataError
+from pipeline.common import DataError, first_release
+from pipeline.universe import write_core_trusts
 from pipeline.fetch import fetch_all
 from pipeline.locations import resolve_locations
 from pipeline.plot import plot_oxford
@@ -64,8 +65,14 @@ def run(start: str, end: str | None, offline: bool, refresh: bool, skip_location
         manifest = manifest.loc[manifest.dataset.eq('backlog') | pd.to_datetime(manifest.period, errors='coerce').between(start_date, end_date)].copy()
         if not {'cwt', 'dm01', 'backlog'}.issubset(set(manifest.dataset)):
             raise DataError('Cached manifest does not cover all datasets for that date range')
+    # Upgrade old cached manifests without changing file bytes or checksums.
+    if 'source_published_on' not in manifest:
+        manifest['source_published_on'] = manifest['published_on']
+    monthly = manifest.dataset.ne('backlog')
+    manifest.loc[monthly, 'published_on'] = first_release(pd.to_datetime(manifest.loc[monthly, 'period'])).dt.strftime('%Y-%m-%d')
+    manifest.loc[monthly, 'publication_date_basis'] = 'assumed_observation_month_plus_2_day_14'
     data = parse_cwt.parse_all(manifest)
-    data.update(parse_backlog.parse_all(manifest, start, end))
+    data.update(parse_backlog.parse_all(manifest, str(BACKLOG_START), end))
     data.update(parse_dm01.parse_all(manifest, set(data['cwt'].Org_Code)))
     report = build_report(data, manifest)
     with tempfile.TemporaryDirectory(prefix='cancer-clock-build-') as staging:
@@ -86,6 +93,10 @@ def run(start: str, end: str | None, offline: bool, refresh: bool, skip_location
             'resolved': int(locations[['lat', 'lon']].notna().all(axis=1).sum()),
             'note': 'Organisation headquarters postcode coordinates, not all hospital sites.',
         }
+    core = write_core_trusts(data['backlog_trust'])
+    report['core_trusts'] = len(core)
+    report['locations']['note'] = 'Headquarters or verified representative hospital postcode; location_kind identifies each.'
+    report['core_locations_resolved'] = int(core.map_eligible.sum())
     report['processed_file_bytes'] = {p.name: p.stat().st_size for p in PROCESSED_DIR.glob('*.parquet')}
     (OUTPUTS_DIR / 'data_quality.json').write_text(json.dumps(report, indent=2, allow_nan=False) + '\n')
     # Public provenance may be committed; local download paths and timestamps are omitted.

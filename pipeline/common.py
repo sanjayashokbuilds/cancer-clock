@@ -79,10 +79,17 @@ def metadata(frame: pd.DataFrame, item: dict[str, str]) -> pd.DataFrame:
     """Attach source provenance and explicitly approximate availability."""
     result = frame.copy()
     result['period'] = pd.Timestamp(item['period'])
-    result['published_on'] = pd.Timestamp(item['published_on'])
-    result['publication_date_basis'] = item['publication_date_basis']
+    result['published_on'] = first_release(result['period'])
+    result['source_published_on'] = pd.Timestamp(item.get('source_published_on', item['published_on']))
+    result['publication_date_basis'] = 'assumed_observation_month_plus_2_day_14'
+    result['availability_label'] = 'approximate: latest revised values'
     result['source_url'] = item['url']
     result['source_sha256'] = item['sha256']
     result['source_version'] = item['version']
     result['historical_vintage_verified'] = False
     return result
+
+
+def first_release(observations: pd.Series) -> pd.Series:
+    """Assume first release on the 14th of M+2; do not infer original values."""
+    return pd.to_datetime(observations).dt.to_period('M').dt.to_timestamp() + pd.DateOffset(months=2, days=13)

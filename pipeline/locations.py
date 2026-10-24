@@ -67,6 +67,15 @@ def resolve_locations() -> dict:
     """Populate the named fallback file, leaving failures usable as explicit gaps."""
     path = STATIC_DIR / 'trust_locations.csv'
     frame = pd.read_csv(path, dtype={'org_code': str})
+    overrides_path = STATIC_DIR / 'location_overrides.csv'
+    if overrides_path.exists():
+        overrides = pd.read_csv(overrides_path).set_index('org_code')
+        frame = frame.set_index('org_code')
+        for code, row in overrides.iterrows():
+            if code in frame.index:
+                for key, value in row.items():
+                    frame.loc[code, key] = value
+        frame = frame.reset_index()
     with ThreadPoolExecutor(max_workers=2) as pool:
         result = pd.DataFrame(pool.map(locate, frame.to_dict('records')))
     result.to_csv(path, index=False)

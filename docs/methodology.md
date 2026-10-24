@@ -1,34 +1,37 @@
-# Methodology status
+# Stage 2 methodology
 
-Stage 1 imports and validates published observations. No forecasts, simulator results or model accuracy findings exist yet. See data_dictionary.md for the source definitions and outputs.
+Target: observed weekly count still waiting beyond 62 days, not total waiting
+list size. Fixed cohort: 133 NHS trusts with observations in the evaluation era.
+No merger stitching. Missing weeks remain missing; retired codes are not extrapolated.
 
-The planned outcome is the number of people still waiting beyond 62 days at
-trust level. Completed-pathway performance percentages are different measures.
-Do not label this overdue count as the entire waiting list.
+Origins: every 28 days from Sunday 7 January 2024 through available 2026 history.
+Training may use April–September 2023; scoring never uses pre-October outcomes.
+Each origin filters `published_on <= issue` before building features, scales or
+calibration errors. All releases use M+2/day14. **Approximate: latest revised
+values**; this is not a reconstructed historical-vintage backtest.
 
-Before Stage 2, resolve the forecast time axis. If the latest observation is
-dated `t`, the forecast is issued on date `a`, and its horizon from observation
-is `h` weeks, the target is `t + h`, and its lead from issue is `(t + h) - a`.
-Publication lag therefore SHORTENS that lead. Illustration only: with a
-7-week lag, horizons of 4, 8 and 12 weeks from observation correspond to -3,
-1 and 5 weeks from issue. The negative lead is retrospective estimation of an
-unpublished outcome, not a future forecast. For an 8-week forecast from today,
-the model must reach 8 weeks plus the observation lag from its last observation.
-Report observation date, issue date, target date and both horizons explicitly.
+For last observation t and issue a: observation-anchored target = t+h and true
+lead = t+h-a. Issue-anchored target = a+h and extrapolation = a+h-t. Both are
+reported at 4/8/12 weeks. Future-only observation scores are separate from all
+scores; the latter can contain retrospective estimation of unpublished outcomes.
 
-Before calling an evaluation vintage-safe, retain the values actually released
-at each historical origin as well as their release dates. Latest revised files
-with estimated release dates support only an approximate availability-aware
-evaluation. Choosing Final over Provisional for current analysis does not make
-Final values available to past forecast origins. Training labels must also have
-been published by the training cutoff.
+Persistence = last value. Drift = last + horizon × (last − value 8 weeks ago)/8,
+floored at zero. Both require 26 weeks of history and nine recent complete
+weekly values. Both use identical eligible cases. No seasonal tweak is justified yet.
 
-The proposed 10th, 50th and 90th quantiles alone do not uniquely determine a
-probability of growth. A later stage must define and validate a probability
-estimator or omit that probability. Handle zero backlogs before using log ratios;
-do not silently divide by zero or exclude zero-valued trusts.
+MAE is mean absolute patient-count error. MASE divides each error by the mean
+absolute adjacent-week change in its available training history, then averages.
+Zero scales are omitted from MASE only and counted. No epsilon substitutions.
+Direction compares shrink/unchanged/grow signs. Persistence predicts unchanged;
+its grow/shrink-only abstentions count as incorrect, reported separately.
 
-Per-trust total backlog cannot uniquely identify two stage-specific capacities
-or the hidden age distribution. A fitted scenario engine will need explicit
-assumptions and sensitivity analysis; a good historical fit does not validate
-causal recommendations or estimates of currently waiting patients over 104 days.
+Every scored prediction has an empirical 80% band: symmetric absolute residual
+quantile from at most 52 within-trust historical errors (minimum 8), with all
+calibration targets published by issue. History gaps are not bridged. Coverage
+and mean width are reported; serial dependence prevents a coverage guarantee.
+Metrics average paired forecast cases, not equally weighted trust-level means.
+The row-level parquet enables auditing; JSON includes skipped-case counts.
+
+Later: quantiles alone do not identify growth probability. Aggregate backlogs
+cannot identify diagnosis/treatment capacities or long-wait age profiles.
+Scenario calibration must not be presented as causal validation.
