@@ -720,5 +720,23 @@
       "beats_coin": false,
       "beats_historical_frequency": true
     }
+  },
+  "display_policy": {
+    "horizon_weeks": 4,
+    "labels": [
+      "likely up",
+      "likely down",
+      "unclear"
+    ],
+    "rule": "Raw classifier >=0.6 plus rising point forecast: up; <=0.4 plus falling point: down; else unclear.",
+    "probabilities_displayed": false,
+    "horizons_8_12_displayed": false,
+    "caveat": "Experimental categories, not validated probabilities; thresholds are assumptions.",
+    "retrospective_4w": {
+      "n": 4446,
+      "decisive_n": 3093,
+      "decisive_accuracy": 0.630779178790818,
+      "unclear_n": 1353
+    }
   }
 }

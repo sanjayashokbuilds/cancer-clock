@@ -146,6 +146,20 @@ def test_dm01_aggregation_and_suppression(tmp_path: Path, item: dict) -> None:
         parse_zip(path, item, {'RTH'})
 
 
+def test_dm01_stage4_excludes_nonc_without_changing_legacy_model_inputs(tmp_path: Path, item: dict) -> None:
+    """English reference removes NONC; Stage 3's original parser default is preserved."""
+    path=tmp_path/'dm.zip';make_dm_zip(path)
+    with ZipFile(path) as archive:
+        rows=pd.read_csv(BytesIO(archive.read('extract.csv')))
+    rows.loc[rows['Commissioner Org Code'].eq('B'),'Commissioner Org Code']='NONC'
+    with ZipFile(path,'w') as archive:
+        archive.writestr('extract.csv',rows.to_csv(index=False))
+    assert parse_zip(path,item,{'RTH'}).total_waiting_list.eq(28).all()
+    english=parse_zip(path,item,None,exclude_non_english=True)
+    assert english.total_waiting_list.eq(14).all()
+    assert english.waiting_6plus.eq(8).all()
+
+
 def test_backlog_missing_week_and_dtt_reconciliation(tmp_path: Path, item: dict) -> None:
     """Retain missing provider counts; validate the national diagnosis/treatment split."""
     workbook = Workbook(); national = workbook.active; national.title = '62 day PTL'

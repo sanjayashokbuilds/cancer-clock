@@ -18,8 +18,9 @@ TESTS = {'MRI': 'MRI', 'CT': 'CT', 'NON_OBSTETRIC_ULTRASOUND': 'Non-obstetric ul
          'GASTROSCOPY': 'Gastroscopy', 'CYSTOSCOPY': 'Cystoscopy'}
 
 
-def parse_zip(path: Path, item: dict[str, str], providers: set[str]) -> pd.DataFrame:
-    """Retain only CWT-listed providers and the seven specified tests."""
+def parse_zip(path: Path, item: dict[str, str], providers: set[str] | None,
+              *, exclude_non_english: bool = False) -> pd.DataFrame:
+    """Parse seven tests; optional full English scope supports Stage 4 references."""
     with ZipFile(path) as archive:
         names = [n for n in archive.namelist() if n.lower().endswith('.csv') and not n.startswith('__MACOSX/')]
         if len(names) != 1:
@@ -39,9 +40,16 @@ def parse_zip(path: Path, item: dict[str, str], providers: set[str]) -> pd.DataF
     if unknown:
         raise DataError(f'DM01 expected tests missing: {unknown}; found {sorted(set(canonical))}')
     frame['test'] = canonical.map(TESTS)
-    frame = frame.loc[frame['Provider Org Code'].isin(providers) & frame.test.notna()].copy()
+    keep = frame.test.notna()
+    if providers is not None:
+        keep &= frame['Provider Org Code'].isin(providers)
+    if exclude_non_english:
+        keep &= frame['Commissioner Org Code'].str.upper().ne('NONC')
+    frame = frame.loc[keep].copy()
     if frame.empty:
         raise DataError('No DM01 providers match CWT; check for a CDC-only extract or changed identifiers')
+    if frame['Provider Org Code'].str.upper().isin(['', 'TOTAL', 'ALL', 'ENGLAND']).any():
+        raise DataError('DM01 provider aggregate rows need explicit handling to avoid double counting')
     if frame['Commissioner Org Code'].str.upper().isin(['TOTAL', 'ALL', 'ENGLAND']).any():
         raise DataError('DM01 commissioner aggregate rows need explicit handling to avoid double counting')
     assert_unique(frame, ['Provider Org Code', 'Commissioner Org Code', 'test'], 'DM01 source')

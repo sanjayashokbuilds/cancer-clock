@@ -98,7 +98,7 @@
       "n": 4446,
       "trusts": 133,
       "origins": 34,
-      "mae": 28.080758920538326,
+      "mae": 28.080758920538322,
       "mase": 2.8045080203553274,
       "mase_n": 4409,
       "undefined_scale_n": 37,
@@ -139,7 +139,7 @@
       "trusts": 133,
       "origins": 34,
       "mae": 29.372957201612564,
-      "mase": 2.883271073962378,
+      "mase": 2.8832710739623786,
       "mase_n": 4409,
       "undefined_scale_n": 37,
       "direction_accuracy": 0.5802968960863698,
@@ -167,7 +167,7 @@
       "grow_shrink_n": 4262,
       "unchanged_actual_n": 184,
       "coverage_80": 0.7991452991452992,
-      "mean_interval_width": 101.04114540146658,
+      "mean_interval_width": 101.0411454014666,
       "issue_lead_weeks_min": 4.0,
       "issue_lead_weeks_max": 4.0,
       "retrospective_or_nowcast_n": 0
@@ -338,7 +338,7 @@
       "n": 3919,
       "trusts": 133,
       "origins": 30,
-      "mae": 33.184559912924996,
+      "mae": 33.184559912925,
       "mase": 3.157544716524684,
       "mase_n": 3886,
       "undefined_scale_n": 33,
@@ -367,7 +367,7 @@
       "grow_shrink_n": 3775,
       "unchanged_actual_n": 144,
       "coverage_80": 0.8093901505486093,
-      "mean_interval_width": 127.00716372480679,
+      "mean_interval_width": 127.0071637248068,
       "issue_lead_weeks_min": 12.0,
       "issue_lead_weeks_max": 12.0,
       "retrospective_or_nowcast_n": 0
@@ -401,19 +401,10 @@
   "protocol": "Fixed model settings. Weekly training snapshots; label release <= issue. Exact saved Stage 2 issue cases. No retuning on reported outcomes.",
   "limitations": [
     "Approximate first releases and latest revised values; not reconstructed historical vintages.",
-    "Overlapping targets/trust outcomes are dependent; no significance claim.",
     "Global reversion coefficients are predictive associations, not causal effects.",
-    "Model selection on this retrospective comparison needs independent future validation."
+    "Model selection on this retrospective comparison needs independent future validation.",
+    "Trust-cluster bootstrap preserves within-trust dependence but not common national shocks or retrospective selection uncertainty."
   ],
-  "input_sha256": {
-    "backlog_trust.parquet": "d294b3d42a96f295086f6165c86f79191bda5f7307061a56f2d7b810e75864c7",
-    "backlog_national.parquet": "45438269dc2f9c8a85b9e7721048db1bac36671b0d9cec21b429808b6eac4635",
-    "cwt_trust_month.parquet": "0d509f8bb50a015e07e030f17dad9487ac9d164ba720ad13c2e22b93d66ffcd5",
-    "cwt_first_seen.parquet": "1fb261d062759dde2634dae6bd224e816018f56ba4e6ba39b6042a98dd44c012",
-    "dm01.parquet": "9d04157484cd5c20a92e31e12b521814a8e7576d08297161567b121eeba61850",
-    "core_trusts.csv": "2c7c1d8d0026dde72d8aa227babc4ab7b5b84b423fd50f354dec9460580bd9bc",
-    "strike_dates.csv": "17dfe7976aa1fdeb92e8e7dd92567eb36dccb039101c3a30df76cf05be74daff"
-  },
   "baseline_sha256": "aee870add2296a9b9e2446cf164f3c5e16ae8028012609a16fc0672638cc093d",
   "versions": {
     "numpy": "2.3.5",
@@ -437,14 +428,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.4413718553237357
+          "reversion_weight": 0.4413718553237358
         },
         "reversion_context": {
-          "reversion_weight": 0.32737851859037137,
-          "season_sin": -0.0054166769823932115,
-          "season_cos": 0.0691549924965041,
+          "reversion_weight": 0.32737851859037115,
+          "season_sin": -0.005416676982393405,
+          "season_cos": 0.06915499249650403,
           "christmas": 0.0,
-          "national_trend": -0.01992459607457351
+          "national_trend": -0.01992459607457354
         }
       }
     },
@@ -466,11 +457,11 @@
           "reversion_weight": 0.3647535193679724
         },
         "reversion_context": {
-          "reversion_weight": 0.2907473009866434,
-          "season_sin": -0.04958070660887631,
-          "season_cos": 0.02050688223243196,
+          "reversion_weight": 0.2907473009866433,
+          "season_sin": -0.04958070660887639,
+          "season_cos": 0.02050688223243202,
           "christmas": 0.0,
-          "national_trend": -0.09813613321181999
+          "national_trend": -0.09813613321181992
         }
       }
     },
@@ -489,14 +480,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.4565452835303656
+          "reversion_weight": 0.4565452835303654
         },
         "reversion_context": {
-          "reversion_weight": 0.4132471338031074,
-          "season_sin": -0.04893783850982773,
-          "season_cos": -0.003670185103372384,
+          "reversion_weight": 0.41324713380310746,
+          "season_sin": -0.04893783850982786,
+          "season_cos": -0.0036701851033724255,
           "christmas": 0.0,
-          "national_trend": -0.0130304001059797
+          "national_trend": -0.013030400105979821
         }
       }
     },
@@ -518,11 +509,11 @@
           "reversion_weight": 0.386271985758752
         },
         "reversion_context": {
-          "reversion_weight": 0.2729658367753265,
-          "season_sin": -0.0731379729144446,
-          "season_cos": 0.002346859836955604,
-          "christmas": 0.009030303101316011,
-          "national_trend": -0.13118530049843113
+          "reversion_weight": 0.2729658367753266,
+          "season_sin": -0.07313797291444468,
+          "season_cos": 0.002346859836955571,
+          "christmas": 0.009030303101315917,
+          "national_trend": -0.13118530049843066
         }
       }
     },
@@ -541,14 +532,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.4182124545586653
+          "reversion_weight": 0.4182124545586651
         },
         "reversion_context": {
-          "reversion_weight": 0.363760757102554,
-          "season_sin": -0.06461454878780672,
+          "reversion_weight": 0.3637607571025535,
+          "season_sin": -0.06461454878780665,
           "season_cos": -0.014278460904390413,
-          "christmas": 0.04111983760159616,
-          "national_trend": -0.03465370895501151
+          "christmas": 0.041119837601596244,
+          "national_trend": -0.034653708955011506
         }
       }
     },
@@ -567,14 +558,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2621150003088314
+          "reversion_weight": 0.26211500030883156
         },
         "reversion_context": {
-          "reversion_weight": 0.299177935592649,
-          "season_sin": -0.004894552905323641,
-          "season_cos": -0.016518329054545297,
-          "christmas": 0.038765158076680135,
-          "national_trend": -0.017874859450032053
+          "reversion_weight": 0.29917793559264894,
+          "season_sin": -0.004894552905323613,
+          "season_cos": -0.016518329054545252,
+          "christmas": 0.03876515807668015,
+          "national_trend": -0.017874859450031963
         }
       }
     },
@@ -593,14 +584,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.34242265936775745
+          "reversion_weight": 0.3424226593677577
         },
         "reversion_context": {
-          "reversion_weight": 0.26398062640677666,
-          "season_sin": -0.04709406700413136,
-          "season_cos": 0.0080790244974433,
-          "christmas": 0.010964029840294145,
-          "national_trend": -0.15242769126787975
+          "reversion_weight": 0.26398062640677655,
+          "season_sin": -0.047094067004131435,
+          "season_cos": 0.008079024497443339,
+          "christmas": 0.010964029840294261,
+          "national_trend": -0.15242769126787972
         }
       }
     },
@@ -619,14 +610,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3699525721206864
+          "reversion_weight": 0.3699525721206861
         },
         "reversion_context": {
-          "reversion_weight": 0.3148955006391888,
-          "season_sin": -0.04911638897100301,
-          "season_cos": -0.005300299244028182,
-          "christmas": 0.027019357942799145,
-          "national_trend": 0.011261630218723818
+          "reversion_weight": 0.31489550063918853,
+          "season_sin": -0.04911638897100297,
+          "season_cos": -0.005300299244028186,
+          "christmas": 0.02701935794279914,
+          "national_trend": 0.011261630218723484
         }
       }
     },
@@ -645,14 +636,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.26295631755124593
+          "reversion_weight": 0.2629563175512459
         },
         "reversion_context": {
-          "reversion_weight": 0.2817533165299051,
-          "season_sin": 0.002294598028823015,
-          "season_cos": -0.011611304580902664,
-          "christmas": 0.03524802692874474,
-          "national_trend": 0.004530919952218797
+          "reversion_weight": 0.2817533165299049,
+          "season_sin": 0.002294598028823057,
+          "season_cos": -0.011611304580902673,
+          "christmas": 0.03524802692874466,
+          "national_trend": 0.004530919952218629
         }
       }
     },
@@ -671,14 +662,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3649302136744422
+          "reversion_weight": 0.36493021367444234
         },
         "reversion_context": {
-          "reversion_weight": 0.2944867672975438,
-          "season_sin": -0.06892273166473667,
-          "season_cos": 0.008095602463916494,
-          "christmas": 0.006970488476727662,
-          "national_trend": -0.06867456236020875
+          "reversion_weight": 0.2944867672975439,
+          "season_sin": -0.06892273166473671,
+          "season_cos": 0.008095602463916591,
+          "christmas": 0.006970488476727603,
+          "national_trend": -0.0686745623602088
         }
       }
     },
@@ -697,14 +688,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.43703359165773775
+          "reversion_weight": 0.4370335916577378
         },
         "reversion_context": {
-          "reversion_weight": 0.33468052730144005,
-          "season_sin": -0.07950119183732579,
-          "season_cos": -0.005583536261305991,
-          "christmas": 0.04459678535783889,
-          "national_trend": 0.06269600035821787
+          "reversion_weight": 0.33468052730144016,
+          "season_sin": -0.07950119183732576,
+          "season_cos": -0.0055835362613059925,
+          "christmas": 0.044596785357839036,
+          "national_trend": 0.062696000358218
         }
       }
     },
@@ -726,11 +717,11 @@
           "reversion_weight": 0.3710502569659614
         },
         "reversion_context": {
-          "reversion_weight": 0.31245797894715827,
-          "season_sin": -0.025705173728901128,
-          "season_cos": -0.02303757390073135,
-          "christmas": 0.049827906163062194,
-          "national_trend": -0.11824649747030617
+          "reversion_weight": 0.3124579789471581,
+          "season_sin": -0.025705173728901035,
+          "season_cos": -0.02303757390073141,
+          "christmas": 0.049827906163062125,
+          "national_trend": -0.11824649747030644
         }
       }
     },
@@ -749,14 +740,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3842513833505714
+          "reversion_weight": 0.384251383350572
         },
         "reversion_context": {
-          "reversion_weight": 0.3069363706033852,
-          "season_sin": -0.11833142514939808,
-          "season_cos": 0.012626052783925746,
+          "reversion_weight": 0.30693637060338513,
+          "season_sin": -0.1183314251493981,
+          "season_cos": 0.012626052783925826,
           "christmas": 0.15968435137132628,
-          "national_trend": -0.06061027973871721
+          "national_trend": -0.06061027973871707
         }
       }
     },
@@ -778,11 +769,11 @@
           "reversion_weight": 0.4354932434108167
         },
         "reversion_context": {
-          "reversion_weight": 0.35480890537240406,
+          "reversion_weight": 0.35480890537240395,
           "season_sin": -0.14032589170730697,
-          "season_cos": 0.009322289614016918,
-          "christmas": 0.04615930732006665,
-          "national_trend": 0.2517070769723041
+          "season_cos": 0.009322289614016977,
+          "christmas": 0.04615930732006664,
+          "national_trend": 0.2517070769723042
         }
       }
     },
@@ -801,14 +792,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.523917082029035
+          "reversion_weight": 0.5239170820290354
         },
         "reversion_context": {
           "reversion_weight": 0.39200370953635627,
-          "season_sin": -0.15402685645554737,
-          "season_cos": 0.016832519660290264,
-          "christmas": 0.09269439391074351,
-          "national_trend": 0.15459346080642586
+          "season_sin": -0.15402685645554742,
+          "season_cos": 0.016832519660290344,
+          "christmas": 0.09269439391074334,
+          "national_trend": 0.15459346080642597
         }
       }
     },
@@ -827,14 +818,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.35469207543467823
+          "reversion_weight": 0.35469207543467846
         },
         "reversion_context": {
-          "reversion_weight": 0.2837585482897191,
-          "season_sin": -0.1264116282512685,
-          "season_cos": 0.03948655604660484,
-          "christmas": 0.13952800496469758,
-          "national_trend": -0.08694311932152064
+          "reversion_weight": 0.28375854828971886,
+          "season_sin": -0.12641162825126873,
+          "season_cos": 0.0394865560466049,
+          "christmas": 0.13952800496469753,
+          "national_trend": -0.08694311932151978
         }
       }
     },
@@ -853,14 +844,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.44565451262095634
+          "reversion_weight": 0.4456545126209561
         },
         "reversion_context": {
-          "reversion_weight": 0.37213045931467664,
-          "season_sin": -0.14735656983120066,
-          "season_cos": 0.010614508221891805,
-          "christmas": 0.09708062821291855,
-          "national_trend": 0.2513020258304419
+          "reversion_weight": 0.3721304593146764,
+          "season_sin": -0.14735656983120082,
+          "season_cos": 0.010614508221891828,
+          "christmas": 0.0970806282129186,
+          "national_trend": 0.25130202583044187
         }
       }
     },
@@ -879,14 +870,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.5090281403522875
+          "reversion_weight": 0.5090281403522873
         },
         "reversion_context": {
-          "reversion_weight": 0.4220531255547044,
-          "season_sin": -0.15312773117602163,
-          "season_cos": 0.017331546498598745,
-          "christmas": 0.08887655380805344,
-          "national_trend": 0.15051418747345577
+          "reversion_weight": 0.42205312555470503,
+          "season_sin": -0.15312773117602146,
+          "season_cos": 0.017331546498598735,
+          "christmas": 0.08887655380805343,
+          "national_trend": 0.1505141874734554
         }
       }
     },
@@ -905,14 +896,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.27530877634031614
+          "reversion_weight": 0.27530877634031653
         },
         "reversion_context": {
-          "reversion_weight": 0.24325507504688218,
-          "season_sin": -0.1292674678662405,
-          "season_cos": 0.05674693789059237,
+          "reversion_weight": 0.24325507504688257,
+          "season_sin": -0.12926746786624085,
+          "season_cos": 0.056746937890592486,
           "christmas": 0.11486301299824347,
-          "national_trend": -0.03768308223939733
+          "national_trend": -0.03768308223939742
         }
       }
     },
@@ -931,13 +922,13 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.4173162942548641
+          "reversion_weight": 0.4173162942548639
         },
         "reversion_context": {
-          "reversion_weight": 0.34614187969926064,
-          "season_sin": -0.14734764041076226,
-          "season_cos": 0.03647505388602054,
-          "christmas": 0.06972518068621329,
+          "reversion_weight": 0.3461418796992605,
+          "season_sin": -0.1473476404107622,
+          "season_cos": 0.03647505388602061,
+          "christmas": 0.06972518068621351,
           "national_trend": 0.204689714715574
         }
       }
@@ -960,11 +951,11 @@
           "reversion_weight": 0.5175740753284438
         },
         "reversion_context": {
-          "reversion_weight": 0.4212485915859736,
-          "season_sin": -0.1535737247059868,
-          "season_cos": 0.01700610014790401,
-          "christmas": 0.11045544374986935,
-          "national_trend": 0.15001549834167172
+          "reversion_weight": 0.42124859158597355,
+          "season_sin": -0.15357372470598687,
+          "season_cos": 0.017006100147904008,
+          "christmas": 0.11045544374986917,
+          "national_trend": 0.15001549834167163
         }
       }
     },
@@ -983,14 +974,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.24070759825751287
+          "reversion_weight": 0.2407075982575129
         },
         "reversion_context": {
-          "reversion_weight": 0.2155976610389345,
-          "season_sin": -0.1284731220966461,
-          "season_cos": 0.06396344740188474,
-          "christmas": 0.10159068444736757,
-          "national_trend": 0.00449486253957275
+          "reversion_weight": 0.21559766103893446,
+          "season_sin": -0.128473122096646,
+          "season_cos": 0.06396344740188478,
+          "christmas": 0.10159068444736753,
+          "national_trend": 0.004494862539572778
         }
       }
     },
@@ -1004,19 +995,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 525,
-        "intercept": -1.1518958478664707,
+        "intercept": -1.151895847866471,
         "slope": 0.6504530714807977
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.28284801051451836
+          "reversion_weight": 0.282848010514518
         },
         "reversion_context": {
-          "reversion_weight": 0.28577267793442257,
-          "season_sin": -0.14492990476639214,
-          "season_cos": 0.056708343396090016,
-          "christmas": 0.041346241593936316,
-          "national_trend": 0.23749423390717728
+          "reversion_weight": 0.2857726779344233,
+          "season_sin": -0.14492990476639206,
+          "season_cos": 0.056708343396090106,
+          "christmas": 0.04134624159393646,
+          "national_trend": 0.23749423390717778
         }
       }
     },
@@ -1035,14 +1026,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.47040939913446606
+          "reversion_weight": 0.4704093991344653
         },
         "reversion_context": {
-          "reversion_weight": 0.3890869547294136,
-          "season_sin": -0.1443328915807924,
-          "season_cos": 0.05997890537332543,
-          "christmas": 0.045024616171960304,
-          "national_trend": 0.06345369144826758
+          "reversion_weight": 0.38908695472941385,
+          "season_sin": -0.14433289158079218,
+          "season_cos": 0.05997890537332547,
+          "christmas": 0.045024616171960324,
+          "national_trend": 0.06345369144826771
         }
       }
     },
@@ -1061,14 +1052,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.243268998131862
+          "reversion_weight": 0.24326899813186179
         },
         "reversion_context": {
           "reversion_weight": 0.192037701012782,
-          "season_sin": -0.11730167658723772,
-          "season_cos": 0.06733605155048998,
-          "christmas": 0.10346041386796381,
-          "national_trend": -0.02427646963613874
+          "season_sin": -0.11730167658723782,
+          "season_cos": 0.06733605155049005,
+          "christmas": 0.10346041386796369,
+          "national_trend": -0.024276469636138682
         }
       }
     },
@@ -1087,14 +1078,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2740828194714787
+          "reversion_weight": 0.27408281947147867
         },
         "reversion_context": {
-          "reversion_weight": 0.28523421694583695,
-          "season_sin": -0.14426629213937528,
-          "season_cos": 0.05861557487312423,
-          "christmas": 0.03895383703957145,
-          "national_trend": 0.23390996672080058
+          "reversion_weight": 0.28523421694583667,
+          "season_sin": -0.14426629213937534,
+          "season_cos": 0.05861557487312434,
+          "christmas": 0.03895383703957138,
+          "national_trend": 0.23390996672080056
         }
       }
     },
@@ -1113,14 +1104,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3522775900952257
+          "reversion_weight": 0.3522775900952256
         },
         "reversion_context": {
-          "reversion_weight": 0.33662967987413805,
-          "season_sin": -0.1388475606560849,
+          "reversion_weight": 0.336629679874138,
+          "season_sin": -0.13884756065608506,
           "season_cos": 0.07316246766205328,
-          "christmas": 0.026359411073050683,
-          "national_trend": 0.12561011803110042
+          "christmas": 0.02635941107305066,
+          "national_trend": 0.12561011803110037
         }
       }
     },
@@ -1139,14 +1130,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.243268998131862
+          "reversion_weight": 0.24326899813186179
         },
         "reversion_context": {
           "reversion_weight": 0.192037701012782,
-          "season_sin": -0.11730167658723772,
-          "season_cos": 0.06733605155048998,
-          "christmas": 0.10346041386796381,
-          "national_trend": -0.02427646963613874
+          "season_sin": -0.11730167658723782,
+          "season_cos": 0.06733605155049005,
+          "christmas": 0.10346041386796369,
+          "national_trend": -0.024276469636138682
         }
       }
     },
@@ -1165,14 +1156,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2740828194714787
+          "reversion_weight": 0.27408281947147867
         },
         "reversion_context": {
-          "reversion_weight": 0.28523421694583695,
-          "season_sin": -0.14426629213937528,
-          "season_cos": 0.05861557487312423,
-          "christmas": 0.03895383703957145,
-          "national_trend": 0.23390996672080058
+          "reversion_weight": 0.28523421694583667,
+          "season_sin": -0.14426629213937534,
+          "season_cos": 0.05861557487312434,
+          "christmas": 0.03895383703957138,
+          "national_trend": 0.23390996672080056
         }
       }
     },
@@ -1191,14 +1182,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3522775900952257
+          "reversion_weight": 0.3522775900952256
         },
         "reversion_context": {
-          "reversion_weight": 0.33662967987413805,
-          "season_sin": -0.1388475606560849,
+          "reversion_weight": 0.336629679874138,
+          "season_sin": -0.13884756065608506,
           "season_cos": 0.07316246766205328,
-          "christmas": 0.026359411073050683,
-          "national_trend": 0.12561011803110042
+          "christmas": 0.02635941107305066,
+          "national_trend": 0.12561011803110037
         }
       }
     },
@@ -1217,14 +1208,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.23786300241811903
+          "reversion_weight": 0.23786300241811853
         },
         "reversion_context": {
-          "reversion_weight": 0.17655872805827472,
-          "season_sin": -0.09595802472036703,
-          "season_cos": 0.07101916684745413,
-          "christmas": 0.11374424370521402,
-          "national_trend": -0.10632145891123622
+          "reversion_weight": 0.17655872805827466,
+          "season_sin": -0.09595802472036705,
+          "season_cos": 0.07101916684745405,
+          "christmas": 0.1137442437052143,
+          "national_trend": -0.10632145891123612
         }
       }
     },
@@ -1246,11 +1237,11 @@
           "reversion_weight": 0.26172847492806955
         },
         "reversion_context": {
-          "reversion_weight": 0.25044839965939736,
+          "reversion_weight": 0.25044839965939686,
           "season_sin": -0.1292299028994665,
-          "season_cos": 0.060652581215129266,
-          "christmas": 0.04303810738861181,
-          "national_trend": 0.19465834493491913
+          "season_cos": 0.06065258121512918,
+          "christmas": 0.04303810738861199,
+          "national_trend": 0.19465834493491904
         }
       }
     },
@@ -1265,18 +1256,18 @@
         "status": "past_issued_platt",
         "n": 526,
         "intercept": -0.4631355377750158,
-        "slope": 0.0060106500766817185
+        "slope": 0.006010650076681795
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.306865026629693
+          "reversion_weight": 0.30686502662969284
         },
         "reversion_context": {
-          "reversion_weight": 0.2911386669560667,
-          "season_sin": -0.13625345843434455,
-          "season_cos": 0.07430095374487089,
-          "christmas": 0.026017337697517122,
-          "national_trend": 0.16030978935264323
+          "reversion_weight": 0.2911386669560666,
+          "season_sin": -0.13625345843434467,
+          "season_cos": 0.07430095374487107,
+          "christmas": 0.026017337697517056,
+          "national_trend": 0.16030978935264317
         }
       }
     },
@@ -1290,7 +1281,7 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1186,
-        "intercept": -0.437239877394289,
+        "intercept": -0.43723987739428904,
         "slope": 0.4746949388682206
       },
       "coefficients": {
@@ -1298,11 +1289,11 @@
           "reversion_weight": 0.23841006431007408
         },
         "reversion_context": {
-          "reversion_weight": 0.17345016197949203,
-          "season_sin": -0.08192830779080176,
-          "season_cos": 0.06514556791642061,
-          "christmas": 0.12451179988233102,
-          "national_trend": -0.1364740154612155
+          "reversion_weight": 0.1734501619794923,
+          "season_sin": -0.08192830779080179,
+          "season_cos": 0.06514556791642077,
+          "christmas": 0.12451179988233083,
+          "national_trend": -0.13647401546121551
         }
       }
     },
@@ -1316,19 +1307,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 921,
-        "intercept": -0.4882774706581807,
-        "slope": 0.06827251263618372
+        "intercept": -0.48827747065818083,
+        "slope": 0.06827251263618367
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.25815523987956007
+          "reversion_weight": 0.25815523987956024
         },
         "reversion_context": {
           "reversion_weight": 0.2158923962710933,
-          "season_sin": -0.09786196580534998,
-          "season_cos": 0.05905629793652199,
-          "christmas": 0.061034458748222734,
-          "national_trend": 0.07095187552240871
+          "season_sin": -0.09786196580535006,
+          "season_cos": 0.05905629793652194,
+          "christmas": 0.06103445874822268,
+          "national_trend": 0.0709518755224089
         }
       }
     },
@@ -1342,19 +1333,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 658,
-        "intercept": -0.3349624349485211,
+        "intercept": -0.33496243494852124,
         "slope": 0.0
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2965080747161294
+          "reversion_weight": 0.29650807471612944
         },
         "reversion_context": {
-          "reversion_weight": 0.2428865386943827,
+          "reversion_weight": 0.2428865386943824,
           "season_sin": -0.117850333441118,
-          "season_cos": 0.07106296827330325,
-          "christmas": 0.0340120879501307,
-          "national_trend": 0.12374390561200556
+          "season_cos": 0.07106296827330308,
+          "christmas": 0.03401208795013058,
+          "national_trend": 0.12374390561200607
         }
       }
     },
@@ -1373,14 +1364,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2438640825252547
+          "reversion_weight": 0.2438640825252544
         },
         "reversion_context": {
-          "reversion_weight": 0.1779844721510436,
-          "season_sin": -0.0770795835545767,
-          "season_cos": 0.053801124637367526,
+          "reversion_weight": 0.17798447215104368,
+          "season_sin": -0.07707958355457667,
+          "season_cos": 0.053801124637367664,
           "christmas": 0.13314371747043133,
-          "national_trend": -0.12316919852656472
+          "national_trend": -0.12316919852656456
         }
       }
     },
@@ -1394,19 +1385,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1053,
-        "intercept": -0.42431994195479467,
-        "slope": 0.05484390230236094
+        "intercept": -0.4243199419547946,
+        "slope": 0.05484390230236098
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.25918117411068226
+          "reversion_weight": 0.2591811741106823
         },
         "reversion_context": {
-          "reversion_weight": 0.20250616582169004,
-          "season_sin": -0.0849814977635052,
-          "season_cos": 0.047890215373102896,
-          "christmas": 0.08044488333168208,
-          "national_trend": 0.0419840367688374
+          "reversion_weight": 0.2025061658216903,
+          "season_sin": -0.08498149776350511,
+          "season_cos": 0.04789021537310279,
+          "christmas": 0.08044488333168207,
+          "national_trend": 0.041984036768837524
         }
       }
     },
@@ -1420,19 +1411,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 789,
-        "intercept": -0.3145398886526218,
+        "intercept": -0.31453988865262156,
         "slope": 0.0
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.29158210418990493
+          "reversion_weight": 0.291582104189905
         },
         "reversion_context": {
-          "reversion_weight": 0.19364281764967006,
-          "season_sin": -0.0911845384460223,
-          "season_cos": 0.06399410105214326,
-          "christmas": 0.04600419889210729,
-          "national_trend": 0.012346866062491536
+          "reversion_weight": 0.1936428176496701,
+          "season_sin": -0.09118453844602221,
+          "season_cos": 0.0639941010521433,
+          "christmas": 0.046004198892107225,
+          "national_trend": 0.01234686606249174
         }
       }
     },
@@ -1446,19 +1437,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1452,
-        "intercept": -0.40605822786498397,
+        "intercept": -0.406058227864984,
         "slope": 0.5132634025325634
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.25193109379472
+          "reversion_weight": 0.25193109379472023
         },
         "reversion_context": {
-          "reversion_weight": 0.18362023778291953,
-          "season_sin": -0.07712375873704456,
-          "season_cos": 0.038082365780830726,
-          "christmas": 0.14431905935782943,
-          "national_trend": -0.10393056086884853
+          "reversion_weight": 0.18362023778291944,
+          "season_sin": -0.07712375873704454,
+          "season_cos": 0.038082365780830865,
+          "christmas": 0.14431905935782918,
+          "national_trend": -0.10393056086884864
         }
       }
     },
@@ -1472,19 +1463,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1186,
-        "intercept": -0.3987633089699544,
-        "slope": 0.12292162400154552
+        "intercept": -0.3987633089699543,
+        "slope": 0.12292162400154556
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.26316682886313775
+          "reversion_weight": 0.26316682886313764
         },
         "reversion_context": {
-          "reversion_weight": 0.20531431280497808,
-          "season_sin": -0.08191311231877485,
-          "season_cos": 0.03260188639910306,
-          "christmas": 0.1000867634609896,
-          "national_trend": 0.055193400419632804
+          "reversion_weight": 0.205314312804978,
+          "season_sin": -0.0819131123187748,
+          "season_cos": 0.03260188639910314,
+          "christmas": 0.10008676346098956,
+          "national_trend": 0.05519340041963265
         }
       }
     },
@@ -1498,19 +1489,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 921,
-        "intercept": -0.33330569817512457,
-        "slope": 0.013399878762831099
+        "intercept": -0.3333056981751245,
+        "slope": 0.013399878762831158
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2824640132544205
+          "reversion_weight": 0.28246401325442055
         },
         "reversion_context": {
-          "reversion_weight": 0.1769888744618974,
-          "season_sin": -0.08061620436798249,
-          "season_cos": 0.045281400661823824,
-          "christmas": 0.07768619381747431,
-          "national_trend": -0.004573817219752781
+          "reversion_weight": 0.1769888744618972,
+          "season_sin": -0.08061620436798247,
+          "season_cos": 0.04528140066182388,
+          "christmas": 0.07768619381747445,
+          "national_trend": -0.004573817219752812
         }
       }
     },
@@ -1529,14 +1520,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.25956803215093244
+          "reversion_weight": 0.25956803215093205
         },
         "reversion_context": {
-          "reversion_weight": 0.18031755697945798,
-          "season_sin": -0.08741032529659555,
-          "season_cos": 0.026246928955959616,
-          "christmas": 0.11126886851009785,
-          "national_trend": -0.07615684901794824
+          "reversion_weight": 0.18031755697945814,
+          "season_sin": -0.08741032529659543,
+          "season_cos": 0.026246928955959488,
+          "christmas": 0.11126886851009778,
+          "national_trend": -0.07615684901794814
         }
       }
     },
@@ -1551,18 +1542,18 @@
         "status": "past_issued_platt",
         "n": 1319,
         "intercept": -0.386608928551363,
-        "slope": 0.1919524128438355
+        "slope": 0.19195241284383546
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2775835249671983
+          "reversion_weight": 0.2775835249671981
         },
         "reversion_context": {
-          "reversion_weight": 0.21468991360858125,
-          "season_sin": -0.08773399592589985,
-          "season_cos": 0.020496234891806627,
-          "christmas": 0.07544393607221694,
-          "national_trend": 0.07839909669280297
+          "reversion_weight": 0.21468991360858106,
+          "season_sin": -0.08773399592590012,
+          "season_cos": 0.02049623489180664,
+          "christmas": 0.07544393607221708,
+          "national_trend": 0.07839909669280301
         }
       }
     },
@@ -1576,19 +1567,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1054,
-        "intercept": -0.3240711490872432,
+        "intercept": -0.32407114908724327,
         "slope": 0.08344633888182927
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2943338472023037
+          "reversion_weight": 0.29433384720230393
         },
         "reversion_context": {
-          "reversion_weight": 0.188496574589741,
-          "season_sin": -0.08182202853824438,
-          "season_cos": 0.03007321659873206,
-          "christmas": 0.06680924323766234,
-          "national_trend": 0.011627885613155826
+          "reversion_weight": 0.18849657458974087,
+          "season_sin": -0.08182202853824457,
+          "season_cos": 0.030073216598732307,
+          "christmas": 0.06680924323766242,
+          "national_trend": 0.011627885613155767
         }
       }
     },
@@ -1602,19 +1593,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1717,
-        "intercept": -0.3731736390015301,
+        "intercept": -0.37317363900153006,
         "slope": 0.5296112011517506
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2664351308789658
+          "reversion_weight": 0.2664351308789654
         },
         "reversion_context": {
-          "reversion_weight": 0.19858827033821266,
+          "reversion_weight": 0.19858827033821255,
           "season_sin": -0.08031713196415499,
-          "season_cos": 0.030004553475460834,
+          "season_cos": 0.03000455347546072,
           "christmas": 0.10461894565749227,
-          "national_trend": -0.08544982292758696
+          "national_trend": -0.08544982292758692
         }
       }
     },
@@ -1628,19 +1619,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1451,
-        "intercept": -0.31606834864078154,
-        "slope": 0.20890739751015294
+        "intercept": -0.3160683486407815,
+        "slope": 0.20890739751015297
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.28237649971257345
+          "reversion_weight": 0.2823764997125737
         },
         "reversion_context": {
-          "reversion_weight": 0.22692757111543632,
-          "season_sin": -0.08161255782993158,
-          "season_cos": 0.024866341032136644,
-          "christmas": 0.0669043897317026,
-          "national_trend": 0.07202542454636462
+          "reversion_weight": 0.22692757111543616,
+          "season_sin": -0.0816125578299316,
+          "season_cos": 0.024866341032136648,
+          "christmas": 0.06690438973170261,
+          "national_trend": 0.07202542454636451
         }
       }
     },
@@ -1654,19 +1645,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1186,
-        "intercept": -0.22803158672957702,
+        "intercept": -0.22803158672957696,
         "slope": 0.12985789411684362
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3042534183388256
+          "reversion_weight": 0.3042534183388254
         },
         "reversion_context": {
-          "reversion_weight": 0.202125887768269,
-          "season_sin": -0.07947894408400971,
-          "season_cos": 0.03275806868019819,
+          "reversion_weight": 0.20212588776826887,
+          "season_sin": -0.0794789440840096,
+          "season_cos": 0.03275806868019813,
           "christmas": 0.05767553240779943,
-          "national_trend": 0.00968225342075022
+          "national_trend": 0.009682253420750174
         }
       }
     },
@@ -1680,19 +1671,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1848,
-        "intercept": -0.3295288486690544,
+        "intercept": -0.32952884866905435,
         "slope": 0.5578301920639468
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.27250512932190635
+          "reversion_weight": 0.2725051293219066
         },
         "reversion_context": {
-          "reversion_weight": 0.21936692445428016,
-          "season_sin": -0.07217477771931215,
-          "season_cos": 0.031698766710770834,
-          "christmas": 0.1023827642699722,
-          "national_trend": -0.0947672096093967
+          "reversion_weight": 0.2193669244542802,
+          "season_sin": -0.07217477771931219,
+          "season_cos": 0.03169876671077083,
+          "christmas": 0.10238276426997181,
+          "national_trend": -0.09476720960939689
         }
       }
     },
@@ -1707,18 +1698,18 @@
         "status": "past_issued_platt",
         "n": 1583,
         "intercept": -0.2816989956812011,
-        "slope": 0.23317244757048244
+        "slope": 0.23317244757048242
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.29067889806306507
+          "reversion_weight": 0.29067889806306535
         },
         "reversion_context": {
           "reversion_weight": 0.24436135328832656,
-          "season_sin": -0.07372277599415031,
-          "season_cos": 0.027279473675007583,
-          "christmas": 0.06398557409765934,
-          "national_trend": 0.05902994984517394
+          "season_sin": -0.07372277599415039,
+          "season_cos": 0.02727947367500752,
+          "christmas": 0.06398557409765947,
+          "national_trend": 0.05902994984517416
         }
       }
     },
@@ -1732,19 +1723,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1318,
-        "intercept": -0.19327621699478173,
-        "slope": 0.15768146444945014
+        "intercept": -0.19327621699478176,
+        "slope": 0.15768146444945008
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.31218798385082336
+          "reversion_weight": 0.31218798385082364
         },
         "reversion_context": {
-          "reversion_weight": 0.21756014889550138,
+          "reversion_weight": 0.21756014889550135,
           "season_sin": -0.0745245904939863,
-          "season_cos": 0.03479289174055044,
-          "christmas": 0.053744428008733525,
-          "national_trend": 0.007019776811048666
+          "season_cos": 0.034792891740550426,
+          "christmas": 0.053744428008733594,
+          "national_trend": 0.00701977681104873
         }
       }
     },
@@ -1763,14 +1754,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.27011847625385055
+          "reversion_weight": 0.2701184762538505
         },
         "reversion_context": {
-          "reversion_weight": 0.22364817799516534,
-          "season_sin": -0.07207608397389498,
-          "season_cos": 0.031757699510255366,
-          "christmas": 0.09445648127371516,
-          "national_trend": -0.08579602732093562
+          "reversion_weight": 0.22364817799516515,
+          "season_sin": -0.07207608397389495,
+          "season_cos": 0.031757699510255324,
+          "christmas": 0.09445648127371534,
+          "national_trend": -0.08579602732093558
         }
       }
     },
@@ -1789,14 +1780,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2859850178360978
+          "reversion_weight": 0.2859850178360982
         },
         "reversion_context": {
-          "reversion_weight": 0.2514545494226139,
-          "season_sin": -0.0752959956601983,
-          "season_cos": 0.027402930880528555,
-          "christmas": 0.06333710468538539,
-          "national_trend": 0.06469322995902561
+          "reversion_weight": 0.2514545494226138,
+          "season_sin": -0.07529599566019807,
+          "season_cos": 0.027402930880528413,
+          "christmas": 0.06333710468538546,
+          "national_trend": 0.06469322995902527
         }
       }
     },
@@ -1810,19 +1801,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1581,
-        "intercept": -0.18245131816080573,
+        "intercept": -0.1824513181608057,
         "slope": 0.2723678372931167
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.315525713402206
+          "reversion_weight": 0.31552571340220603
         },
         "reversion_context": {
-          "reversion_weight": 0.22819897250767784,
-          "season_sin": -0.07912606795236939,
-          "season_cos": 0.035077008763438784,
-          "christmas": 0.05314652403601618,
-          "national_trend": 0.017846011067402214
+          "reversion_weight": 0.22819897250767748,
+          "season_sin": -0.07912606795236957,
+          "season_cos": 0.03507700876343873,
+          "christmas": 0.05314652403601625,
+          "national_trend": 0.017846011067402218
         }
       }
     },
@@ -1841,14 +1832,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2709445363928689
+          "reversion_weight": 0.27094453639286925
         },
         "reversion_context": {
-          "reversion_weight": 0.22412302109589122,
-          "season_sin": -0.07148603762640408,
-          "season_cos": 0.03225353955128625,
-          "christmas": 0.08861558388759805,
-          "national_trend": -0.08486600205418333
+          "reversion_weight": 0.22412302109589127,
+          "season_sin": -0.07148603762640415,
+          "season_cos": 0.03225353955128634,
+          "christmas": 0.08861558388759813,
+          "national_trend": -0.08486600205418347
         }
       }
     },
@@ -1863,18 +1854,18 @@
         "status": "past_issued_platt",
         "n": 1971,
         "intercept": -0.21688226454773582,
-        "slope": 0.27504382045983977
+        "slope": 0.2750438204598398
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2871559659212583
+          "reversion_weight": 0.287155965921258
         },
         "reversion_context": {
-          "reversion_weight": 0.25694562890272,
-          "season_sin": -0.07228557995576664,
-          "season_cos": 0.02687965303424061,
-          "christmas": 0.04209893103747461,
-          "national_trend": 0.06558426284305709
+          "reversion_weight": 0.2569456289027204,
+          "season_sin": -0.07228557995576673,
+          "season_cos": 0.026879653034240565,
+          "christmas": 0.04209893103747459,
+          "national_trend": 0.06558426284305732
         }
       }
     },
@@ -1888,19 +1879,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1711,
-        "intercept": -0.1070015322297328,
-        "slope": 0.30369619613032917
+        "intercept": -0.10700153222973288,
+        "slope": 0.3036961961303291
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3161293326775073
+          "reversion_weight": 0.3161293326775075
         },
         "reversion_context": {
-          "reversion_weight": 0.2458357673541395,
-          "season_sin": -0.07331029101191772,
-          "season_cos": 0.03163780632215032,
-          "christmas": 0.05794284535128609,
-          "national_trend": 0.009034685546326448
+          "reversion_weight": 0.24583576735413906,
+          "season_sin": -0.07331029101191787,
+          "season_cos": 0.03163780632215036,
+          "christmas": 0.05794284535128613,
+          "national_trend": 0.009034685546326549
         }
       }
     },
@@ -1914,19 +1905,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2361,
-        "intercept": -0.20907837762446943,
+        "intercept": -0.20907837762446946,
         "slope": 0.48827297412055165
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2717041939795356
+          "reversion_weight": 0.271704193979536
         },
         "reversion_context": {
-          "reversion_weight": 0.2245226205966308,
-          "season_sin": -0.07157515896968256,
-          "season_cos": 0.02756781063783256,
-          "christmas": 0.09197623989512163,
-          "national_trend": -0.07667796816146338
+          "reversion_weight": 0.22452262059663122,
+          "season_sin": -0.07157515896968272,
+          "season_cos": 0.02756781063783255,
+          "christmas": 0.09197623989512177,
+          "national_trend": -0.07667796816146324
         }
       }
     },
@@ -1945,14 +1936,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2858587254205514
+          "reversion_weight": 0.28585872542055135
         },
         "reversion_context": {
           "reversion_weight": 0.25584360287687297,
-          "season_sin": -0.07161706393886504,
-          "season_cos": 0.02404344651461265,
-          "christmas": 0.03804632277546237,
-          "national_trend": 0.07317327407638897
+          "season_sin": -0.07161706393886495,
+          "season_cos": 0.024043446514612765,
+          "christmas": 0.03804632277546258,
+          "national_trend": 0.0731732740763888
         }
       }
     },
@@ -1966,19 +1957,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1838,
-        "intercept": -0.055447897039413344,
+        "intercept": -0.05544789703941343,
         "slope": 0.3182323014411241
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.31818021303225197
+          "reversion_weight": 0.31818021303225186
         },
         "reversion_context": {
-          "reversion_weight": 0.2541010835769474,
-          "season_sin": -0.06891732833486937,
-          "season_cos": 0.02972680883151153,
-          "christmas": 0.02349127719610927,
-          "national_trend": 0.004089350181679449
+          "reversion_weight": 0.25410108357694694,
+          "season_sin": -0.06891732833486948,
+          "season_cos": 0.029726808831511492,
+          "christmas": 0.023491277196109512,
+          "national_trend": 0.004089350181679493
         }
       }
     },
@@ -1997,14 +1988,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2828001265637929
+          "reversion_weight": 0.28280012656379244
         },
         "reversion_context": {
-          "reversion_weight": 0.22579164128339801,
-          "season_sin": -0.07488235391722538,
-          "season_cos": 0.021213547657133555,
-          "christmas": 0.09825301608354632,
-          "national_trend": -0.08935872167754762
+          "reversion_weight": 0.22579164128339715,
+          "season_sin": -0.07488235391722539,
+          "season_cos": 0.0212135476571335,
+          "christmas": 0.09825301608354617,
+          "national_trend": -0.08935872167754741
         }
       }
     },
@@ -2023,14 +2014,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2825769875257998
+          "reversion_weight": 0.28257698752580007
         },
         "reversion_context": {
-          "reversion_weight": 0.2534151769855852,
-          "season_sin": -0.07227003100309343,
-          "season_cos": 0.019127229947785884,
-          "christmas": 0.04390139497995394,
-          "national_trend": 0.08362490389959798
+          "reversion_weight": 0.2534151769855849,
+          "season_sin": -0.07227003100309344,
+          "season_cos": 0.01912722994778593,
+          "christmas": 0.04390139497995393,
+          "national_trend": 0.08362490389959805
         }
       }
     },
@@ -2044,19 +2035,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 1963,
-        "intercept": -0.03575225212214902,
+        "intercept": -0.03575225212214894,
         "slope": 0.3134281365123257
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3123807065072328
+          "reversion_weight": 0.3123807065072327
         },
         "reversion_context": {
-          "reversion_weight": 0.25071026259173995,
-          "season_sin": -0.06857528845122726,
-          "season_cos": 0.02612266350522359,
-          "christmas": 0.01648534508751968,
-          "national_trend": 0.012087181638042403
+          "reversion_weight": 0.25071026259174045,
+          "season_sin": -0.06857528845122715,
+          "season_cos": 0.026122663505223666,
+          "christmas": 0.016485345087519674,
+          "national_trend": 0.012087181638042352
         }
       }
     },
@@ -2075,14 +2066,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2848751801999244
+          "reversion_weight": 0.28487518019992475
         },
         "reversion_context": {
-          "reversion_weight": 0.23003258922986422,
-          "season_sin": -0.0727059773113509,
-          "season_cos": 0.02233539963709895,
-          "christmas": 0.0979857586205634,
-          "national_trend": -0.09822667662927405
+          "reversion_weight": 0.23003258922986441,
+          "season_sin": -0.07270597731135102,
+          "season_cos": 0.022335399637099015,
+          "christmas": 0.09798575862056332,
+          "national_trend": -0.09822667662927406
         }
       }
     },
@@ -2096,19 +2087,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2358,
-        "intercept": -0.04049023252246034,
+        "intercept": -0.040490232522460354,
         "slope": 0.3454386118722366
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.28964280919542224
+          "reversion_weight": 0.28964280919542174
         },
         "reversion_context": {
-          "reversion_weight": 0.25443435746215143,
-          "season_sin": -0.07364583328958993,
-          "season_cos": 0.018464464171379823,
-          "christmas": 0.04481117221606017,
-          "national_trend": 0.0749903658208003
+          "reversion_weight": 0.25443435746215165,
+          "season_sin": -0.07364583328959004,
+          "season_cos": 0.018464464171379757,
+          "christmas": 0.04481117221606019,
+          "national_trend": 0.07499036582080026
         }
       }
     },
@@ -2122,19 +2113,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2093,
-        "intercept": -0.014996623593360415,
+        "intercept": -0.014996623593360386,
         "slope": 0.3151792004745931
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.30918382559489793
+          "reversion_weight": 0.3091838255948982
         },
         "reversion_context": {
-          "reversion_weight": 0.24996153006545807,
+          "reversion_weight": 0.24996153006545796,
           "season_sin": -0.06756972697250047,
-          "season_cos": 0.028145570456937635,
-          "christmas": 0.013221982794648075,
-          "national_trend": 0.008727780677438134
+          "season_cos": 0.02814557045693761,
+          "christmas": 0.013221982794648146,
+          "national_trend": 0.008727780677438268
         }
       }
     },
@@ -2153,14 +2144,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2848751801999244
+          "reversion_weight": 0.28487518019992475
         },
         "reversion_context": {
-          "reversion_weight": 0.23003258922986422,
-          "season_sin": -0.0727059773113509,
-          "season_cos": 0.02233539963709895,
-          "christmas": 0.0979857586205634,
-          "national_trend": -0.09822667662927405
+          "reversion_weight": 0.23003258922986441,
+          "season_sin": -0.07270597731135102,
+          "season_cos": 0.022335399637099015,
+          "christmas": 0.09798575862056332,
+          "national_trend": -0.09822667662927406
         }
       }
     },
@@ -2174,19 +2165,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2358,
-        "intercept": -0.04049023252246034,
+        "intercept": -0.040490232522460354,
         "slope": 0.3454386118722366
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.28964280919542224
+          "reversion_weight": 0.28964280919542174
         },
         "reversion_context": {
-          "reversion_weight": 0.25443435746215143,
-          "season_sin": -0.07364583328958993,
-          "season_cos": 0.018464464171379823,
-          "christmas": 0.04481117221606017,
-          "national_trend": 0.0749903658208003
+          "reversion_weight": 0.25443435746215165,
+          "season_sin": -0.07364583328959004,
+          "season_cos": 0.018464464171379757,
+          "christmas": 0.04481117221606019,
+          "national_trend": 0.07499036582080026
         }
       }
     },
@@ -2200,19 +2191,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2093,
-        "intercept": -0.014996623593360415,
+        "intercept": -0.014996623593360386,
         "slope": 0.3151792004745931
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.30918382559489793
+          "reversion_weight": 0.3091838255948982
         },
         "reversion_context": {
-          "reversion_weight": 0.24996153006545807,
+          "reversion_weight": 0.24996153006545796,
           "season_sin": -0.06756972697250047,
-          "season_cos": 0.028145570456937635,
-          "christmas": 0.013221982794648075,
-          "national_trend": 0.008727780677438134
+          "season_cos": 0.02814557045693761,
+          "christmas": 0.013221982794648146,
+          "national_trend": 0.008727780677438268
         }
       }
     },
@@ -2226,19 +2217,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2756,
-        "intercept": -0.09949034862167636,
+        "intercept": -0.09949034862167637,
         "slope": 0.5348339468608172
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2825932581690009
+          "reversion_weight": 0.28259325816900044
         },
         "reversion_context": {
-          "reversion_weight": 0.2328867179841855,
-          "season_sin": -0.06861492758683753,
-          "season_cos": 0.023428030595141133,
-          "christmas": 0.09856693313495106,
-          "national_trend": -0.11680195300596274
+          "reversion_weight": 0.23288671798418487,
+          "season_sin": -0.06861492758683761,
+          "season_cos": 0.023428030595141112,
+          "christmas": 0.09856693313495085,
+          "national_trend": -0.11680195300596272
         }
       }
     },
@@ -2252,19 +2243,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2490,
-        "intercept": -0.008799150494225067,
-        "slope": 0.3535503718454207
+        "intercept": -0.008799150494225078,
+        "slope": 0.35355037184542065
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2901859644197125
+          "reversion_weight": 0.29018596441971334
         },
         "reversion_context": {
-          "reversion_weight": 0.25666447154627114,
-          "season_sin": -0.07019024913140134,
-          "season_cos": 0.019261904027505203,
-          "christmas": 0.04479378263928731,
-          "national_trend": 0.06053415901032128
+          "reversion_weight": 0.25666447154627087,
+          "season_sin": -0.07019024913140132,
+          "season_cos": 0.019261904027505272,
+          "christmas": 0.04479378263928737,
+          "national_trend": 0.06053415901032126
         }
       }
     },
@@ -2278,19 +2269,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2225,
-        "intercept": 0.07701604877923945,
-        "slope": 0.3794988244369739
+        "intercept": 0.0770160487792395,
+        "slope": 0.37949882443697397
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.319762685091088
+          "reversion_weight": 0.3197626850910882
         },
         "reversion_context": {
-          "reversion_weight": 0.2545732147658844,
-          "season_sin": -0.06879541793231851,
-          "season_cos": 0.028647963358340568,
-          "christmas": 0.011933646427522402,
-          "national_trend": 0.0011290874196750633
+          "reversion_weight": 0.2545732147658849,
+          "season_sin": -0.0687954179323185,
+          "season_cos": 0.02864796335834062,
+          "christmas": 0.01193364642752236,
+          "national_trend": 0.0011290874196749586
         }
       }
     },
@@ -2304,19 +2295,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2886,
-        "intercept": -0.05655473570282299,
+        "intercept": -0.056554735702822996,
         "slope": 0.532611081501717
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2770290168795502
+          "reversion_weight": 0.2770290168795504
         },
         "reversion_context": {
-          "reversion_weight": 0.23167981724484568,
-          "season_sin": -0.06942970234488721,
-          "season_cos": 0.023957789904745987,
-          "christmas": 0.09751378804058863,
-          "national_trend": -0.11471897051110856
+          "reversion_weight": 0.23167981724484638,
+          "season_sin": -0.06942970234488713,
+          "season_cos": 0.023957789904746025,
+          "christmas": 0.09751378804058858,
+          "national_trend": -0.1147189705111086
         }
       }
     },
@@ -2330,19 +2321,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2621,
-        "intercept": 0.02184478658932649,
+        "intercept": 0.02184478658932653,
         "slope": 0.3474963057688952
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2844528410252662
+          "reversion_weight": 0.2844528410252658
         },
         "reversion_context": {
-          "reversion_weight": 0.25820389893614015,
-          "season_sin": -0.06629535510798829,
-          "season_cos": 0.01893480589985824,
-          "christmas": 0.04674272817361004,
-          "national_trend": 0.03791044897155488
+          "reversion_weight": 0.25820389893614026,
+          "season_sin": -0.0662953551079883,
+          "season_cos": 0.018934805899858215,
+          "christmas": 0.046742728173610054,
+          "national_trend": 0.0379104489715548
         }
       }
     },
@@ -2356,19 +2347,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2356,
-        "intercept": 0.13138056266495918,
-        "slope": 0.39962780585299235
+        "intercept": 0.13138056266495915,
+        "slope": 0.3996278058529923
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3143251841607309
+          "reversion_weight": 0.314325184160731
         },
         "reversion_context": {
-          "reversion_weight": 0.2562132210670406,
-          "season_sin": -0.06782805529647645,
-          "season_cos": 0.02857685060819229,
-          "christmas": 0.012071276570615392,
-          "national_trend": -0.0014209507733987097
+          "reversion_weight": 0.25621322106704064,
+          "season_sin": -0.06782805529647654,
+          "season_cos": 0.02857685060819225,
+          "christmas": 0.01207127657061552,
+          "national_trend": -0.0014209507733988131
         }
       }
     },
@@ -2382,19 +2373,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3017,
-        "intercept": -0.032102580425076396,
+        "intercept": -0.0321025804250764,
         "slope": 0.5389466623607737
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.27116461700786004
+          "reversion_weight": 0.27116461700786093
         },
         "reversion_context": {
-          "reversion_weight": 0.2302926892279063,
-          "season_sin": -0.06944191766203574,
-          "season_cos": 0.02352134269972352,
-          "christmas": 0.09740147544766835,
-          "national_trend": -0.11270463207221525
+          "reversion_weight": 0.23029268922790633,
+          "season_sin": -0.06944191766203575,
+          "season_cos": 0.02352134269972357,
+          "christmas": 0.0974014754476684,
+          "national_trend": -0.11270463207221504
         }
       }
     },
@@ -2408,19 +2399,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2752,
-        "intercept": 0.05514250763022617,
+        "intercept": 0.055142507630226156,
         "slope": 0.3672340320569419
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2831115756552074
+          "reversion_weight": 0.2831115756552073
         },
         "reversion_context": {
-          "reversion_weight": 0.25819702129769656,
-          "season_sin": -0.06517192895924537,
-          "season_cos": 0.018316165438850365,
-          "christmas": 0.04782790704795806,
-          "national_trend": 0.03252069641572741
+          "reversion_weight": 0.2581970212976961,
+          "season_sin": -0.06517192895924544,
+          "season_cos": 0.018316165438850486,
+          "christmas": 0.04782790704795794,
+          "national_trend": 0.03252069641572721
         }
       }
     },
@@ -2439,14 +2430,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3149551193660819
+          "reversion_weight": 0.3149551193660814
         },
         "reversion_context": {
-          "reversion_weight": 0.26191917972573625,
-          "season_sin": -0.06407890796204183,
-          "season_cos": 0.02725499793621848,
-          "christmas": 0.014174919739786454,
-          "national_trend": -0.021895181104356023
+          "reversion_weight": 0.26191917972573586,
+          "season_sin": -0.06407890796204185,
+          "season_cos": 0.027254997936218436,
+          "christmas": 0.01417491973978649,
+          "national_trend": -0.021895181104356114
         }
       }
     },
@@ -2460,19 +2451,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3148,
-        "intercept": -0.03565760918459288,
+        "intercept": -0.0356576091845929,
         "slope": 0.5337801406273122
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.28055775458572335
+          "reversion_weight": 0.2805577545857235
         },
         "reversion_context": {
-          "reversion_weight": 0.23571649809995898,
-          "season_sin": -0.06994875838471654,
-          "season_cos": 0.01649089397108984,
-          "christmas": 0.10379573613927795,
-          "national_trend": -0.11735092622993304
+          "reversion_weight": 0.23571649809995857,
+          "season_sin": -0.06994875838471659,
+          "season_cos": 0.016490893971089802,
+          "christmas": 0.10379573613927796,
+          "national_trend": -0.1173509262299332
         }
       }
     },
@@ -2486,19 +2477,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2883,
-        "intercept": 0.05047730929513939,
-        "slope": 0.3652770071798227
+        "intercept": 0.05047730929513935,
+        "slope": 0.36527700717982264
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2816966003250551
+          "reversion_weight": 0.2816966003250546
         },
         "reversion_context": {
           "reversion_weight": 0.26059549451067454,
-          "season_sin": -0.06422051751689066,
-          "season_cos": 0.013181095372780232,
-          "christmas": 0.05410616963236689,
-          "national_trend": 0.043371148631512625
+          "season_sin": -0.06422051751689062,
+          "season_cos": 0.01318109537278019,
+          "christmas": 0.054106169632366856,
+          "national_trend": 0.04337114863151264
         }
       }
     },
@@ -2517,14 +2508,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.31427049131119006
+          "reversion_weight": 0.31427049131118967
         },
         "reversion_context": {
-          "reversion_weight": 0.2639258114900452,
-          "season_sin": -0.06084619658465762,
-          "season_cos": 0.022030291457195695,
-          "christmas": 0.022784856397334415,
-          "national_trend": -0.027514592855563878
+          "reversion_weight": 0.26392581149004546,
+          "season_sin": -0.06084619658465751,
+          "season_cos": 0.022030291457195685,
+          "christmas": 0.022784856397334373,
+          "national_trend": -0.027514592855563933
         }
       }
     },
@@ -2538,18 +2529,18 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3277,
-        "intercept": -0.052742200322299065,
-        "slope": 0.554082898316365
+        "intercept": -0.05274220032229907,
+        "slope": 0.5540828983163649
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.29112295732212634
+          "reversion_weight": 0.2911229573221256
         },
         "reversion_context": {
-          "reversion_weight": 0.236322965199418,
-          "season_sin": -0.07475183798952909,
-          "season_cos": 0.013561128108218978,
-          "christmas": 0.08588952053660219,
+          "reversion_weight": 0.23632296519941778,
+          "season_sin": -0.07475183798952925,
+          "season_cos": 0.01356112810821894,
+          "christmas": 0.08588952053660229,
           "national_trend": -0.13660793536148227
         }
       }
@@ -2564,19 +2555,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3014,
-        "intercept": 0.023809235915993765,
+        "intercept": 0.023809235915993814,
         "slope": 0.3588987165056325
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.29395058171448724
+          "reversion_weight": 0.29395058171448707
         },
         "reversion_context": {
-          "reversion_weight": 0.26648302711185784,
+          "reversion_weight": 0.2664830271118578,
           "season_sin": -0.06651499179848527,
-          "season_cos": 0.010570495011528779,
-          "christmas": 0.03584133723637221,
-          "national_trend": 0.03387170810663137
+          "season_cos": 0.010570495011528768,
+          "christmas": 0.03584133723637227,
+          "national_trend": 0.03387170810663131
         }
       }
     },
@@ -2591,18 +2582,18 @@
         "status": "past_issued_platt",
         "n": 2750,
         "intercept": 0.11822874852739386,
-        "slope": 0.39957402905685707
+        "slope": 0.399574029056857
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.31413837520646865
+          "reversion_weight": 0.3141383752064686
         },
         "reversion_context": {
-          "reversion_weight": 0.26828569325209073,
-          "season_sin": -0.06120860029319973,
-          "season_cos": 0.018086205446422112,
-          "christmas": 0.015572277920535232,
-          "national_trend": -0.015290541505422537
+          "reversion_weight": 0.26828569325209045,
+          "season_sin": -0.06120860029319984,
+          "season_cos": 0.018086205446422168,
+          "christmas": 0.015572277920535131,
+          "national_trend": -0.015290541505422493
         }
       }
     },
@@ -2616,19 +2607,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3404,
-        "intercept": -0.05148232598846879,
+        "intercept": -0.051482325988468775,
         "slope": 0.5544020859148017
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.29805049312396603
+          "reversion_weight": 0.298050493123966
         },
         "reversion_context": {
-          "reversion_weight": 0.24725275397451799,
-          "season_sin": -0.07406861528107783,
-          "season_cos": 0.01423306113701792,
-          "christmas": 0.08286445422501212,
-          "national_trend": -0.13501735854798474
+          "reversion_weight": 0.2472527539745177,
+          "season_sin": -0.07406861528107794,
+          "season_cos": 0.014233061137018011,
+          "christmas": 0.08286445422501217,
+          "national_trend": -0.13501735854798463
         }
       }
     },
@@ -2642,19 +2633,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3143,
-        "intercept": 0.02228412217934974,
-        "slope": 0.36866872728700845
+        "intercept": 0.022284122179349757,
+        "slope": 0.3686687272870085
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3013042447180965
+          "reversion_weight": 0.3013042447180963
         },
         "reversion_context": {
-          "reversion_weight": 0.27047620194057775,
-          "season_sin": -0.06698962176317298,
-          "season_cos": 0.010459449367202531,
-          "christmas": 0.03364173411839132,
-          "national_trend": 0.03220075697542912
+          "reversion_weight": 0.27047620194057737,
+          "season_sin": -0.06698962176317302,
+          "season_cos": 0.010459449367202502,
+          "christmas": 0.033641734118391206,
+          "national_trend": 0.03220075697542905
         }
       }
     },
@@ -2668,19 +2659,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 2881,
-        "intercept": 0.12176588396588721,
+        "intercept": 0.12176588396588724,
         "slope": 0.40406705139169175
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3226045434923317
+          "reversion_weight": 0.32260454349233236
         },
         "reversion_context": {
-          "reversion_weight": 0.2728845885673017,
-          "season_sin": -0.06146695158257747,
-          "season_cos": 0.017699808136513184,
-          "christmas": 0.015617320352883993,
-          "national_trend": -0.015727149837527453
+          "reversion_weight": 0.2728845885673011,
+          "season_sin": -0.06146695158257757,
+          "season_cos": 0.01769980813651308,
+          "christmas": 0.015617320352883905,
+          "national_trend": -0.01572714983752736
         }
       }
     },
@@ -2694,19 +2685,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3533,
-        "intercept": -0.05192103894701896,
-        "slope": 0.5664691896293772
+        "intercept": -0.051921038947018903,
+        "slope": 0.5664691896293773
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3003521053100968
+          "reversion_weight": 0.30035210531009776
         },
         "reversion_context": {
-          "reversion_weight": 0.25446227201082644,
-          "season_sin": -0.07434997656463878,
-          "season_cos": 0.01427900664156522,
-          "christmas": 0.08250247357069071,
-          "national_trend": -0.1314619223989473
+          "reversion_weight": 0.2544622720108276,
+          "season_sin": -0.07434997656463872,
+          "season_cos": 0.014279006641565175,
+          "christmas": 0.08250247357069099,
+          "national_trend": -0.13146192239894744
         }
       }
     },
@@ -2720,19 +2711,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3270,
-        "intercept": 0.006077587269716373,
+        "intercept": 0.006077587269716364,
         "slope": 0.3743644934631763
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3097401545713626
+          "reversion_weight": 0.3097401545713628
         },
         "reversion_context": {
-          "reversion_weight": 0.27980233727657333,
-          "season_sin": -0.06822711793603799,
-          "season_cos": 0.010241770774744197,
-          "christmas": 0.034010020173706274,
-          "national_trend": 0.03420507063928174
+          "reversion_weight": 0.2798023372765743,
+          "season_sin": -0.06822711793603815,
+          "season_cos": 0.010241770774744242,
+          "christmas": 0.034010020173706225,
+          "national_trend": 0.03420507063928182
         }
       }
     },
@@ -2751,14 +2742,14 @@
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.33735361294560173
+          "reversion_weight": 0.3373536129456027
         },
         "reversion_context": {
-          "reversion_weight": 0.2793835685136007,
-          "season_sin": -0.06354041351432493,
-          "season_cos": 0.01722086868546973,
-          "christmas": 0.015888558118807048,
-          "national_trend": -0.02182939006395804
+          "reversion_weight": 0.27938356851360097,
+          "season_sin": -0.06354041351432504,
+          "season_cos": 0.017220868685469775,
+          "christmas": 0.015888558118807114,
+          "national_trend": -0.021829390063958076
         }
       }
     },
@@ -2772,19 +2763,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3795,
-        "intercept": -0.06674854443569082,
+        "intercept": -0.06674854443569084,
         "slope": 0.6020145787671308
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2919922185258166
+          "reversion_weight": 0.29199221852581575
         },
         "reversion_context": {
-          "reversion_weight": 0.2503415570097147,
-          "season_sin": -0.07820834079403989,
-          "season_cos": 0.01457415763655207,
-          "christmas": 0.09140087236770536,
-          "national_trend": -0.12554776294128908
+          "reversion_weight": 0.2503415570097146,
+          "season_sin": -0.0782083407940396,
+          "season_cos": 0.014574157636552015,
+          "christmas": 0.09140087236770567,
+          "national_trend": -0.1255477629412892
         }
       }
     },
@@ -2798,19 +2789,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3530,
-        "intercept": -0.01866176556738196,
+        "intercept": -0.01866176556738195,
         "slope": 0.40265422451779004
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.30786732697386104
+          "reversion_weight": 0.3078673269738604
         },
         "reversion_context": {
-          "reversion_weight": 0.28442067241317737,
-          "season_sin": -0.07342444333051519,
-          "season_cos": 0.011266246801523026,
-          "christmas": 0.031682799169284036,
-          "national_trend": 0.047813713121561185
+          "reversion_weight": 0.284420672413177,
+          "season_sin": -0.07342444333051515,
+          "season_cos": 0.01126624680152311,
+          "christmas": 0.03168279916928409,
+          "national_trend": 0.04781371312156112
         }
       }
     },
@@ -2824,19 +2815,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3266,
-        "intercept": 0.0966437156936441,
+        "intercept": 0.09664371569364412,
         "slope": 0.45302782714288364
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.3489537412198062
+          "reversion_weight": 0.3489537412198057
         },
         "reversion_context": {
-          "reversion_weight": 0.2914641067284293,
-          "season_sin": -0.07025421547054375,
-          "season_cos": 0.01828185057651631,
-          "christmas": 0.013864316712302488,
-          "national_trend": -0.016663672270531373
+          "reversion_weight": 0.2914641067284289,
+          "season_sin": -0.07025421547054381,
+          "season_cos": 0.018281850576516306,
+          "christmas": 0.013864316712302462,
+          "national_trend": -0.01666367227053133
         }
       }
     },
@@ -2850,19 +2841,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3925,
-        "intercept": -0.06987936009556621,
+        "intercept": -0.0698793600955662,
         "slope": 0.6074687381227736
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.28312970614905164
+          "reversion_weight": 0.2831297061490516
         },
         "reversion_context": {
-          "reversion_weight": 0.24248536666536163,
-          "season_sin": -0.07893031411206414,
-          "season_cos": 0.01596707488932664,
-          "christmas": 0.08993983613137678,
-          "national_trend": -0.12919013225272985
+          "reversion_weight": 0.24248536666536147,
+          "season_sin": -0.07893031411206426,
+          "season_cos": 0.015967074889326617,
+          "christmas": 0.08993983613137675,
+          "national_trend": -0.12919013225272966
         }
       }
     },
@@ -2876,19 +2867,19 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 3661,
-        "intercept": -0.02950046924082496,
+        "intercept": -0.0295004692408249,
         "slope": 0.4038994592024319
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.30387541375611576
+          "reversion_weight": 0.3038754137561157
         },
         "reversion_context": {
-          "reversion_weight": 0.28209315206473407,
-          "season_sin": -0.07372262868694633,
-          "season_cos": 0.011404927922761168,
-          "christmas": 0.031510556670903564,
-          "national_trend": 0.047979508312069125
+          "reversion_weight": 0.28209315206473384,
+          "season_sin": -0.07372262868694618,
+          "season_cos": 0.011404927922761144,
+          "christmas": 0.031510556670903536,
+          "national_trend": 0.047979508312069
         }
       }
     },
@@ -2902,21 +2893,495 @@
       "probability_calibrator": {
         "status": "past_issued_platt",
         "n": 4055,
-        "intercept": -0.0866928540306457,
+        "intercept": -0.08669285403064572,
         "slope": 0.5939531272892488
       },
       "coefficients": {
         "reversion": {
-          "reversion_weight": 0.2714612121156343
+          "reversion_weight": 0.2714612121156344
         },
         "reversion_context": {
-          "reversion_weight": 0.23366937565636542,
-          "season_sin": -0.07916405377997046,
-          "season_cos": 0.01775215051874777,
-          "christmas": 0.08793507147034274,
-          "national_trend": -0.13086649872744435
+          "reversion_weight": 0.23366937565636545,
+          "season_sin": -0.07916405377997045,
+          "season_cos": 0.017752150518747938,
+          "christmas": 0.08793507147034281,
+          "national_trend": -0.13086649872744427
         }
       }
     }
-  ]
+  ],
+  "input_sha256": {
+    "backlog_trust.parquet": "d294b3d42a96f295086f6165c86f79191bda5f7307061a56f2d7b810e75864c7",
+    "backlog_national.parquet": "45438269dc2f9c8a85b9e7721048db1bac36671b0d9cec21b429808b6eac4635",
+    "cwt_trust_month.parquet": "0d509f8bb50a015e07e030f17dad9487ac9d164ba720ad13c2e22b93d66ffcd5",
+    "cwt_first_seen.parquet": "1fb261d062759dde2634dae6bd224e816018f56ba4e6ba39b6042a98dd44c012",
+    "dm01.parquet": "9d04157484cd5c20a92e31e12b521814a8e7576d08297161567b121eeba61850",
+    "core_trusts.csv": "2c7c1d8d0026dde72d8aa227babc4ab7b5b84b423fd50f354dec9460580bd9bc",
+    "strike_dates.csv": "17dfe7976aa1fdeb92e8e7dd92567eb36dccb039101c3a30df76cf05be74daff"
+  },
+  "review": {
+    "metrics": [
+      {
+        "model": "lightgbm",
+        "horizon_weeks": 4,
+        "n": 4446,
+        "trusts": 133,
+        "origins": 34,
+        "mae": 28.080758920538322,
+        "mase": 2.8045080203553274,
+        "mase_n": 4409,
+        "undefined_scale_n": 37,
+        "direction_accuracy": 0.6054880791722898,
+        "grow_shrink_accuracy": 0.6264664476771469,
+        "grow_shrink_n": 4262,
+        "unchanged_actual_n": 184,
+        "coverage_80": 0.8493027440395862,
+        "mean_interval_width": 101.46333579253131,
+        "issue_lead_weeks_min": 4.0,
+        "issue_lead_weeks_max": 4.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": -0.9880254403291412,
+        "naive_mae": 29.98335582546109,
+        "trust_bootstrap": {
+          "gain_pct": 6.345510209057814,
+          "ci95_low_pct": 3.7459236309620874,
+          "ci95_high_pct": 8.810497980033029,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1280,
+          "zero_last_value_n": 17,
+          "naive_mae": 56.4171875,
+          "model_mae": 48.758675371193114,
+          "gain_pct": 13.574785394622669
+        },
+        "national_sum": {
+          "n_origins": 34,
+          "min_trusts": 126,
+          "max_trusts": 133,
+          "naive_mae": 1964.1764705882354,
+          "model_mae": 1760.942077112124,
+          "gain_pct": 10.347053664442196,
+          "beats_naive": true,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm",
+        "horizon_weeks": 8,
+        "n": 4182,
+        "trusts": 133,
+        "origins": 32,
+        "mae": 31.146547319957886,
+        "mase": 2.956006412296702,
+        "mase_n": 4147,
+        "undefined_scale_n": 35,
+        "direction_accuracy": 0.573170731707317,
+        "grow_shrink_accuracy": 0.5903105590062112,
+        "grow_shrink_n": 4025,
+        "unchanged_actual_n": 157,
+        "coverage_80": 0.8448110951697753,
+        "mean_interval_width": 110.69346418253959,
+        "issue_lead_weeks_min": 8.0,
+        "issue_lead_weeks_max": 8.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": -5.720340506172269,
+        "naive_mae": 32.00239120038259,
+        "trust_bootstrap": {
+          "gain_pct": 2.6743122883095105,
+          "ci95_low_pct": -0.6780379845096529,
+          "ci95_high_pct": 5.826036207429004,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1313,
+          "zero_last_value_n": 17,
+          "naive_mae": 60.21249047981721,
+          "model_mae": 53.342590786259045,
+          "gain_pct": 11.40942624829795
+        },
+        "national_sum": {
+          "n_origins": 32,
+          "min_trusts": 126,
+          "max_trusts": 133,
+          "naive_mae": 2026.125,
+          "model_mae": 2206.1600865218525,
+          "gain_pct": -8.885685064931948,
+          "beats_naive": false,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm",
+        "horizon_weeks": 12,
+        "n": 3919,
+        "trusts": 133,
+        "origins": 30,
+        "mae": 32.22075922767228,
+        "mase": 3.082612651544926,
+        "mase_n": 3886,
+        "undefined_scale_n": 33,
+        "direction_accuracy": 0.5771880581781067,
+        "grow_shrink_accuracy": 0.5952317880794702,
+        "grow_shrink_n": 3775,
+        "unchanged_actual_n": 144,
+        "coverage_80": 0.8323551926511865,
+        "mean_interval_width": 112.05378990364267,
+        "issue_lead_weeks_min": 12.0,
+        "issue_lead_weeks_max": 12.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": -9.601370224052104,
+        "naive_mae": 33.90558816024496,
+        "trust_bootstrap": {
+          "gain_pct": 4.969177719642626,
+          "ci95_low_pct": 0.8181927681451778,
+          "ci95_high_pct": 8.747154436616592,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1350,
+          "zero_last_value_n": 19,
+          "naive_mae": 60.88740740740741,
+          "model_mae": 51.5450044411099,
+          "gain_pct": 15.343735862796704
+        },
+        "national_sum": {
+          "n_origins": 30,
+          "min_trusts": 125,
+          "max_trusts": 133,
+          "naive_mae": 2018.4,
+          "model_mae": 2141.9372544835123,
+          "gain_pct": -6.120553630772507,
+          "beats_naive": false,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm_bias_corrected",
+        "horizon_weeks": 4,
+        "n": 4446,
+        "trusts": 133,
+        "origins": 34,
+        "mae": 32.522675399144575,
+        "mase": 3.7903505391987617,
+        "mase_n": 4409,
+        "undefined_scale_n": 37,
+        "direction_accuracy": 0.5600539811066126,
+        "grow_shrink_accuracy": 0.5748474894415767,
+        "grow_shrink_n": 4262,
+        "unchanged_actual_n": 184,
+        "coverage_80": 0.7478632478632479,
+        "mean_interval_width": 100.79652148976713,
+        "issue_lead_weeks_min": 4.0,
+        "issue_lead_weeks_max": 4.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": -8.608125827312922,
+        "naive_mae": 29.98335582546109,
+        "trust_bootstrap": {
+          "gain_pct": -8.46909728339067,
+          "ci95_low_pct": -12.285081022171267,
+          "ci95_high_pct": -4.879739159900545,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1280,
+          "zero_last_value_n": 17,
+          "naive_mae": 56.4171875,
+          "model_mae": 51.7949177555995,
+          "gain_pct": 8.193016967392253
+        },
+        "national_sum": {
+          "n_origins": 34,
+          "min_trusts": 126,
+          "max_trusts": 133,
+          "naive_mae": 1964.1764705882354,
+          "model_mae": 2806.718200326334,
+          "gain_pct": -42.895419141528194,
+          "beats_naive": false,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm_bias_corrected",
+        "horizon_weeks": 8,
+        "n": 4182,
+        "trusts": 133,
+        "origins": 32,
+        "mae": 35.95967086274262,
+        "mase": 6.35776879033633,
+        "mase_n": 4147,
+        "undefined_scale_n": 35,
+        "direction_accuracy": 0.5518890483022477,
+        "grow_shrink_accuracy": 0.5662111801242236,
+        "grow_shrink_n": 4025,
+        "unchanged_actual_n": 157,
+        "coverage_80": 0.7431850789096126,
+        "mean_interval_width": 109.75170170268177,
+        "issue_lead_weeks_min": 8.0,
+        "issue_lead_weeks_max": 8.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": -9.602535987130661,
+        "naive_mae": 32.00239120038259,
+        "trust_bootstrap": {
+          "gain_pct": -12.365574927140809,
+          "ci95_low_pct": -16.74143605133347,
+          "ci95_high_pct": -8.249004313818345,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1313,
+          "zero_last_value_n": 17,
+          "naive_mae": 60.21249047981721,
+          "model_mae": 55.64503259768597,
+          "gain_pct": 7.585565462804134
+        },
+        "national_sum": {
+          "n_origins": 32,
+          "min_trusts": 126,
+          "max_trusts": 133,
+          "naive_mae": 2026.125,
+          "model_mae": 3142.685073055255,
+          "gain_pct": -55.10815339898847,
+          "beats_naive": false,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm_bias_corrected",
+        "horizon_weeks": 12,
+        "n": 3919,
+        "trusts": 133,
+        "origins": 30,
+        "mae": 34.791429102407136,
+        "mase": 8.681733300553649,
+        "mase_n": 3886,
+        "undefined_scale_n": 33,
+        "direction_accuracy": 0.5680020413370758,
+        "grow_shrink_accuracy": 0.5856953642384106,
+        "grow_shrink_n": 3775,
+        "unchanged_actual_n": 144,
+        "coverage_80": 0.7471293697371778,
+        "mean_interval_width": 111.81272151705043,
+        "issue_lead_weeks_min": 12.0,
+        "issue_lead_weeks_max": 12.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": -6.768399465790039,
+        "naive_mae": 33.90558816024496,
+        "trust_bootstrap": {
+          "gain_pct": -2.6126694454480903,
+          "ci95_low_pct": -7.382930020898425,
+          "ci95_high_pct": 1.729735213756394,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1350,
+          "zero_last_value_n": 19,
+          "naive_mae": 60.88740740740741,
+          "model_mae": 52.21279495960987,
+          "gain_pct": 14.246972924556156
+        },
+        "national_sum": {
+          "n_origins": 30,
+          "min_trusts": 125,
+          "max_trusts": 133,
+          "naive_mae": 2018.4,
+          "model_mae": 2578.1499929222487,
+          "gain_pct": -27.73236191648081,
+          "beats_naive": false,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm_blend",
+        "horizon_weeks": 4,
+        "n": 4446,
+        "trusts": 133,
+        "origins": 34,
+        "mae": 28.091632509011838,
+        "mase": 2.811108709302847,
+        "mase_n": 4409,
+        "undefined_scale_n": 37,
+        "direction_accuracy": 0.6054880791722898,
+        "grow_shrink_accuracy": 0.6264664476771469,
+        "grow_shrink_n": 4262,
+        "unchanged_actual_n": 184,
+        "coverage_80": 0.844804318488529,
+        "mean_interval_width": 104.24358872397595,
+        "issue_lead_weeks_min": 4.0,
+        "issue_lead_weeks_max": 4.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": 2.6803012699388926,
+        "naive_mae": 29.98335582546109,
+        "trust_bootstrap": {
+          "gain_pct": 6.309244793882785,
+          "ci95_low_pct": 5.085764869794752,
+          "ci95_high_pct": 7.468290460486665,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1280,
+          "zero_last_value_n": 17,
+          "naive_mae": 56.4171875,
+          "model_mae": 52.57527962539111,
+          "gain_pct": 6.8098181509116955
+        },
+        "national_sum": {
+          "n_origins": 34,
+          "min_trusts": 126,
+          "max_trusts": 133,
+          "naive_mae": 1964.1764705882354,
+          "model_mae": 1678.3549877023545,
+          "gain_pct": 14.551721149591135,
+          "beats_naive": true,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm_blend",
+        "horizon_weeks": 8,
+        "n": 4182,
+        "trusts": 133,
+        "origins": 32,
+        "mae": 30.44272327831184,
+        "mase": 2.910129087771508,
+        "mase_n": 4147,
+        "undefined_scale_n": 35,
+        "direction_accuracy": 0.573170731707317,
+        "grow_shrink_accuracy": 0.5903105590062112,
+        "grow_shrink_n": 4025,
+        "unchanged_actual_n": 157,
+        "coverage_80": 0.8388330942132951,
+        "mean_interval_width": 112.40400134043288,
+        "issue_lead_weeks_min": 8.0,
+        "issue_lead_weeks_max": 8.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": 0.1257216646565722,
+        "naive_mae": 32.00239120038259,
+        "trust_bootstrap": {
+          "gain_pct": 4.873598076796537,
+          "ci95_low_pct": 3.257290774082552,
+          "ci95_high_pct": 6.371195867066697,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1313,
+          "zero_last_value_n": 17,
+          "naive_mae": 60.21249047981721,
+          "model_mae": 56.67699080369585,
+          "gain_pct": 5.871704770800723
+        },
+        "national_sum": {
+          "n_origins": 32,
+          "min_trusts": 126,
+          "max_trusts": 133,
+          "naive_mae": 2026.125,
+          "model_mae": 1913.961709536618,
+          "gain_pct": 5.535852450534007,
+          "beats_naive": true,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      },
+      {
+        "model": "lightgbm_blend",
+        "horizon_weeks": 12,
+        "n": 3919,
+        "trusts": 133,
+        "origins": 30,
+        "mae": 31.72770041616596,
+        "mase": 3.0610752143208417,
+        "mase_n": 3886,
+        "undefined_scale_n": 33,
+        "direction_accuracy": 0.5771880581781067,
+        "grow_shrink_accuracy": 0.5952317880794702,
+        "grow_shrink_n": 3775,
+        "unchanged_actual_n": 144,
+        "coverage_80": 0.8349068639959173,
+        "mean_interval_width": 117.68790541367385,
+        "issue_lead_weeks_min": 12.0,
+        "issue_lead_weeks_max": 12.0,
+        "retrospective_or_nowcast_n": 0,
+        "mean_signed_error": -2.547304147494284,
+        "naive_mae": 33.90558816024496,
+        "trust_bootstrap": {
+          "gain_pct": 6.4233887752834224,
+          "ci95_low_pct": 4.352218071331653,
+          "ci95_high_pct": 8.21077758839561,
+          "trusts": 133,
+          "replicates": 10000,
+          "valid_replicates": 10000,
+          "seed": 42,
+          "method": "Percentile paired trust-cluster bootstrap; resample trusts with all their cases.",
+          "caveat": "Preserves within-trust dependence; does not capture shared national shocks or model-selection uncertainty."
+        },
+        "large_swings": {
+          "n": 1350,
+          "zero_last_value_n": 19,
+          "naive_mae": 60.88740740740741,
+          "model_mae": 56.02056598349774,
+          "gain_pct": 7.993182221316886
+        },
+        "national_sum": {
+          "n_origins": 30,
+          "min_trusts": 125,
+          "max_trusts": 133,
+          "naive_mae": 2018.4,
+          "model_mae": 1895.380927047863,
+          "gain_pct": 6.0948807447551046,
+          "beats_naive": true,
+          "scope": "Sum over identical scored trusts at each issue; coverage varies, not the official England series."
+        }
+      }
+    ],
+    "bias_rule": "Per-horizon expanding mean actual-minus-raw-prediction from earlier issues with target release <= issue; zero until 200 cases.",
+    "blend_rule": "Fixed 50:50 LightGBM/last-value blend at every horizon; weight not fitted or searched.",
+    "large_swings_rule": "abs(actual - last) > 0.30 * last; zero last includes any nonzero actual.",
+    "large_swings_caveat": "Outcome-defined, post-hoc diagnostic slice; not a group identifiable at forecast time.",
+    "evaluation_caveat": "Requested after inspection of Stage 3 results; all additions and selection remain exploratory.",
+    "national_display": {
+      "enabled": false,
+      "reason": "Only paired cohort sums have been evaluated; full England coverage and aggregate intervals are not established. No national model forecasts exported."
+    },
+    "selected_trust_model": "lightgbm_blend",
+    "selection_rule": "Use fixed blend if it beats both original baselines on trust MAE/MASE at 8/12w and naive paired-sum MAE at all horizons; otherwise retain Stage 3 selection."
+  }
 }

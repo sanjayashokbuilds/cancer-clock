@@ -1,5 +1,8 @@
 # Stage 3 handoff
 
+Historical Stage 3 handoff. Stage 4's review, blend, display restrictions and
+current test count supersede this page; see `stage_4.md` and the README.
+
 **Done:** all 38 tests pass with warnings treated as errors; pipeline/model snapshot
 checks pass. Full fit took 234 seconds on this Linux runtime, without warnings.
 Mac warnings were not reproduced; see warnings.md. No blanket suppression added.

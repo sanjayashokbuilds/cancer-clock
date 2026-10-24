@@ -10,6 +10,7 @@ import pandas as pd
 from config import OUTPUTS_DIR, STATIC_DIR, PROCESSED_DIR
 from models.forecast import KEY, comparison, choose_model
 from models.calibration import probability_metrics
+from models.review import adjusted_predictions, evaluate
 from pipeline.common import DataError
 
 
@@ -29,6 +30,12 @@ def main() -> None:
         raise DataError('Model score report does not match row-level results')
     if choose_model(report['metrics'])[1]!=report['gate']:
         raise DataError('GO/NO-GO report does not match measured results')
+    adjusted=pd.read_parquet(OUTPUTS_DIR/'backtest_adjusted_predictions.parquet')
+    pd.testing.assert_frame_equal(adjusted_predictions(predictions,baseline),adjusted)
+    review=evaluate(predictions,adjusted)
+    for key,value in review.items():
+        if report['review'][key]!=value:
+            raise DataError(f'Review report differs from row-level results: {key}')
     checks=[predictions.feature_max_published_on.le(predictions.as_of_date).all(),
             predictions.training_max_target_published_on.le(predictions.as_of_date).all(),
             (predictions.calibration_max_target_published_on.isna() | predictions.calibration_max_target_published_on.le(predictions.as_of_date)).all(),
@@ -46,11 +53,21 @@ def main() -> None:
     core=pd.read_csv(STATIC_DIR/'core_trusts.csv')
     if {t['org_code'] for t in latest['trusts']}!=set(core.org_code):
         raise DataError('Latest forecasts do not account for every core trust')
+    if latest['selected_model']!=report['review']['selected_trust_model']:
+        raise DataError('Latest display model differs from reviewed selection')
+    if latest['national_model_forecasts']['enabled']:
+        raise DataError('Full England model forecasts are not validated')
+    for trust in latest['trusts']:
+        for forecast in trust['forecasts']:
+            if any('probability' in key for key in forecast):
+                raise DataError('Numerical growth probabilities entered the display contract')
+            if forecast['horizon_weeks']!=4 and 'growth_signal' in forecast:
+                raise DataError('Growth signals must be limited to four weeks')
     for h in (4,8,12):
-        m=next(m for m in report['metrics'] if m['horizon_weeks']==h and m['model']==report['gate']['selected'])
+        m=next(m for m in report['review']['metrics'] if m['horizon_weeks']==h and m['model']==latest['selected_model'])
         print(f'Issue +{h} weeks: {m["n"]:,} paired cases; selected {m["model"]}, MAE {m["mae"]:.2f}')
     print(f'Latest issue {latest["issue_date"]}: {latest["forecast_trusts"]}/{len(core)} trusts have sufficient recent history.')
-    print('Stage 3 snapshot checks passed. '+report['availability_label'])
+    print('Model and review snapshot checks passed. '+report['availability_label'])
 
 
 if __name__=='__main__':

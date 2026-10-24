@@ -22,13 +22,13 @@
    If your branch is protected, use the offered new-branch/pull-request flow.
 
 Upload summary:
-`Test mean reversion and machine learning against the backlog baseline`
+`Add bottleneck checks and temper the longer-range backlog forecasts`
 
 Optional description:
-`Added an interpretable reversion model, LightGBM forecasts and a separate growth
-classifier. They use published history and are compared on the same future
-forecast cases as the baseline. The results include error scores, uncertainty
-coverage and probability calibration, so we can see which approaches help.`
+`The longer forecasts tended to come in low, so they now split the difference
+with the last known backlog. Added diagnosis and treatment signals with the
+underlying volumes, and ten hospitals for Rounak to check. The report keeps the
+original model results, including the large swings where it helped most.`
 
 Web uploads overwrite files but do **not** delete old files or respect ignore
 rules. The packaged ZIP excludes caches at every depth, raw downloads, virtual

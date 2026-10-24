@@ -130,7 +130,12 @@ def test_latest_forecasts_and_classifier_artifacts() -> None:
         for f in trust['forecasts']:
             assert pd.Timestamp(f['target_date'])-pd.Timestamp(f['issue_date'])==pd.Timedelta(weeks=f['horizon_weeks'])
             assert 0<=f['lower_80']<=f['upper_80']
-            assert 0<=f['probability_of_growth']<=1
+            assert not any('probability' in key for key in f)
+            if f['horizon_weeks']==4:
+                assert f['growth_signal'] in {'likely up','likely down','unclear'}
+            else:
+                assert 'growth_signal' not in f
+    assert forecast['national_model_forecasts']['enabled'] is False
     report=json.loads((OUTPUTS_DIR/'backtest_classifier.json').read_text())
     p=pd.read_parquet(OUTPUTS_DIR/'backtest_model_predictions.parquet')
     p=p.loc[p.model.eq('lightgbm')]

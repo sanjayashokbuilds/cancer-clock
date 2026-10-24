@@ -1,4 +1,4 @@
-# Stage 3 methodology
+# Forecast methodology (Stages 3–4)
 
 **Approximate: latest revised values.** Release dates are M+2/day14; source
 upload dates are retained separately. Archived original values are unavailable.
@@ -53,8 +53,37 @@ remain experimental. No growth probability is inferred from three quantiles.
 
 MAE and MASE average paired forecast cases. MASE's scale uses available adjacent
 weekly changes; zero scales are excluded from MASE only and counted. Direction
-includes unchanged. Overlapping dates and trusts are dependent; no significance claim.
+includes unchanged. Overlapping dates and trusts are dependent.
 
 Count gate: beat **both** baselines on MAE and MASE at issue +8 AND +12 weeks.
 Among passing candidates select lowest combined 8/12 MASE; otherwise use persistence.
 Selection on this comparison is exploratory, not independent future validation.
+
+## Stage 4 review additions
+
+`models.review` preserves the original predictions and reports three candidates:
+original LightGBM, an expanding bias correction, and a fixed 50:50 blend with
+last value. The correction subtracts earlier mean signed error per horizon,
+using only older issued cases with targets published by the current issue;
+it is zero before 200 eligible cases. It worsened errors and was rejected.
+The blend uses no fitted weight and is now selected for trust forecasts. Its
+interval endpoints are blended with the baseline endpoints; reported coverage
+is empirical, not a formal quantile guarantee.
+
+Bootstrap intervals resample whole trusts with all paired issue cases, 10,000
+draws, seed 42, percentile 2.5/97.5 bounds. Gain is one minus the ratio of summed
+absolute errors, preserving the original case weighting. This captures
+within-trust dependence but not common shocks. Large swings use
+`abs(actual-last) > 0.30*last`, an outcome-defined, post-hoc diagnostic slice.
+Original and blend results are reported separately.
+
+Aggregate MAE first sums predictions and actuals over the identical scored
+trusts at each issue, then averages absolute aggregate errors across issues.
+Varying cohort coverage is reported. These are not forecasts of the official
+England series, so no national forecast or sum of trust intervals is exported.
+
+The display contract exposes only 4-week growth categories. Raw classifier
+probability >=0.6 with a rising count forecast means likely up; <=0.4 with a
+falling count means likely down; otherwise unclear. No numeric probabilities or
+8/12-week growth categories are exported. Thresholds are assumed and experimental.
+Research Brier/calibration outputs remain available for audit.

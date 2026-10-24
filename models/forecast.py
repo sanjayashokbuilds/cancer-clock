@@ -196,8 +196,9 @@ def probability_status(report: dict, horizon: int) -> str:
 
 def export_latest(sources: dict, core: pd.DataFrame, panel: pd.DataFrame, features: list[str],
                   predictions: pd.DataFrame, selected: str, latest_issue: pd.Timestamp,
-                  gate: dict, classifier_report: dict) -> None:
+                  gate: dict, classifier_report: dict, national_display: dict | None = None) -> None:
     """Refit and export one explicit source-supported issue with all core statuses."""
+    from models.review import BLEND_WEIGHT, direction_signal
     # Refit only once at the latest source-supported issue and export all core statuses.
     base=latest_baselines(sources,panel,latest_issue);latest_parts=[]
     for h in FORECAST_HORIZONS_WEEKS:
@@ -208,27 +209,37 @@ def export_latest(sources: dict, core: pd.DataFrame, panel: pd.DataFrame, featur
     latest=pd.concat(latest_parts,ignore_index=True)
     trusts=[]
     for trust in core.itertuples():
-        history=sources['backlog_trust'].loc[sources['backlog_trust'].org_code.eq(trust.org_code)].sort_values('week_ending').tail(52)
+        history=available_at(sources['backlog_trust'],latest_issue,allow_approximate=True)
+        history=history.loc[history.org_code.eq(trust.org_code)].sort_values('week_ending').tail(52)
         entry=dict(org_code=trust.org_code,name=trust.name,history=history[['week_ending','backlog','published_on']].to_dict('records'),forecasts=[])
         for h in FORECAST_HORIZONS_WEEKS:
             r=latest.loc[latest.org_code.eq(trust.org_code)&latest.horizon_weeks.eq(h)]
             if r.empty: continue
-            row=r.loc[r.model.eq(selected)].iloc[0] if selected!='naive' else r.iloc[0]
+            raw_model='lightgbm' if selected=='lightgbm_blend' else selected
+            row=r.loc[r.model.eq(raw_model)].iloc[0] if selected!='naive' else r.iloc[0]
             point,lo,hi=row.prediction,row.lower_80,row.upper_80
+            b=base.loc[base.org_code.eq(trust.org_code)&base.horizon_weeks.eq(h)].iloc[0]
             if selected=='naive':
-                b=base.loc[base.org_code.eq(trust.org_code)&base.horizon_weeks.eq(h)].iloc[0]
                 point,lo,hi=b.prediction,b.lower_80,b.upper_80
-            entry['forecasts'].append(dict(horizon_weeks=h,issue_date=latest_issue,target_date=row.target_date,
+            if selected=='lightgbm_blend':
+                point=BLEND_WEIGHT*point+(1-BLEND_WEIGHT)*b.prediction
+                lo=BLEND_WEIGHT*lo+(1-BLEND_WEIGHT)*b.lower_80
+                hi=BLEND_WEIGHT*hi+(1-BLEND_WEIGHT)*b.upper_80
+            forecast=dict(horizon_weeks=h,issue_date=latest_issue,target_date=row.target_date,
                 latest_observation=row.latest_observation,point_forecast=point,lower_80=lo,upper_80=hi,model=selected,
-                probability_of_growth=row.prob_growth,raw_probability_of_growth=row.prob_growth_raw,
-                probability_model='lightgbm_binary_prequential_platt',
-                probability_status=probability_status(classifier_report,h),
+                last_value=row.last_value,
                 training_n=row.training_n,training_max_target_published_on=row.training_max_target_published_on,
-                interpretation='Hospital overdue backlog, not a personal waiting-time prediction.'))
+                interpretation='Hospital overdue backlog, not a personal waiting-time prediction.')
+            if h==4:
+                forecast['growth_signal']=direction_signal(row.prob_growth_raw,row.last_value,point)
+                forecast['growth_signal_status']='experimental category; thresholds 0.4/0.6 and point-direction agreement'
+            entry['forecasts'].append(forecast)
         entry['status']='forecast_available' if entry['forecasts'] else 'unavailable_missing_recent_history'
         trusts.append(entry)
-    write_json(OUTPUTS_DIR/'forecasts_latest.json',dict(stage=3,issue_date=latest_issue,availability_label=LABEL,
+    write_json(OUTPUTS_DIR/'forecasts_latest.json',dict(stage=4,issue_date=latest_issue,availability_label=LABEL,
         historical_vintage_verified=False,selected_model=selected,gate=gate,
+        growth_display=classifier_report.get('display_policy'),
+        national_model_forecasts=national_display or dict(enabled=False,reason='No national model forecasts exported.'),
         forecast_trusts=sum(t['status']=='forecast_available' for t in trusts),trusts=trusts))
 
 
@@ -282,12 +293,15 @@ def run() -> dict:
     write_json(OUTPUTS_DIR/'backtest_model.json',report)
     write_json(OUTPUTS_DIR/'backtest_classifier.json',classifier_report)
     plot_calibration(classifier_report,OUTPUTS_DIR.parent/'docs'/'fig_growth_calibration.png')
-    export_latest(sources,core,panel,features,predictions,selected,latest_issue,gate,classifier_report)
+    from models.review import run as review_run
+    review=review_run()
+    report['review']=review
     print('\nISSUE-ANCHORED, EXACT PAIRED CASES')
     print('Horizon Model                  N     MAE    MASE  Direction Coverage80')
     for m in metrics:
         print(f'{m["horizon_weeks"]:>3}w    {m["model"]:20} {m["n"]:5} {m["mae"]:7.2f} {m["mase"]:7.3f} {m["direction_accuracy"]:8.1%} {m["coverage_80"]:9.1%}')
-    print('Gate:',gate['status'],'| selected:',selected)
+    print('Original Stage 3 gate:',gate['status'],'| original selection:',selected)
+    print('Reviewed trust forecasts:',review['selected_trust_model'])
     for m in classifier_report['metrics']:
         if m['model'] in {'calibrated','historical_frequency'}:
             print(f'Growth {m["horizon_weeks"]:2}w {m["model"]:20} Brier={m["brier"]:.4f}, accuracy={m["accuracy"]:.1%}')

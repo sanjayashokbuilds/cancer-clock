@@ -17,3 +17,12 @@
 - Probability calibration failed to improve Brier in this run. Scores are shown
   alongside simple benchmarks; probabilities are experimental.
 - No personal waits, lives-saved estimates or causal recovery recommendations.
+- Stage 4 uses a fixed 50:50 blend after retrospective review, not independent
+  model selection. Trust-cluster bootstrap does not model shared national shocks.
+- Large-swings cases depend on future actuals and cannot be selected at issue.
+- Only 4-week qualitative growth signals are exported; thresholds 0.4/0.6 and
+  agreement with the count forecast are assumed, not calibrated confidence.
+- Bottleneck gaps, volume floors, shrinkage and confidence rules are screening
+  assumptions. DM01 contains non-cancer demand and repeated monthly patients.
+  FDS discordance and insufficient evidence are explicit. National DTT context
+  is never copied into trust-level splits. See `bottleneck_method.md`.

@@ -12,7 +12,7 @@ EXCLUDED = {'.git', '.venv', 'venv', 'node_modules', '__pycache__', '.pytest_cac
 
 def main() -> None:
     """Package source and small outputs; fail rather than omit oversized outputs."""
-    target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / 'cancer-clock-stage-3.zip'
+    target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / 'cancer-clock-stage-4.zip'
     if target.is_relative_to(ROOT):
         raise ValueError('Save the archive outside the repository')
     files = []
