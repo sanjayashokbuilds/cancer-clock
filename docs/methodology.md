@@ -1,6 +1,6 @@
 # Methodology status
 
-Stage 0 has no analytical implementation or numerical findings.
+Stage 1 imports and validates published observations. No forecasts, simulator results or model accuracy findings exist yet. See data_dictionary.md for the source definitions and outputs.
 
 The planned outcome is the number of people still waiting beyond 62 days at
 trust level. Completed-pathway performance percentages are different measures.

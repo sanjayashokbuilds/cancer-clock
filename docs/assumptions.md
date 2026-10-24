@@ -1,6 +1,6 @@
 # Assumptions register
 
-No source-specific claim has been independently verified in Stage 0.
+Stage 1 verifies actual CWT, backlog and DM01 source files. Publication timing and causal capacity effects remain assumptions.
 `config.py` contains proposed defaults with provenance, status and caveats.
 
 | Proposed default | Status | Limitation |
@@ -22,8 +22,9 @@ Additional decisions for later stages:
   proportions. Any use in a trust simulator must be an explicit assumption.
 - A coarse weekly age bucket cannot classify the 62- and 104-day boundaries
   exactly. Specify a boundary convention or retain day-level age information.
-- Strike dates, trust coordinates and example statistics remain unverified.
-  No placeholder rows or invented coordinates are supplied.
+- Strike dates and strike-capacity effects remain unverified. Organisation
+  coordinates are sourced through ODS/postcodes.io when available; unresolved
+  coordinates remain blank. No invented coordinates are supplied.
 
-No API keys are required or read by this stage. Later integrations must be
+No API keys are required or read by Stage 1. Later integrations must be
 optional and keep secrets in an excluded `.env` or environment variables.

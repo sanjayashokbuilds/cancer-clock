@@ -1,9 +1,11 @@
-# Stage 0 only needs the test runner. Runtime code uses the standard library.
-pytest>=8.0,<9.0
-# Add and validate dependencies when their stage is implemented:
-# Stage 1: requests beautifulsoup4 pandas pyarrow openpyxl matplotlib python-dotenv
-# Stages 2-5: numpy scipy scikit-learn lightgbm
-# Stage 7: fastapi uvicorn pydantic
-# Stage 9: google-genai
-# Stage 10 (optional): psycopg[binary]
-# Frontend dependencies will live in web/package.json in Stage 8.
+# Stage 1 tested with Python 3.12.14. No API keys are needed.
+pytest==8.4.2
+requests==2.34.2
+beautifulsoup4==4.15.0
+pandas==2.2.3
+numpy==2.3.5
+pyarrow==26.0.0
+openpyxl==3.1.5
+matplotlib==3.10.8
+# Add later only when used: scipy, scikit-learn, lightgbm, fastapi, uvicorn,
+# pydantic, python-dotenv, google-genai, psycopg[binary].

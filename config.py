@@ -1,12 +1,14 @@
 """Shared project settings; importing this module does not write files."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 import sys
 
 PROJECT_NAME: str = "Cancer Clock"
-STAGE: int = 0
+STAGE: int = 1
 MIN_PYTHON: tuple[int, int] = (3, 11)
 ROOT_DIR: Path = Path(__file__).resolve().parent
 DATA_DIR: Path = ROOT_DIR / "data"
@@ -79,7 +81,7 @@ def main() -> None:
     """Check the runtime and initialise directories without downloading data."""
     check_python_version()
     ensure_directories()
-    print(f"{PROJECT_NAME} | Stage {STAGE} skeleton ready")
+    print(f"{PROJECT_NAME} | Stage {STAGE} configuration ready")
     print("Python requirement: 3.11+ OK")
     print("Working directories ready; no data downloaded.")
     print(DISCLAIMER)
