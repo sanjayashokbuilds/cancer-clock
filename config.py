@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 PROJECT_NAME: str = "Cancer Clock"
-STAGE: int = 2
+STAGE: int = 3
 MIN_PYTHON: tuple[int, int] = (3, 11)
 ROOT_DIR: Path = Path(__file__).resolve().parent
 DATA_DIR: Path = ROOT_DIR / "data"

@@ -12,7 +12,7 @@ EXCLUDED = {'.git', '.venv', 'venv', 'node_modules', '__pycache__', '.pytest_cac
 
 def main() -> None:
     """Package source and small outputs; fail rather than omit oversized outputs."""
-    target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / 'cancer-clock-stage-2.zip'
+    target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / 'cancer-clock-stage-3.zip'
     if target.is_relative_to(ROOT):
         raise ValueError('Save the archive outside the repository')
     files = []
@@ -35,6 +35,8 @@ def main() -> None:
         for path in files:
             archive.write(path, Path('cancer-clock') / path.relative_to(ROOT))
     with ZipFile(target) as archive:
+        if any(EXCLUDED.intersection(Path(name).parts) or Path(name).suffix in {'.pyc', '.pyo'} for name in archive.namelist()):
+            raise RuntimeError('Generated caches entered the upload ZIP')
         if archive.testzip() is not None:
             raise RuntimeError('Archive integrity check failed')
     print(f'Packaged {len(files)} files; {target.stat().st_size:,} bytes: {target}')

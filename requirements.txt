@@ -1,4 +1,4 @@
-# Stage 1 tested with Python 3.12.14. No API keys are needed.
+# Tested with Python 3.12.14; Python 3.11+ supported. No API keys needed.
 pytest==8.4.2
 requests==2.34.2
 beautifulsoup4==4.15.0
@@ -7,5 +7,5 @@ numpy==2.3.5
 pyarrow==26.0.0
 openpyxl==3.1.5
 matplotlib==3.10.8
-# Add later only when used: scipy, scikit-learn, lightgbm, fastapi, uvicorn,
-# pydantic, python-dotenv, google-genai, psycopg[binary].
+scipy==1.17.0
+lightgbm==4.6.0

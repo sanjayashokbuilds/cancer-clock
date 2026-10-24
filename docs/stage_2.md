@@ -1,4 +1,6 @@
-# Stage 2 handoff
+# Stage 2 handoff (historical)
+
+Stage 3 adds models; current run/upload instructions are in README and web_upload.md.
 
 Done: 29 tests pass; seven snapshot checks pass. 133 core trusts, all geocoded;
 178 backlog weeks from 9 April 2023. Monthly datasets still start October 2023.

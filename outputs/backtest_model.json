@@ -1,0 +1,2922 @@
+{
+  "stage": 3,
+  "availability_label": "approximate: latest revised values",
+  "historical_vintage_verified": false,
+  "evaluation_anchor": "issue",
+  "core_trusts": 133,
+  "origins": 35,
+  "features": [
+    "log_backlog",
+    "observed_26",
+    "std_26_relative",
+    "log_lag_1",
+    "log_lag_4",
+    "log_lag_8",
+    "log_lag_12",
+    "log_lag_26",
+    "change_1",
+    "change_4",
+    "change_8",
+    "change_12",
+    "change_26",
+    "mean_4_relative",
+    "mean_13_relative",
+    "mean_26_relative",
+    "fds_performance",
+    "d62_usc_performance",
+    "d31_all_performance",
+    "d31_surgery_performance",
+    "d31_radiotherapy_performance",
+    "d31_drugs_performance",
+    "first_seen_change",
+    "log_first_seen",
+    "backlog_per_100_first_seen",
+    "dm_ct_total_waiting_list",
+    "dm_mri_total_waiting_list",
+    "dm_ultrasound_total_waiting_list",
+    "dm_colonoscopy_total_waiting_list",
+    "dm_flexi_total_waiting_list",
+    "dm_gastroscopy_total_waiting_list",
+    "dm_cystoscopy_total_waiting_list",
+    "dm_ct_pct_waiting_6plus",
+    "dm_mri_pct_waiting_6plus",
+    "dm_ultrasound_pct_waiting_6plus",
+    "dm_colonoscopy_pct_waiting_6plus",
+    "dm_flexi_pct_waiting_6plus",
+    "dm_gastroscopy_pct_waiting_6plus",
+    "dm_cystoscopy_pct_waiting_6plus",
+    "dm_ct_activity",
+    "dm_mri_activity",
+    "dm_ultrasound_activity",
+    "dm_colonoscopy_activity",
+    "dm_flexi_activity",
+    "dm_gastroscopy_activity",
+    "dm_cystoscopy_activity",
+    "cwt_age_days",
+    "dm01_age_days",
+    "first_seen_age_days",
+    "national_log_backlog",
+    "national_change8",
+    "lag_weeks",
+    "strike_days_past28",
+    "observation_horizon_weeks",
+    "target_sin",
+    "target_cos",
+    "target_christmas",
+    "observed_sin",
+    "observed_cos",
+    "observed_christmas",
+    "season_sin_change",
+    "season_cos_change",
+    "christmas_change",
+    "target_easter"
+  ],
+  "metrics": [
+    {
+      "model": "drift",
+      "horizon_weeks": 4,
+      "n": 4446,
+      "trusts": 133,
+      "origins": 34,
+      "mae": 52.649881916329285,
+      "mase": 5.264288007702721,
+      "mase_n": 4409,
+      "undefined_scale_n": 37,
+      "direction_accuracy": 0.4161043634727845,
+      "grow_shrink_accuracy": 0.41459408728296576,
+      "grow_shrink_n": 4262,
+      "unchanged_actual_n": 184,
+      "coverage_80": 0.8304093567251462,
+      "mean_interval_width": 179.8602114260009,
+      "issue_lead_weeks_min": 4.0,
+      "issue_lead_weeks_max": 4.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "lightgbm",
+      "horizon_weeks": 4,
+      "n": 4446,
+      "trusts": 133,
+      "origins": 34,
+      "mae": 28.080758920538326,
+      "mase": 2.8045080203553274,
+      "mase_n": 4409,
+      "undefined_scale_n": 37,
+      "direction_accuracy": 0.6054880791722898,
+      "grow_shrink_accuracy": 0.6264664476771469,
+      "grow_shrink_n": 4262,
+      "unchanged_actual_n": 184,
+      "coverage_80": 0.8493027440395862,
+      "mean_interval_width": 101.46333579253131,
+      "issue_lead_weeks_min": 4.0,
+      "issue_lead_weeks_max": 4.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "naive",
+      "horizon_weeks": 4,
+      "n": 4446,
+      "trusts": 133,
+      "origins": 34,
+      "mae": 29.98335582546109,
+      "mase": 2.9806717304084014,
+      "mase_n": 4409,
+      "undefined_scale_n": 37,
+      "direction_accuracy": 0.0413855150697256,
+      "grow_shrink_accuracy": 0.0,
+      "grow_shrink_n": 4262,
+      "unchanged_actual_n": 184,
+      "coverage_80": 0.8101664417453891,
+      "mean_interval_width": 107.0238416554206,
+      "issue_lead_weeks_min": 4.0,
+      "issue_lead_weeks_max": 4.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "reversion",
+      "horizon_weeks": 4,
+      "n": 4446,
+      "trusts": 133,
+      "origins": 34,
+      "mae": 29.372957201612564,
+      "mase": 2.883271073962378,
+      "mase_n": 4409,
+      "undefined_scale_n": 37,
+      "direction_accuracy": 0.5802968960863698,
+      "grow_shrink_accuracy": 0.5933833880807132,
+      "grow_shrink_n": 4262,
+      "unchanged_actual_n": 184,
+      "coverage_80": 0.8124156545209177,
+      "mean_interval_width": 102.83533012973588,
+      "issue_lead_weeks_min": 4.0,
+      "issue_lead_weeks_max": 4.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "reversion_context",
+      "horizon_weeks": 4,
+      "n": 4446,
+      "trusts": 133,
+      "origins": 34,
+      "mae": 28.96836696111043,
+      "mase": 2.901473747780318,
+      "mase_n": 4409,
+      "undefined_scale_n": 37,
+      "direction_accuracy": 0.5870445344129555,
+      "grow_shrink_accuracy": 0.6055842327545753,
+      "grow_shrink_n": 4262,
+      "unchanged_actual_n": 184,
+      "coverage_80": 0.7991452991452992,
+      "mean_interval_width": 101.04114540146658,
+      "issue_lead_weeks_min": 4.0,
+      "issue_lead_weeks_max": 4.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "drift",
+      "horizon_weeks": 8,
+      "n": 4182,
+      "trusts": 133,
+      "origins": 32,
+      "mae": 61.12132352941177,
+      "mase": 5.976522278020711,
+      "mase_n": 4147,
+      "undefined_scale_n": 35,
+      "direction_accuracy": 0.4497847919655667,
+      "grow_shrink_accuracy": 0.44944099378881985,
+      "grow_shrink_n": 4025,
+      "unchanged_actual_n": 157,
+      "coverage_80": 0.8299856527977044,
+      "mean_interval_width": 200.7282400765184,
+      "issue_lead_weeks_min": 8.0,
+      "issue_lead_weeks_max": 8.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "lightgbm",
+      "horizon_weeks": 8,
+      "n": 4182,
+      "trusts": 133,
+      "origins": 32,
+      "mae": 31.146547319957886,
+      "mase": 2.956006412296702,
+      "mase_n": 4147,
+      "undefined_scale_n": 35,
+      "direction_accuracy": 0.573170731707317,
+      "grow_shrink_accuracy": 0.5903105590062112,
+      "grow_shrink_n": 4025,
+      "unchanged_actual_n": 157,
+      "coverage_80": 0.8448110951697753,
+      "mean_interval_width": 110.69346418253959,
+      "issue_lead_weeks_min": 8.0,
+      "issue_lead_weeks_max": 8.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "naive",
+      "horizon_weeks": 8,
+      "n": 4182,
+      "trusts": 133,
+      "origins": 32,
+      "mae": 32.00239120038259,
+      "mase": 3.062510031119947,
+      "mase_n": 4147,
+      "undefined_scale_n": 35,
+      "direction_accuracy": 0.03754184600669536,
+      "grow_shrink_accuracy": 0.0,
+      "grow_shrink_n": 4025,
+      "unchanged_actual_n": 157,
+      "coverage_80": 0.8024868483978957,
+      "mean_interval_width": 114.11453849832616,
+      "issue_lead_weeks_min": 8.0,
+      "issue_lead_weeks_max": 8.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "reversion",
+      "horizon_weeks": 8,
+      "n": 4182,
+      "trusts": 133,
+      "origins": 32,
+      "mae": 31.63170197844159,
+      "mase": 2.9818584550021527,
+      "mase_n": 4147,
+      "undefined_scale_n": 35,
+      "direction_accuracy": 0.5722142515542803,
+      "grow_shrink_accuracy": 0.5826086956521739,
+      "grow_shrink_n": 4025,
+      "unchanged_actual_n": 157,
+      "coverage_80": 0.8118125298900047,
+      "mean_interval_width": 109.86716609385257,
+      "issue_lead_weeks_min": 8.0,
+      "issue_lead_weeks_max": 8.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "reversion_context",
+      "horizon_weeks": 8,
+      "n": 4182,
+      "trusts": 133,
+      "origins": 32,
+      "mae": 32.066358387095285,
+      "mase": 3.080587883673029,
+      "mase_n": 4147,
+      "undefined_scale_n": 35,
+      "direction_accuracy": 0.5712577714012435,
+      "grow_shrink_accuracy": 0.5880745341614907,
+      "grow_shrink_n": 4025,
+      "unchanged_actual_n": 157,
+      "coverage_80": 0.8015303682448589,
+      "mean_interval_width": 113.51132088192008,
+      "issue_lead_weeks_min": 8.0,
+      "issue_lead_weeks_max": 8.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "drift",
+      "horizon_weeks": 12,
+      "n": 3919,
+      "trusts": 133,
+      "origins": 30,
+      "mae": 72.37410691502934,
+      "mase": 7.069635766131211,
+      "mase_n": 3886,
+      "undefined_scale_n": 33,
+      "direction_accuracy": 0.428170451645828,
+      "grow_shrink_accuracy": 0.4280794701986755,
+      "grow_shrink_n": 3775,
+      "unchanged_actual_n": 144,
+      "coverage_80": 0.8262311814238326,
+      "mean_interval_width": 227.35742536361317,
+      "issue_lead_weeks_min": 12.0,
+      "issue_lead_weeks_max": 12.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "lightgbm",
+      "horizon_weeks": 12,
+      "n": 3919,
+      "trusts": 133,
+      "origins": 30,
+      "mae": 32.22075922767228,
+      "mase": 3.082612651544926,
+      "mase_n": 3886,
+      "undefined_scale_n": 33,
+      "direction_accuracy": 0.5771880581781067,
+      "grow_shrink_accuracy": 0.5952317880794702,
+      "grow_shrink_n": 3775,
+      "unchanged_actual_n": 144,
+      "coverage_80": 0.8323551926511865,
+      "mean_interval_width": 112.05378990364267,
+      "issue_lead_weeks_min": 12.0,
+      "issue_lead_weeks_max": 12.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "naive",
+      "horizon_weeks": 12,
+      "n": 3919,
+      "trusts": 133,
+      "origins": 30,
+      "mae": 33.90558816024496,
+      "mase": 3.2709394111361454,
+      "mase_n": 3886,
+      "undefined_scale_n": 33,
+      "direction_accuracy": 0.0367440673641235,
+      "grow_shrink_accuracy": 0.0,
+      "grow_shrink_n": 3775,
+      "unchanged_actual_n": 144,
+      "coverage_80": 0.7973972952283745,
+      "mean_interval_width": 123.32202092370503,
+      "issue_lead_weeks_min": 12.0,
+      "issue_lead_weeks_max": 12.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "reversion",
+      "horizon_weeks": 12,
+      "n": 3919,
+      "trusts": 133,
+      "origins": 30,
+      "mae": 33.184559912924996,
+      "mase": 3.157544716524684,
+      "mase_n": 3886,
+      "undefined_scale_n": 33,
+      "direction_accuracy": 0.5856085736157183,
+      "grow_shrink_accuracy": 0.5965562913907285,
+      "grow_shrink_n": 3775,
+      "unchanged_actual_n": 144,
+      "coverage_80": 0.7945904567491707,
+      "mean_interval_width": 113.2717705374408,
+      "issue_lead_weeks_min": 12.0,
+      "issue_lead_weeks_max": 12.0,
+      "retrospective_or_nowcast_n": 0
+    },
+    {
+      "model": "reversion_context",
+      "horizon_weeks": 12,
+      "n": 3919,
+      "trusts": 133,
+      "origins": 30,
+      "mae": 34.830161612950114,
+      "mase": 3.3635039233836364,
+      "mase_n": 3886,
+      "undefined_scale_n": 33,
+      "direction_accuracy": 0.5450369992344986,
+      "grow_shrink_accuracy": 0.56,
+      "grow_shrink_n": 3775,
+      "unchanged_actual_n": 144,
+      "coverage_80": 0.8093901505486093,
+      "mean_interval_width": 127.00716372480679,
+      "issue_lead_weeks_min": 12.0,
+      "issue_lead_weeks_max": 12.0,
+      "retrospective_or_nowcast_n": 0
+    }
+  ],
+  "gate": {
+    "candidate_pass": {
+      "reversion": true,
+      "reversion_context": false,
+      "lightgbm": true
+    },
+    "selected": "lightgbm",
+    "status": "GO_EXPLORATORY",
+    "rule": "Beat both baselines on paired issue-anchor MAE and MASE at 8 AND 12 weeks.",
+    "caveat": "Selection uses this retrospective comparison; it is not independent confirmation or a clinical deployment approval."
+  },
+  "target": "log1p(target backlog) - log1p(latest published backlog)",
+  "fixed_lightgbm_parameters": {
+    "learning_rate": 0.04,
+    "num_leaves": 15,
+    "min_data_in_leaf": 100,
+    "lambda_l2": 10.0,
+    "max_bin": 63,
+    "num_threads": 2,
+    "verbosity": -1,
+    "seed": 42,
+    "deterministic": true,
+    "force_col_wise": true,
+    "num_boost_round": 100
+  },
+  "protocol": "Fixed model settings. Weekly training snapshots; label release <= issue. Exact saved Stage 2 issue cases. No retuning on reported outcomes.",
+  "limitations": [
+    "Approximate first releases and latest revised values; not reconstructed historical vintages.",
+    "Overlapping targets/trust outcomes are dependent; no significance claim.",
+    "Global reversion coefficients are predictive associations, not causal effects.",
+    "Model selection on this retrospective comparison needs independent future validation."
+  ],
+  "input_sha256": {
+    "backlog_trust.parquet": "d294b3d42a96f295086f6165c86f79191bda5f7307061a56f2d7b810e75864c7",
+    "backlog_national.parquet": "45438269dc2f9c8a85b9e7721048db1bac36671b0d9cec21b429808b6eac4635",
+    "cwt_trust_month.parquet": "0d509f8bb50a015e07e030f17dad9487ac9d164ba720ad13c2e22b93d66ffcd5",
+    "cwt_first_seen.parquet": "1fb261d062759dde2634dae6bd224e816018f56ba4e6ba39b6042a98dd44c012",
+    "dm01.parquet": "9d04157484cd5c20a92e31e12b521814a8e7576d08297161567b121eeba61850",
+    "core_trusts.csv": "2c7c1d8d0026dde72d8aa227babc4ab7b5b84b423fd50f354dec9460580bd9bc",
+    "strike_dates.csv": "17dfe7976aa1fdeb92e8e7dd92567eb36dccb039101c3a30df76cf05be74daff"
+  },
+  "baseline_sha256": "aee870add2296a9b9e2446cf164f3c5e16ae8028012609a16fc0672638cc093d",
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "lightgbm": "4.6.0"
+  },
+  "fit_audit": [
+    {
+      "as_of_date": "2024-01-07",
+      "horizon_weeks": 4,
+      "training_n": 917,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-10-01",
+      "training_max_target_published_on": "2023-12-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.4413718553237357
+        },
+        "reversion_context": {
+          "reversion_weight": 0.32737851859037137,
+          "season_sin": -0.0054166769823932115,
+          "season_cos": 0.0691549924965041,
+          "christmas": 0.0,
+          "national_trend": -0.01992459607457351
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-02-04",
+      "horizon_weeks": 4,
+      "training_n": 1444,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-10-29",
+      "training_max_target_published_on": "2024-01-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3647535193679724
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2907473009866434,
+          "season_sin": -0.04958070660887631,
+          "season_cos": 0.02050688223243196,
+          "christmas": 0.0,
+          "national_trend": -0.09813613321181999
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-02-04",
+      "horizon_weeks": 8,
+      "training_n": 917,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-10-01",
+      "training_max_target_published_on": "2024-01-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.4565452835303656
+        },
+        "reversion_context": {
+          "reversion_weight": 0.4132471338031074,
+          "season_sin": -0.04893783850982773,
+          "season_cos": -0.003670185103372384,
+          "christmas": 0.0,
+          "national_trend": -0.0130304001059797
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-03-03",
+      "horizon_weeks": 4,
+      "training_n": 2103,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-12-03",
+      "training_max_target_published_on": "2024-02-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.386271985758752
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2729658367753265,
+          "season_sin": -0.0731379729144446,
+          "season_cos": 0.002346859836955604,
+          "christmas": 0.009030303101316011,
+          "national_trend": -0.13118530049843113
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-03-03",
+      "horizon_weeks": 8,
+      "training_n": 1575,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-11-05",
+      "training_max_target_published_on": "2024-02-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.4182124545586653
+        },
+        "reversion_context": {
+          "reversion_weight": 0.363760757102554,
+          "season_sin": -0.06461454878780672,
+          "season_cos": -0.014278460904390413,
+          "christmas": 0.04111983760159616,
+          "national_trend": -0.03465370895501151
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-03-03",
+      "horizon_weeks": 12,
+      "training_n": 1047,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-10-08",
+      "training_max_target_published_on": "2024-02-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2621150003088314
+        },
+        "reversion_context": {
+          "reversion_weight": 0.299177935592649,
+          "season_sin": -0.004894552905323641,
+          "season_cos": -0.016518329054545297,
+          "christmas": 0.038765158076680135,
+          "national_trend": -0.017874859450032053
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-03-31",
+      "horizon_weeks": 4,
+      "training_n": 2634,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-12-31",
+      "training_max_target_published_on": "2024-03-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.34242265936775745
+        },
+        "reversion_context": {
+          "reversion_weight": 0.26398062640677666,
+          "season_sin": -0.04709406700413136,
+          "season_cos": 0.0080790244974433,
+          "christmas": 0.010964029840294145,
+          "national_trend": -0.15242769126787975
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-03-31",
+      "horizon_weeks": 8,
+      "training_n": 2103,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-12-03",
+      "training_max_target_published_on": "2024-03-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3699525721206864
+        },
+        "reversion_context": {
+          "reversion_weight": 0.3148955006391888,
+          "season_sin": -0.04911638897100301,
+          "season_cos": -0.005300299244028182,
+          "christmas": 0.027019357942799145,
+          "national_trend": 0.011261630218723818
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-03-31",
+      "horizon_weeks": 12,
+      "training_n": 1575,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-11-05",
+      "training_max_target_published_on": "2024-03-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.26295631755124593
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2817533165299051,
+          "season_sin": 0.002294598028823015,
+          "season_cos": -0.011611304580902664,
+          "christmas": 0.03524802692874474,
+          "national_trend": 0.004530919952218797
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-04-28",
+      "horizon_weeks": 4,
+      "training_n": 3166,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-01-28",
+      "training_max_target_published_on": "2024-04-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 130,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3649302136744422
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2944867672975438,
+          "season_sin": -0.06892273166473667,
+          "season_cos": 0.008095602463916494,
+          "christmas": 0.006970488476727662,
+          "national_trend": -0.06867456236020875
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-04-28",
+      "horizon_weeks": 8,
+      "training_n": 2634,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-12-31",
+      "training_max_target_published_on": "2024-04-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.43703359165773775
+        },
+        "reversion_context": {
+          "reversion_weight": 0.33468052730144005,
+          "season_sin": -0.07950119183732579,
+          "season_cos": -0.005583536261305991,
+          "christmas": 0.04459678535783889,
+          "national_trend": 0.06269600035821787
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-04-28",
+      "horizon_weeks": 12,
+      "training_n": 2103,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2023-12-03",
+      "training_max_target_published_on": "2024-04-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3710502569659614
+        },
+        "reversion_context": {
+          "reversion_weight": 0.31245797894715827,
+          "season_sin": -0.025705173728901128,
+          "season_cos": -0.02303757390073135,
+          "christmas": 0.049827906163062194,
+          "national_trend": -0.11824649747030617
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-05-26",
+      "horizon_weeks": 4,
+      "training_n": 3828,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-03-03",
+      "training_max_target_published_on": "2024-05-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 393,
+        "intercept": -1.5748304400107056,
+        "slope": 0.8838039120305058
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3842513833505714
+        },
+        "reversion_context": {
+          "reversion_weight": 0.3069363706033852,
+          "season_sin": -0.11833142514939808,
+          "season_cos": 0.012626052783925746,
+          "christmas": 0.15968435137132628,
+          "national_trend": -0.06061027973871721
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-05-26",
+      "horizon_weeks": 8,
+      "training_n": 3299,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-02-04",
+      "training_max_target_published_on": "2024-05-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 130,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.4354932434108167
+        },
+        "reversion_context": {
+          "reversion_weight": 0.35480890537240406,
+          "season_sin": -0.14032589170730697,
+          "season_cos": 0.009322289614016918,
+          "christmas": 0.04615930732006665,
+          "national_trend": 0.2517070769723041
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-05-26",
+      "horizon_weeks": 12,
+      "training_n": 2767,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-01-07",
+      "training_max_target_published_on": "2024-05-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.523917082029035
+        },
+        "reversion_context": {
+          "reversion_weight": 0.39200370953635627,
+          "season_sin": -0.15402685645554737,
+          "season_cos": 0.016832519660290264,
+          "christmas": 0.09269439391074351,
+          "national_trend": 0.15459346080642586
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-06-23",
+      "horizon_weeks": 4,
+      "training_n": 4355,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-03-31",
+      "training_max_target_published_on": "2024-06-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 525,
+        "intercept": -1.518967828826759,
+        "slope": 0.8743673022199244
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.35469207543467823
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2837585482897191,
+          "season_sin": -0.1264116282512685,
+          "season_cos": 0.03948655604660484,
+          "christmas": 0.13952800496469758,
+          "national_trend": -0.08694311932152064
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-06-23",
+      "horizon_weeks": 8,
+      "training_n": 3827,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-03-03",
+      "training_max_target_published_on": "2024-06-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 260,
+        "intercept": -1.7577281690081847,
+        "slope": 0.5708002437103296
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.44565451262095634
+        },
+        "reversion_context": {
+          "reversion_weight": 0.37213045931467664,
+          "season_sin": -0.14735656983120066,
+          "season_cos": 0.010614508221891805,
+          "christmas": 0.09708062821291855,
+          "national_trend": 0.2513020258304419
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-06-23",
+      "horizon_weeks": 12,
+      "training_n": 3298,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-02-04",
+      "training_max_target_published_on": "2024-06-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 0,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.5090281403522875
+        },
+        "reversion_context": {
+          "reversion_weight": 0.4220531255547044,
+          "season_sin": -0.15312773117602163,
+          "season_cos": 0.017331546498598745,
+          "christmas": 0.08887655380805344,
+          "national_trend": 0.15051418747345577
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-07-21",
+      "horizon_weeks": 4,
+      "training_n": 4885,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-04-28",
+      "training_max_target_published_on": "2024-07-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 658,
+        "intercept": -1.144889784854331,
+        "slope": 0.6544416302618933
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.27530877634031614
+        },
+        "reversion_context": {
+          "reversion_weight": 0.24325507504688218,
+          "season_sin": -0.1292674678662405,
+          "season_cos": 0.05674693789059237,
+          "christmas": 0.11486301299824347,
+          "national_trend": -0.03768308223939733
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-07-21",
+      "horizon_weeks": 8,
+      "training_n": 4354,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-03-31",
+      "training_max_target_published_on": "2024-07-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 392,
+        "intercept": -1.49197859888971,
+        "slope": 0.739609788350096
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.4173162942548641
+        },
+        "reversion_context": {
+          "reversion_weight": 0.34614187969926064,
+          "season_sin": -0.14734764041076226,
+          "season_cos": 0.03647505388602054,
+          "christmas": 0.06972518068621329,
+          "national_trend": 0.204689714715574
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-07-21",
+      "horizon_weeks": 12,
+      "training_n": 3826,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-03-03",
+      "training_max_target_published_on": "2024-07-14",
+      "probability_calibrator": {
+        "status": "raw_warmup",
+        "n": 130,
+        "intercept": 0.0,
+        "slope": 1.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.5175740753284438
+        },
+        "reversion_context": {
+          "reversion_weight": 0.4212485915859736,
+          "season_sin": -0.1535737247059868,
+          "season_cos": 0.01700610014790401,
+          "christmas": 0.11045544374986935,
+          "national_trend": 0.15001549834167172
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-08-18",
+      "horizon_weeks": 4,
+      "training_n": 5550,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-06-02",
+      "training_max_target_published_on": "2024-08-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 791,
+        "intercept": -0.7302749148349168,
+        "slope": 0.5916873461262337
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.24070759825751287
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2155976610389345,
+          "season_sin": -0.1284731220966461,
+          "season_cos": 0.06396344740188474,
+          "christmas": 0.10159068444736757,
+          "national_trend": 0.00449486253957275
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-08-18",
+      "horizon_weeks": 8,
+      "training_n": 5018,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-05-05",
+      "training_max_target_published_on": "2024-08-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 525,
+        "intercept": -1.1518958478664707,
+        "slope": 0.6504530714807977
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.28284801051451836
+        },
+        "reversion_context": {
+          "reversion_weight": 0.28577267793442257,
+          "season_sin": -0.14492990476639214,
+          "season_cos": 0.056708343396090016,
+          "christmas": 0.041346241593936316,
+          "national_trend": 0.23749423390717728
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-08-18",
+      "horizon_weeks": 12,
+      "training_n": 4486,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-04-07",
+      "training_max_target_published_on": "2024-08-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 260,
+        "intercept": -1.2852725653565136,
+        "slope": 0.7369162554965316
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.47040939913446606
+        },
+        "reversion_context": {
+          "reversion_weight": 0.3890869547294136,
+          "season_sin": -0.1443328915807924,
+          "season_cos": 0.05997890537332543,
+          "christmas": 0.045024616171960304,
+          "national_trend": 0.06345369144826758
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-09-15",
+      "horizon_weeks": 4,
+      "training_n": 6079,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-06-30",
+      "training_max_target_published_on": "2024-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 923,
+        "intercept": -0.5799814807253044,
+        "slope": 0.5113898446276357
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.243268998131862
+        },
+        "reversion_context": {
+          "reversion_weight": 0.192037701012782,
+          "season_sin": -0.11730167658723772,
+          "season_cos": 0.06733605155048998,
+          "christmas": 0.10346041386796381,
+          "national_trend": -0.02427646963613874
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-09-15",
+      "horizon_weeks": 8,
+      "training_n": 5550,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-06-02",
+      "training_max_target_published_on": "2024-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 658,
+        "intercept": -0.686652317681021,
+        "slope": 0.2649494597923972
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2740828194714787
+        },
+        "reversion_context": {
+          "reversion_weight": 0.28523421694583695,
+          "season_sin": -0.14426629213937528,
+          "season_cos": 0.05861557487312423,
+          "christmas": 0.03895383703957145,
+          "national_trend": 0.23390996672080058
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-09-15",
+      "horizon_weeks": 12,
+      "training_n": 5018,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-05-05",
+      "training_max_target_published_on": "2024-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 393,
+        "intercept": -0.9192969145630862,
+        "slope": 0.6999746376839419
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3522775900952257
+        },
+        "reversion_context": {
+          "reversion_weight": 0.33662967987413805,
+          "season_sin": -0.1388475606560849,
+          "season_cos": 0.07316246766205328,
+          "christmas": 0.026359411073050683,
+          "national_trend": 0.12561011803110042
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-10-13",
+      "horizon_weeks": 4,
+      "training_n": 6079,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-06-30",
+      "training_max_target_published_on": "2024-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 923,
+        "intercept": -0.5799814807253044,
+        "slope": 0.5113898446276357
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.243268998131862
+        },
+        "reversion_context": {
+          "reversion_weight": 0.192037701012782,
+          "season_sin": -0.11730167658723772,
+          "season_cos": 0.06733605155048998,
+          "christmas": 0.10346041386796381,
+          "national_trend": -0.02427646963613874
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-10-13",
+      "horizon_weeks": 8,
+      "training_n": 5550,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-06-02",
+      "training_max_target_published_on": "2024-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 658,
+        "intercept": -0.686652317681021,
+        "slope": 0.2649494597923972
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2740828194714787
+        },
+        "reversion_context": {
+          "reversion_weight": 0.28523421694583695,
+          "season_sin": -0.14426629213937528,
+          "season_cos": 0.05861557487312423,
+          "christmas": 0.03895383703957145,
+          "national_trend": 0.23390996672080058
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-10-13",
+      "horizon_weeks": 12,
+      "training_n": 5018,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-05-05",
+      "training_max_target_published_on": "2024-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 393,
+        "intercept": -0.9192969145630862,
+        "slope": 0.6999746376839419
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3522775900952257
+        },
+        "reversion_context": {
+          "reversion_weight": 0.33662967987413805,
+          "season_sin": -0.1388475606560849,
+          "season_cos": 0.07316246766205328,
+          "christmas": 0.026359411073050683,
+          "national_trend": 0.12561011803110042
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-11-10",
+      "horizon_weeks": 4,
+      "training_n": 6604,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-07-28",
+      "training_max_target_published_on": "2024-10-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1054,
+        "intercept": -0.5303938393247587,
+        "slope": 0.4778516453210181
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.23786300241811903
+        },
+        "reversion_context": {
+          "reversion_weight": 0.17655872805827472,
+          "season_sin": -0.09595802472036703,
+          "season_cos": 0.07101916684745413,
+          "christmas": 0.11374424370521402,
+          "national_trend": -0.10632145891123622
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-11-10",
+      "horizon_weeks": 8,
+      "training_n": 6079,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-06-30",
+      "training_max_target_published_on": "2024-10-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 790,
+        "intercept": -0.5602648034683335,
+        "slope": 0.1316538328908423
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.26172847492806955
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25044839965939736,
+          "season_sin": -0.1292299028994665,
+          "season_cos": 0.060652581215129266,
+          "christmas": 0.04303810738861181,
+          "national_trend": 0.19465834493491913
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-11-10",
+      "horizon_weeks": 12,
+      "training_n": 5550,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-06-02",
+      "training_max_target_published_on": "2024-10-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 526,
+        "intercept": -0.4631355377750158,
+        "slope": 0.0060106500766817185
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.306865026629693
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2911386669560667,
+          "season_sin": -0.13625345843434455,
+          "season_cos": 0.07430095374487089,
+          "christmas": 0.026017337697517122,
+          "national_trend": 0.16030978935264323
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-12-08",
+      "horizon_weeks": 4,
+      "training_n": 7262,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-09-01",
+      "training_max_target_published_on": "2024-11-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1186,
+        "intercept": -0.437239877394289,
+        "slope": 0.4746949388682206
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.23841006431007408
+        },
+        "reversion_context": {
+          "reversion_weight": 0.17345016197949203,
+          "season_sin": -0.08192830779080176,
+          "season_cos": 0.06514556791642061,
+          "christmas": 0.12451179988233102,
+          "national_trend": -0.1364740154612155
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-12-08",
+      "horizon_weeks": 8,
+      "training_n": 6735,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-08-04",
+      "training_max_target_published_on": "2024-11-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 921,
+        "intercept": -0.4882774706581807,
+        "slope": 0.06827251263618372
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.25815523987956007
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2158923962710933,
+          "season_sin": -0.09786196580534998,
+          "season_cos": 0.05905629793652199,
+          "christmas": 0.061034458748222734,
+          "national_trend": 0.07095187552240871
+        }
+      }
+    },
+    {
+      "as_of_date": "2024-12-08",
+      "horizon_weeks": 12,
+      "training_n": 6211,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-07-07",
+      "training_max_target_published_on": "2024-11-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 658,
+        "intercept": -0.3349624349485211,
+        "slope": 0.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2965080747161294
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2428865386943827,
+          "season_sin": -0.117850333441118,
+          "season_cos": 0.07106296827330325,
+          "christmas": 0.0340120879501307,
+          "national_trend": 0.12374390561200556
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-01-05",
+      "horizon_weeks": 4,
+      "training_n": 7792,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-09-29",
+      "training_max_target_published_on": "2024-12-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1319,
+        "intercept": -0.3920501048576267,
+        "slope": 0.4892630615372102
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2438640825252547
+        },
+        "reversion_context": {
+          "reversion_weight": 0.1779844721510436,
+          "season_sin": -0.0770795835545767,
+          "season_cos": 0.053801124637367526,
+          "christmas": 0.13314371747043133,
+          "national_trend": -0.12316919852656472
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-01-05",
+      "horizon_weeks": 8,
+      "training_n": 7261,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-09-01",
+      "training_max_target_published_on": "2024-12-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1053,
+        "intercept": -0.42431994195479467,
+        "slope": 0.05484390230236094
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.25918117411068226
+        },
+        "reversion_context": {
+          "reversion_weight": 0.20250616582169004,
+          "season_sin": -0.0849814977635052,
+          "season_cos": 0.047890215373102896,
+          "christmas": 0.08044488333168208,
+          "national_trend": 0.0419840367688374
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-01-05",
+      "horizon_weeks": 12,
+      "training_n": 6734,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-08-04",
+      "training_max_target_published_on": "2024-12-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 789,
+        "intercept": -0.3145398886526218,
+        "slope": 0.0
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.29158210418990493
+        },
+        "reversion_context": {
+          "reversion_weight": 0.19364281764967006,
+          "season_sin": -0.0911845384460223,
+          "season_cos": 0.06399410105214326,
+          "christmas": 0.04600419889210729,
+          "national_trend": 0.012346866062491536
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-02-02",
+      "horizon_weeks": 4,
+      "training_n": 8323,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-10-27",
+      "training_max_target_published_on": "2025-01-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1452,
+        "intercept": -0.40605822786498397,
+        "slope": 0.5132634025325634
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.25193109379472
+        },
+        "reversion_context": {
+          "reversion_weight": 0.18362023778291953,
+          "season_sin": -0.07712375873704456,
+          "season_cos": 0.038082365780830726,
+          "christmas": 0.14431905935782943,
+          "national_trend": -0.10393056086884853
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-02-02",
+      "horizon_weeks": 8,
+      "training_n": 7791,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-09-29",
+      "training_max_target_published_on": "2025-01-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1186,
+        "intercept": -0.3987633089699544,
+        "slope": 0.12292162400154552
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.26316682886313775
+        },
+        "reversion_context": {
+          "reversion_weight": 0.20531431280497808,
+          "season_sin": -0.08191311231877485,
+          "season_cos": 0.03260188639910306,
+          "christmas": 0.1000867634609896,
+          "national_trend": 0.055193400419632804
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-02-02",
+      "horizon_weeks": 12,
+      "training_n": 7260,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-09-01",
+      "training_max_target_published_on": "2025-01-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 921,
+        "intercept": -0.33330569817512457,
+        "slope": 0.013399878762831099
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2824640132544205
+        },
+        "reversion_context": {
+          "reversion_weight": 0.1769888744618974,
+          "season_sin": -0.08061620436798249,
+          "season_cos": 0.045281400661823824,
+          "christmas": 0.07768619381747431,
+          "national_trend": -0.004573817219752781
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-03-02",
+      "horizon_weeks": 4,
+      "training_n": 8983,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-12-01",
+      "training_max_target_published_on": "2025-02-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1585,
+        "intercept": -0.42734116483445533,
+        "slope": 0.5539904692304274
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.25956803215093244
+        },
+        "reversion_context": {
+          "reversion_weight": 0.18031755697945798,
+          "season_sin": -0.08741032529659555,
+          "season_cos": 0.026246928955959616,
+          "christmas": 0.11126886851009785,
+          "national_trend": -0.07615684901794824
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-03-02",
+      "horizon_weeks": 8,
+      "training_n": 8451,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-11-03",
+      "training_max_target_published_on": "2025-02-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1319,
+        "intercept": -0.386608928551363,
+        "slope": 0.1919524128438355
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2775835249671983
+        },
+        "reversion_context": {
+          "reversion_weight": 0.21468991360858125,
+          "season_sin": -0.08773399592589985,
+          "season_cos": 0.020496234891806627,
+          "christmas": 0.07544393607221694,
+          "national_trend": 0.07839909669280297
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-03-02",
+      "horizon_weeks": 12,
+      "training_n": 7919,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-10-06",
+      "training_max_target_published_on": "2025-02-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1054,
+        "intercept": -0.3240711490872432,
+        "slope": 0.08344633888182927
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2943338472023037
+        },
+        "reversion_context": {
+          "reversion_weight": 0.188496574589741,
+          "season_sin": -0.08182202853824438,
+          "season_cos": 0.03007321659873206,
+          "christmas": 0.06680924323766234,
+          "national_trend": 0.011627885613155826
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-03-30",
+      "horizon_weeks": 4,
+      "training_n": 9507,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-12-29",
+      "training_max_target_published_on": "2025-03-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1717,
+        "intercept": -0.3731736390015301,
+        "slope": 0.5296112011517506
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2664351308789658
+        },
+        "reversion_context": {
+          "reversion_weight": 0.19858827033821266,
+          "season_sin": -0.08031713196415499,
+          "season_cos": 0.030004553475460834,
+          "christmas": 0.10461894565749227,
+          "national_trend": -0.08544982292758696
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-03-30",
+      "horizon_weeks": 8,
+      "training_n": 8978,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-12-01",
+      "training_max_target_published_on": "2025-03-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1451,
+        "intercept": -0.31606834864078154,
+        "slope": 0.20890739751015294
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.28237649971257345
+        },
+        "reversion_context": {
+          "reversion_weight": 0.22692757111543632,
+          "season_sin": -0.08161255782993158,
+          "season_cos": 0.024866341032136644,
+          "christmas": 0.0669043897317026,
+          "national_trend": 0.07202542454636462
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-03-30",
+      "horizon_weeks": 12,
+      "training_n": 8446,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-11-03",
+      "training_max_target_published_on": "2025-03-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1186,
+        "intercept": -0.22803158672957702,
+        "slope": 0.12985789411684362
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3042534183388256
+        },
+        "reversion_context": {
+          "reversion_weight": 0.202125887768269,
+          "season_sin": -0.07947894408400971,
+          "season_cos": 0.03275806868019819,
+          "christmas": 0.05767553240779943,
+          "national_trend": 0.00968225342075022
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-04-27",
+      "horizon_weeks": 4,
+      "training_n": 10029,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-01-26",
+      "training_max_target_published_on": "2025-04-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1848,
+        "intercept": -0.3295288486690544,
+        "slope": 0.5578301920639468
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.27250512932190635
+        },
+        "reversion_context": {
+          "reversion_weight": 0.21936692445428016,
+          "season_sin": -0.07217477771931215,
+          "season_cos": 0.031698766710770834,
+          "christmas": 0.1023827642699722,
+          "national_trend": -0.0947672096093967
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-04-27",
+      "horizon_weeks": 8,
+      "training_n": 9503,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-12-29",
+      "training_max_target_published_on": "2025-04-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1583,
+        "intercept": -0.2816989956812011,
+        "slope": 0.23317244757048244
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.29067889806306507
+        },
+        "reversion_context": {
+          "reversion_weight": 0.24436135328832656,
+          "season_sin": -0.07372277599415031,
+          "season_cos": 0.027279473675007583,
+          "christmas": 0.06398557409765934,
+          "national_trend": 0.05902994984517394
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-04-27",
+      "horizon_weeks": 12,
+      "training_n": 8974,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2024-12-01",
+      "training_max_target_published_on": "2025-04-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1318,
+        "intercept": -0.19327621699478173,
+        "slope": 0.15768146444945014
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.31218798385082336
+        },
+        "reversion_context": {
+          "reversion_weight": 0.21756014889550138,
+          "season_sin": -0.0745245904939863,
+          "season_cos": 0.03479289174055044,
+          "christmas": 0.053744428008733525,
+          "national_trend": 0.007019776811048666
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-05-25",
+      "horizon_weeks": 4,
+      "training_n": 10670,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-03-02",
+      "training_max_target_published_on": "2025-05-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2105,
+        "intercept": -0.28880476397651583,
+        "slope": 0.5199486061949325
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.27011847625385055
+        },
+        "reversion_context": {
+          "reversion_weight": 0.22364817799516534,
+          "season_sin": -0.07207608397389498,
+          "season_cos": 0.031757699510255366,
+          "christmas": 0.09445648127371516,
+          "national_trend": -0.08579602732093562
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-05-25",
+      "horizon_weeks": 8,
+      "training_n": 10155,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-02-02",
+      "training_max_target_published_on": "2025-05-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1844,
+        "intercept": -0.24622450783489822,
+        "slope": 0.291435959761665
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2859850178360978
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2514545494226139,
+          "season_sin": -0.0752959956601983,
+          "season_cos": 0.027402930880528555,
+          "christmas": 0.06333710468538539,
+          "national_trend": 0.06469322995902561
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-05-25",
+      "horizon_weeks": 12,
+      "training_n": 9630,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-01-05",
+      "training_max_target_published_on": "2025-05-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1581,
+        "intercept": -0.18245131816080573,
+        "slope": 0.2723678372931167
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.315525713402206
+        },
+        "reversion_context": {
+          "reversion_weight": 0.22819897250767784,
+          "season_sin": -0.07912606795236939,
+          "season_cos": 0.035077008763438784,
+          "christmas": 0.05314652403601618,
+          "national_trend": 0.017846011067402214
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-06-22",
+      "horizon_weeks": 4,
+      "training_n": 11175,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-03-30",
+      "training_max_target_published_on": "2025-06-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2231,
+        "intercept": -0.26126470019563797,
+        "slope": 0.46984746439954234
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2709445363928689
+        },
+        "reversion_context": {
+          "reversion_weight": 0.22412302109589122,
+          "season_sin": -0.07148603762640408,
+          "season_cos": 0.03225353955128625,
+          "christmas": 0.08861558388759805,
+          "national_trend": -0.08486600205418333
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-06-22",
+      "horizon_weeks": 8,
+      "training_n": 10666,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-03-02",
+      "training_max_target_published_on": "2025-06-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1971,
+        "intercept": -0.21688226454773582,
+        "slope": 0.27504382045983977
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2871559659212583
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25694562890272,
+          "season_sin": -0.07228557995576664,
+          "season_cos": 0.02687965303424061,
+          "christmas": 0.04209893103747461,
+          "national_trend": 0.06558426284305709
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-06-22",
+      "horizon_weeks": 12,
+      "training_n": 10151,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-02-02",
+      "training_max_target_published_on": "2025-06-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1711,
+        "intercept": -0.1070015322297328,
+        "slope": 0.30369619613032917
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3161293326775073
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2458357673541395,
+          "season_sin": -0.07331029101191772,
+          "season_cos": 0.03163780632215032,
+          "christmas": 0.05794284535128609,
+          "national_trend": 0.009034685546326448
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-07-20",
+      "horizon_weeks": 4,
+      "training_n": 11687,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-04-27",
+      "training_max_target_published_on": "2025-07-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2361,
+        "intercept": -0.20907837762446943,
+        "slope": 0.48827297412055165
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2717041939795356
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2245226205966308,
+          "season_sin": -0.07157515896968256,
+          "season_cos": 0.02756781063783256,
+          "christmas": 0.09197623989512163,
+          "national_trend": -0.07667796816146338
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-07-20",
+      "horizon_weeks": 8,
+      "training_n": 11171,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-03-30",
+      "training_max_target_published_on": "2025-07-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2097,
+        "intercept": -0.18026973317207312,
+        "slope": 0.27321154999705094
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2858587254205514
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25584360287687297,
+          "season_sin": -0.07161706393886504,
+          "season_cos": 0.02404344651461265,
+          "christmas": 0.03804632277546237,
+          "national_trend": 0.07317327407638897
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-07-20",
+      "horizon_weeks": 12,
+      "training_n": 10662,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-03-02",
+      "training_max_target_published_on": "2025-07-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1838,
+        "intercept": -0.055447897039413344,
+        "slope": 0.3182323014411241
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.31818021303225197
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2541010835769474,
+          "season_sin": -0.06891732833486937,
+          "season_cos": 0.02972680883151153,
+          "christmas": 0.02349127719610927,
+          "national_trend": 0.004089350181679449
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-08-17",
+      "horizon_weeks": 4,
+      "training_n": 12342,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-06-01",
+      "training_max_target_published_on": "2025-08-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2492,
+        "intercept": -0.12640975431202708,
+        "slope": 0.5397972711705767
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2828001265637929
+        },
+        "reversion_context": {
+          "reversion_weight": 0.22579164128339801,
+          "season_sin": -0.07488235391722538,
+          "season_cos": 0.021213547657133555,
+          "christmas": 0.09825301608354632,
+          "national_trend": -0.08935872167754762
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-08-17",
+      "horizon_weeks": 8,
+      "training_n": 11812,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-05-04",
+      "training_max_target_published_on": "2025-08-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2226,
+        "intercept": -0.12955510239226506,
+        "slope": 0.28753950789408694
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2825769875257998
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2534151769855852,
+          "season_sin": -0.07227003100309343,
+          "season_cos": 0.019127229947785884,
+          "christmas": 0.04390139497995394,
+          "national_trend": 0.08362490389959798
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-08-17",
+      "horizon_weeks": 12,
+      "training_n": 11292,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-04-06",
+      "training_max_target_published_on": "2025-08-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 1963,
+        "intercept": -0.03575225212214902,
+        "slope": 0.3134281365123257
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3123807065072328
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25071026259173995,
+          "season_sin": -0.06857528845122726,
+          "season_cos": 0.02612266350522359,
+          "christmas": 0.01648534508751968,
+          "national_trend": 0.012087181638042403
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-09-14",
+      "horizon_weeks": 4,
+      "training_n": 12870,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-06-29",
+      "training_max_target_published_on": "2025-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2624,
+        "intercept": -0.10319692652336379,
+        "slope": 0.5389762523158169
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2848751801999244
+        },
+        "reversion_context": {
+          "reversion_weight": 0.23003258922986422,
+          "season_sin": -0.0727059773113509,
+          "season_cos": 0.02233539963709895,
+          "christmas": 0.0979857586205634,
+          "national_trend": -0.09822667662927405
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-09-14",
+      "horizon_weeks": 8,
+      "training_n": 12338,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-06-01",
+      "training_max_target_published_on": "2025-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2358,
+        "intercept": -0.04049023252246034,
+        "slope": 0.3454386118722366
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.28964280919542224
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25443435746215143,
+          "season_sin": -0.07364583328958993,
+          "season_cos": 0.018464464171379823,
+          "christmas": 0.04481117221606017,
+          "national_trend": 0.0749903658208003
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-09-14",
+      "horizon_weeks": 12,
+      "training_n": 11808,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-05-04",
+      "training_max_target_published_on": "2025-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2093,
+        "intercept": -0.014996623593360415,
+        "slope": 0.3151792004745931
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.30918382559489793
+        },
+        "reversion_context": {
+          "reversion_weight": 0.24996153006545807,
+          "season_sin": -0.06756972697250047,
+          "season_cos": 0.028145570456937635,
+          "christmas": 0.013221982794648075,
+          "national_trend": 0.008727780677438134
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-10-12",
+      "horizon_weeks": 4,
+      "training_n": 12870,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-06-29",
+      "training_max_target_published_on": "2025-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2624,
+        "intercept": -0.10319692652336379,
+        "slope": 0.5389762523158169
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2848751801999244
+        },
+        "reversion_context": {
+          "reversion_weight": 0.23003258922986422,
+          "season_sin": -0.0727059773113509,
+          "season_cos": 0.02233539963709895,
+          "christmas": 0.0979857586205634,
+          "national_trend": -0.09822667662927405
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-10-12",
+      "horizon_weeks": 8,
+      "training_n": 12338,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-06-01",
+      "training_max_target_published_on": "2025-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2358,
+        "intercept": -0.04049023252246034,
+        "slope": 0.3454386118722366
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.28964280919542224
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25443435746215143,
+          "season_sin": -0.07364583328958993,
+          "season_cos": 0.018464464171379823,
+          "christmas": 0.04481117221606017,
+          "national_trend": 0.0749903658208003
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-10-12",
+      "horizon_weeks": 12,
+      "training_n": 11808,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-05-04",
+      "training_max_target_published_on": "2025-09-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2093,
+        "intercept": -0.014996623593360415,
+        "slope": 0.3151792004745931
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.30918382559489793
+        },
+        "reversion_context": {
+          "reversion_weight": 0.24996153006545807,
+          "season_sin": -0.06756972697250047,
+          "season_cos": 0.028145570456937635,
+          "christmas": 0.013221982794648075,
+          "national_trend": 0.008727780677438134
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-11-09",
+      "horizon_weeks": 4,
+      "training_n": 13527,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-08-03",
+      "training_max_target_published_on": "2025-10-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2756,
+        "intercept": -0.09949034862167636,
+        "slope": 0.5348339468608172
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2825932581690009
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2328867179841855,
+          "season_sin": -0.06861492758683753,
+          "season_cos": 0.023428030595141133,
+          "christmas": 0.09856693313495106,
+          "national_trend": -0.11680195300596274
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-11-09",
+      "horizon_weeks": 8,
+      "training_n": 12995,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-07-06",
+      "training_max_target_published_on": "2025-10-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2490,
+        "intercept": -0.008799150494225067,
+        "slope": 0.3535503718454207
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2901859644197125
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25666447154627114,
+          "season_sin": -0.07019024913140134,
+          "season_cos": 0.019261904027505203,
+          "christmas": 0.04479378263928731,
+          "national_trend": 0.06053415901032128
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-11-09",
+      "horizon_weeks": 12,
+      "training_n": 12463,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-06-08",
+      "training_max_target_published_on": "2025-10-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2225,
+        "intercept": 0.07701604877923945,
+        "slope": 0.3794988244369739
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.319762685091088
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2545732147658844,
+          "season_sin": -0.06879541793231851,
+          "season_cos": 0.028647963358340568,
+          "christmas": 0.011933646427522402,
+          "national_trend": 0.0011290874196750633
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-12-07",
+      "horizon_weeks": 4,
+      "training_n": 14050,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-08-31",
+      "training_max_target_published_on": "2025-11-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2886,
+        "intercept": -0.05655473570282299,
+        "slope": 0.532611081501717
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2770290168795502
+        },
+        "reversion_context": {
+          "reversion_weight": 0.23167981724484568,
+          "season_sin": -0.06942970234488721,
+          "season_cos": 0.023957789904745987,
+          "christmas": 0.09751378804058863,
+          "national_trend": -0.11471897051110856
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-12-07",
+      "horizon_weeks": 8,
+      "training_n": 13521,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-08-03",
+      "training_max_target_published_on": "2025-11-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2621,
+        "intercept": 0.02184478658932649,
+        "slope": 0.3474963057688952
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2844528410252662
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25820389893614015,
+          "season_sin": -0.06629535510798829,
+          "season_cos": 0.01893480589985824,
+          "christmas": 0.04674272817361004,
+          "national_trend": 0.03791044897155488
+        }
+      }
+    },
+    {
+      "as_of_date": "2025-12-07",
+      "horizon_weeks": 12,
+      "training_n": 12989,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-07-06",
+      "training_max_target_published_on": "2025-11-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2356,
+        "intercept": 0.13138056266495918,
+        "slope": 0.39962780585299235
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3143251841607309
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2562132210670406,
+          "season_sin": -0.06782805529647645,
+          "season_cos": 0.02857685060819229,
+          "christmas": 0.012071276570615392,
+          "national_trend": -0.0014209507733987097
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-01-04",
+      "horizon_weeks": 4,
+      "training_n": 14574,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-09-28",
+      "training_max_target_published_on": "2025-12-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3017,
+        "intercept": -0.032102580425076396,
+        "slope": 0.5389466623607737
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.27116461700786004
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2302926892279063,
+          "season_sin": -0.06944191766203574,
+          "season_cos": 0.02352134269972352,
+          "christmas": 0.09740147544766835,
+          "national_trend": -0.11270463207221525
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-01-04",
+      "horizon_weeks": 8,
+      "training_n": 14046,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-08-31",
+      "training_max_target_published_on": "2025-12-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2752,
+        "intercept": 0.05514250763022617,
+        "slope": 0.3672340320569419
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2831115756552074
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25819702129769656,
+          "season_sin": -0.06517192895924537,
+          "season_cos": 0.018316165438850365,
+          "christmas": 0.04782790704795806,
+          "national_trend": 0.03252069641572741
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-01-04",
+      "horizon_weeks": 12,
+      "training_n": 13517,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-08-03",
+      "training_max_target_published_on": "2025-12-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2488,
+        "intercept": 0.14678973725514824,
+        "slope": 0.40506872865350735
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3149551193660819
+        },
+        "reversion_context": {
+          "reversion_weight": 0.26191917972573625,
+          "season_sin": -0.06407890796204183,
+          "season_cos": 0.02725499793621848,
+          "christmas": 0.014174919739786454,
+          "national_trend": -0.021895181104356023
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-02-01",
+      "horizon_weeks": 4,
+      "training_n": 15223,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-11-02",
+      "training_max_target_published_on": "2026-01-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3148,
+        "intercept": -0.03565760918459288,
+        "slope": 0.5337801406273122
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.28055775458572335
+        },
+        "reversion_context": {
+          "reversion_weight": 0.23571649809995898,
+          "season_sin": -0.06994875838471654,
+          "season_cos": 0.01649089397108984,
+          "christmas": 0.10379573613927795,
+          "national_trend": -0.11735092622993304
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-02-01",
+      "horizon_weeks": 8,
+      "training_n": 14700,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-10-05",
+      "training_max_target_published_on": "2026-01-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2883,
+        "intercept": 0.05047730929513939,
+        "slope": 0.3652770071798227
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2816966003250551
+        },
+        "reversion_context": {
+          "reversion_weight": 0.26059549451067454,
+          "season_sin": -0.06422051751689066,
+          "season_cos": 0.013181095372780232,
+          "christmas": 0.05410616963236689,
+          "national_trend": 0.043371148631512625
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-02-01",
+      "horizon_weeks": 12,
+      "training_n": 14172,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-09-07",
+      "training_max_target_published_on": "2026-01-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2619,
+        "intercept": 0.15064997070248037,
+        "slope": 0.4066285664363128
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.31427049131119006
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2639258114900452,
+          "season_sin": -0.06084619658465762,
+          "season_cos": 0.022030291457195695,
+          "christmas": 0.022784856397334415,
+          "national_trend": -0.027514592855563878
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-03-01",
+      "horizon_weeks": 4,
+      "training_n": 15733,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-11-30",
+      "training_max_target_published_on": "2026-02-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3277,
+        "intercept": -0.052742200322299065,
+        "slope": 0.554082898316365
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.29112295732212634
+        },
+        "reversion_context": {
+          "reversion_weight": 0.236322965199418,
+          "season_sin": -0.07475183798952909,
+          "season_cos": 0.013561128108218978,
+          "christmas": 0.08588952053660219,
+          "national_trend": -0.13660793536148227
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-03-01",
+      "horizon_weeks": 8,
+      "training_n": 15218,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-11-02",
+      "training_max_target_published_on": "2026-02-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3014,
+        "intercept": 0.023809235915993765,
+        "slope": 0.3588987165056325
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.29395058171448724
+        },
+        "reversion_context": {
+          "reversion_weight": 0.26648302711185784,
+          "season_sin": -0.06651499179848527,
+          "season_cos": 0.010570495011528779,
+          "christmas": 0.03584133723637221,
+          "national_trend": 0.03387170810663137
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-03-01",
+      "horizon_weeks": 12,
+      "training_n": 14696,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-10-05",
+      "training_max_target_published_on": "2026-02-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2750,
+        "intercept": 0.11822874852739386,
+        "slope": 0.39957402905685707
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.31413837520646865
+        },
+        "reversion_context": {
+          "reversion_weight": 0.26828569325209073,
+          "season_sin": -0.06120860029319973,
+          "season_cos": 0.018086205446422112,
+          "christmas": 0.015572277920535232,
+          "national_trend": -0.015290541505422537
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-03-29",
+      "horizon_weeks": 4,
+      "training_n": 16246,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-12-28",
+      "training_max_target_published_on": "2026-03-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3404,
+        "intercept": -0.05148232598846879,
+        "slope": 0.5544020859148017
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.29805049312396603
+        },
+        "reversion_context": {
+          "reversion_weight": 0.24725275397451799,
+          "season_sin": -0.07406861528107783,
+          "season_cos": 0.01423306113701792,
+          "christmas": 0.08286445422501212,
+          "national_trend": -0.13501735854798474
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-03-29",
+      "horizon_weeks": 8,
+      "training_n": 15727,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-11-30",
+      "training_max_target_published_on": "2026-03-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3143,
+        "intercept": 0.02228412217934974,
+        "slope": 0.36866872728700845
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3013042447180965
+        },
+        "reversion_context": {
+          "reversion_weight": 0.27047620194057775,
+          "season_sin": -0.06698962176317298,
+          "season_cos": 0.010459449367202531,
+          "christmas": 0.03364173411839132,
+          "national_trend": 0.03220075697542912
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-03-29",
+      "horizon_weeks": 12,
+      "training_n": 15213,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-11-02",
+      "training_max_target_published_on": "2026-03-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 2881,
+        "intercept": 0.12176588396588721,
+        "slope": 0.40406705139169175
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3226045434923317
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2728845885673017,
+          "season_sin": -0.06146695158257747,
+          "season_cos": 0.017699808136513184,
+          "christmas": 0.015617320352883993,
+          "national_trend": -0.015727149837527453
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-04-26",
+      "horizon_weeks": 4,
+      "training_n": 16766,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2026-01-25",
+      "training_max_target_published_on": "2026-04-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3533,
+        "intercept": -0.05192103894701896,
+        "slope": 0.5664691896293772
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3003521053100968
+        },
+        "reversion_context": {
+          "reversion_weight": 0.25446227201082644,
+          "season_sin": -0.07434997656463878,
+          "season_cos": 0.01427900664156522,
+          "christmas": 0.08250247357069071,
+          "national_trend": -0.1314619223989473
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-04-26",
+      "horizon_weeks": 8,
+      "training_n": 16241,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-12-28",
+      "training_max_target_published_on": "2026-04-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3270,
+        "intercept": 0.006077587269716373,
+        "slope": 0.3743644934631763
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3097401545713626
+        },
+        "reversion_context": {
+          "reversion_weight": 0.27980233727657333,
+          "season_sin": -0.06822711793603799,
+          "season_cos": 0.010241770774744197,
+          "christmas": 0.034010020173706274,
+          "national_trend": 0.03420507063928174
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-04-26",
+      "horizon_weeks": 12,
+      "training_n": 15723,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2025-11-30",
+      "training_max_target_published_on": "2026-04-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3010,
+        "intercept": 0.1131412470177734,
+        "slope": 0.41869610015504266
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.33735361294560173
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2793835685136007,
+          "season_sin": -0.06354041351432493,
+          "season_cos": 0.01722086868546973,
+          "christmas": 0.015888558118807048,
+          "national_trend": -0.02182939006395804
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-05-24",
+      "horizon_weeks": 4,
+      "training_n": 17421,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2026-03-01",
+      "training_max_target_published_on": "2026-05-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3795,
+        "intercept": -0.06674854443569082,
+        "slope": 0.6020145787671308
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2919922185258166
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2503415570097147,
+          "season_sin": -0.07820834079403989,
+          "season_cos": 0.01457415763655207,
+          "christmas": 0.09140087236770536,
+          "national_trend": -0.12554776294128908
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-05-24",
+      "horizon_weeks": 8,
+      "training_n": 16892,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2026-02-01",
+      "training_max_target_published_on": "2026-05-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3530,
+        "intercept": -0.01866176556738196,
+        "slope": 0.40265422451779004
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.30786732697386104
+        },
+        "reversion_context": {
+          "reversion_weight": 0.28442067241317737,
+          "season_sin": -0.07342444333051519,
+          "season_cos": 0.011266246801523026,
+          "christmas": 0.031682799169284036,
+          "national_trend": 0.047813713121561185
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-05-24",
+      "horizon_weeks": 12,
+      "training_n": 16366,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2026-01-04",
+      "training_max_target_published_on": "2026-05-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3266,
+        "intercept": 0.0966437156936441,
+        "slope": 0.45302782714288364
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.3489537412198062
+        },
+        "reversion_context": {
+          "reversion_weight": 0.2914641067284293,
+          "season_sin": -0.07025421547054375,
+          "season_cos": 0.01828185057651631,
+          "christmas": 0.013864316712302488,
+          "national_trend": -0.016663672270531373
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-06-21",
+      "horizon_weeks": 4,
+      "training_n": 17942,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2026-03-29",
+      "training_max_target_published_on": "2026-06-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3925,
+        "intercept": -0.06987936009556621,
+        "slope": 0.6074687381227736
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.28312970614905164
+        },
+        "reversion_context": {
+          "reversion_weight": 0.24248536666536163,
+          "season_sin": -0.07893031411206414,
+          "season_cos": 0.01596707488932664,
+          "christmas": 0.08993983613137678,
+          "national_trend": -0.12919013225272985
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-06-21",
+      "horizon_weeks": 8,
+      "training_n": 17416,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2026-03-01",
+      "training_max_target_published_on": "2026-06-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 3661,
+        "intercept": -0.02950046924082496,
+        "slope": 0.4038994592024319
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.30387541375611576
+        },
+        "reversion_context": {
+          "reversion_weight": 0.28209315206473407,
+          "season_sin": -0.07372262868694633,
+          "season_cos": 0.011404927922761168,
+          "christmas": 0.031510556670903564,
+          "national_trend": 0.047979508312069125
+        }
+      }
+    },
+    {
+      "as_of_date": "2026-07-19",
+      "horizon_weeks": 4,
+      "training_n": 18591,
+      "training_first_issue": "2023-08-20",
+      "training_last_issue": "2026-05-03",
+      "training_max_target_published_on": "2026-07-14",
+      "probability_calibrator": {
+        "status": "past_issued_platt",
+        "n": 4055,
+        "intercept": -0.0866928540306457,
+        "slope": 0.5939531272892488
+      },
+      "coefficients": {
+        "reversion": {
+          "reversion_weight": 0.2714612121156343
+        },
+        "reversion_context": {
+          "reversion_weight": 0.23366937565636542,
+          "season_sin": -0.07916405377997046,
+          "season_cos": 0.01775215051874777,
+          "christmas": 0.08793507147034274,
+          "national_trend": -0.13086649872744435
+        }
+      }
+    }
+  ]
+}

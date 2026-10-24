@@ -1,1 +1,1 @@
-"""Availability-aware baseline evaluation; no fitted ML model yet."""
+"""Published-history baseline, count and growth-probability models."""
