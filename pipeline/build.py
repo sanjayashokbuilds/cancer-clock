@@ -93,7 +93,9 @@ def run(start: str, end: str | None, offline: bool, refresh: bool, skip_location
             'resolved': int(locations[['lat', 'lon']].notna().all(axis=1).sum()),
             'note': 'Organisation headquarters postcode coordinates, not all hospital sites.',
         }
-    core = write_core_trusts(data['backlog_trust'])
+    from pipeline.mergers import harmonize, write_scope
+    write_scope(data['backlog_trust'],data['cwt_trust_month'])
+    core = write_core_trusts(harmonize(data['backlog_trust'],'backlog_trust'))
     report['core_trusts'] = len(core)
     report['locations']['note'] = 'Headquarters or verified representative hospital postcode; location_kind identifies each.'
     report['core_locations_resolved'] = int(core.map_eligible.sum())

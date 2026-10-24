@@ -45,7 +45,8 @@ def test_core_universe_and_real_locations() -> None:
     backlog=pd.read_parquet(PROCESSED_DIR/'backlog_trust.parquet')
     observed=backlog.loc[backlog.backlog.notna() & backlog.week_ending.ge('2023-10-01')]
     core=load_core_trusts()
-    assert set(core.org_code)==set(observed.org_code)
+    assert set(core.org_code)==set(observed.org_code)-{'RVJ','RAP','RY2'}
+    assert {'RET','RP6'}<=set(core.org_code)
     assert 'RVY' not in set(core.org_code)
     assert backlog.week_ending.min()==pd.Timestamp('2023-04-09')
     assert backlog.loc[backlog.org_code.eq('RVY') & backlog.week_ending.lt('2023-10-01'),'backlog'].notna().any()

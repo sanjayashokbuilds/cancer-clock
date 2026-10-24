@@ -1635,8 +1635,8 @@
     "resolved": 150,
     "note": "Headquarters or verified representative hospital postcode; location_kind identifies each."
   },
-  "core_trusts": 133,
-  "core_locations_resolved": 133,
+  "core_trusts": 130,
+  "core_locations_resolved": 130,
   "processed_file_bytes": {
     "cwt_national.parquet": 324239,
     "backlog_national.parquet": 15872,
@@ -1645,5 +1645,7 @@
     "cwt_first_seen.parquet": 39029,
     "cwt_trust_month.parquet": 2472168,
     "backlog_trust.parquet": 51495
-  }
+  },
+  "modelling_geography": "Retrospectively harmonised current organisation footprint; merger mapping uses later information",
+  "source_tables": "Original provider codes preserved; downstream counts harmonised in memory via trust_mergers.csv"
 }

@@ -1,89 +1,70 @@
-# Forecast methodology (Stages 3–4)
+# Forecast methodology (updated through Stage 5)
 
 **Approximate: latest revised values.** Release dates are M+2/day14; source
-upload dates are retained separately. Archived original values are unavailable.
-Release-aware code does not eliminate revision leakage in the source snapshot.
+upload dates are separate. Available-at filtering does not remove revision
+leakage. The 130-trust acute/specialist cohort and merger mapping describe the
+current organisation footprint retrospectively, not historical deployment units.
+
+## Merger and cohort handling
+
+`pipeline.mergers` preserves raw tables and sums predecessor/successor counts
+before each documented weekly/monthly boundary. Rates are rebuilt from counts.
+Post-merger predecessor observations, including zeros, are removed. An entirely
+missing provider-period or an explicitly suppressed count is not treated as zero.
+A missing cancer/test category contributes zero only when the provider's broader
+report for that metric/period exists. Provenance keeps component codes and the
+latest contributing release date.
+
+The core requires observed evaluation-era backlog and positive 31D cancer
+activity in the latest 12 months, among live NHS acute/specialist providers.
+Community-only, mental-health and independent providers are excluded. Retired
+providers map to successors; RET/RP6 are retained specialist cancer providers.
+The registry and `provider_scope.csv` give per-code evidence/decisions.
 
 ## Pairing and training
 
-Target: trust count still waiting beyond 62 days. Stage 3 headlines use targets
-exactly 4/8/12 weeks **after issue**, not after the old observation. The saved
-Stage 2 issue cases are immutable: 4,446 / 4,182 / 3,919 per model, across 35
-origins in 2024–2026 and 133 core trusts. Missing cases cannot silently disappear.
+Headline targets are exactly 4/8/12 weeks **after issue**. Stage 2 cases were
+regenerated on merged counts: **4,371 / 4,113 / 3,855** at these horizons across
+35 scheduled origins. Every model uses identical eligible cases. April 2023
+history supports lags; scored outcomes are never before October 2023.
 
-Training uses weekly historical issue snapshots. Each feature is calculated
-from data released at that historical issue; each label must itself be released
-by the current fit date. Calendar lags preserve missing weeks; rolling means use observed values with counts. April history may
-train; scored outcomes are never before October 2023. Warm-up training can use
-9–25 observed weeks within the 26-week window; scored cases retain Stage 2's
-26-week history rule. Trust codes are not merged or used as categorical predictors.
+Weekly training snapshots use features released by their historical issue; labels
+must be released by the current fit. Calendar lags retain missing weeks.
+Warm-up training permits 9–25 observed weeks in a 26-week window; evaluation
+requires the baseline 26-week history rule. Trust code is not a categorical feature.
 
-## Candidates
+Compare persistence, eight-week drift, partial reversion towards the trust's
+26-week mean (global horizon weight refitted from published labels), reversion
+with annual/Christmas/national trend context, and LightGBM 10/50/90th quantiles of
+`log1p(target)-log1p(latest)`. LightGBM uses 100 rounds, 15 leaves, learning rate
+0.04, minimum leaf 100, two threads. Features include backlog levels/lags,
+first-attendance volume proxy, CWT performance, DM01, publication age, calendar,
+national trend and past strikes. Missing monthly features remain NaN.
 
-- Persistence and eight-week endpoint drift retain the Stage 2 scores/bands.
-- Partial reversion: `latest + weight × (rolling 26-week mean − latest)`.
-  One global weight per horizon, bounded [0,1], refitted using published labels.
-- Context version adds annual sine/cosine changes, Christmas and national
-  eight-week trend. Coefficients are bounded/regularised, not causal effects.
-- LightGBM: global 10th/50th/90th quantiles of `log1p(target) − log1p(latest)`.
-  Inverse transformation handles zeros; crossing quantiles are sorted.
-  Fixed 100 rounds, 15 leaves, 0.04 learning rate, minimum leaf 100, two CPU threads.
-  Training-only count weights/caps reduce relative-error emphasis. No reported
-  test score was used to tune these settings.
+## Calibration, selection and review
 
-Features: backlog lags/changes, rolling means/variation, first-attendance volume
-proxy and backlog normalisation, FDS/62D/31D-modality performance, seven DM01
-list sizes/waits/activity, publication ages, annual/Christmas/Easter calendar,
-national backlog trend and past strike-day indicators. Future strikes are never
-read. Missing monthly features remain NaN; first attendances are not referrals.
+Intervals use earlier issued errors with published outcomes; <200 errors borrows
+baseline widths. Nominal 80% coverage is empirical, not guaranteed. Classifier
+Platt calibration also uses earlier published outcomes; it did not improve Brier.
+Research outputs retain raw/calibrated Brier scores and reliability curves.
+Display is only 4-week likely up/down/unclear, with assumed 0.6/0.4 thresholds and
+agreement with count direction. No probabilities or longer-horizon signals.
 
-## Uncertainty and classification
+The count gate requires beating both baselines on MAE and MASE at +8 and +12;
+lowest combined 8/12 MASE wins among passing candidates. An expanding
+published-history mean-error correction was tested and rejected. The selected
+**50:50 LightGBM/last-value blend was chosen post-hoc on the back-test**.
+Its fixed weight and blended interval endpoints do not constitute independent
+validation or formal quantile calibration.
 
-Reversion intervals use earlier issued out-of-sample absolute errors divided by
-`1 + latest`. LightGBM bands expand using earlier issued quantile errors. Only
-published calibration targets qualify; fewer than 200 errors uses baseline
-widths as explicit warm-up. Nominal coverage is 80%, measured rather than guaranteed.
+Trust-cluster bootstrap: 10,000 whole-trust resamples, seed 42, percentile 95%
+intervals for gain in paired summed absolute errors. Preserves within-trust
+dependence, but not common shocks or selection uncertainty. Large swings are
+`abs(actual-last)>0.30*last`, an outcome-defined post-hoc slice.
 
-The separate binary classifier predicts `target > latest`. Ties are **non-growth**;
-grow/shrink-only accuracy additionally excludes ties. Report raw and Platt-calibrated
-probabilities, Brier scores, 10-bin reliability curves/counts, frequency, coin and
-hard non-growth benchmarks. Platt fitting uses earlier issued predictions with
-published labels. This run's calibration does not improve Brier: probabilities
-remain experimental. No growth probability is inferred from three quantiles.
-
-MAE and MASE average paired forecast cases. MASE's scale uses available adjacent
-weekly changes; zero scales are excluded from MASE only and counted. Direction
-includes unchanged. Overlapping dates and trusts are dependent.
-
-Count gate: beat **both** baselines on MAE and MASE at issue +8 AND +12 weeks.
-Among passing candidates select lowest combined 8/12 MASE; otherwise use persistence.
-Selection on this comparison is exploratory, not independent future validation.
-
-## Stage 4 review additions
-
-`models.review` preserves the original predictions and reports three candidates:
-original LightGBM, an expanding bias correction, and a fixed 50:50 blend with
-last value. The correction subtracts earlier mean signed error per horizon,
-using only older issued cases with targets published by the current issue;
-it is zero before 200 eligible cases. It worsened errors and was rejected.
-The blend uses no fitted weight and is now selected for trust forecasts. Its
-interval endpoints are blended with the baseline endpoints; reported coverage
-is empirical, not a formal quantile guarantee.
-
-Bootstrap intervals resample whole trusts with all paired issue cases, 10,000
-draws, seed 42, percentile 2.5/97.5 bounds. Gain is one minus the ratio of summed
-absolute errors, preserving the original case weighting. This captures
-within-trust dependence but not common shocks. Large swings use
-`abs(actual-last) > 0.30*last`, an outcome-defined, post-hoc diagnostic slice.
-Original and blend results are reported separately.
-
-Aggregate MAE first sums predictions and actuals over the identical scored
-trusts at each issue, then averages absolute aggregate errors across issues.
-Varying cohort coverage is reported. These are not forecasts of the official
-England series, so no national forecast or sum of trust intervals is exported.
-
-The display contract exposes only 4-week growth categories. Raw classifier
-probability >=0.6 with a rising count forecast means likely up; <=0.4 with a
-falling count means likely down; otherwise unclear. No numeric probabilities or
-8/12-week growth categories are exported. Thresholds are assumed and experimental.
-Research Brier/calibration outputs remain available for audit.
+Paired-sum MAE sums actual/predicted counts over exactly the scored trusts at each
+issue before averaging absolute errors. Coverage varies; this is not official
+England. National forecasts and summed trust bands remain withheld.
+Stage 4 reference JSON/parquet retain old results; merger comparison also reports
+exact common cases on unchanged footprints. Overall before/after differences
+include changed trust units/cohorts. See README for current results.

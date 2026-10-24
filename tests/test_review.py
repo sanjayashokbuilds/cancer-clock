@@ -11,6 +11,47 @@ from config import OUTPUTS_DIR
 from models.review import adjusted_predictions, bias_offset, direction_signal, trust_bootstrap
 
 
+def test_snapshot_comparison_allows_roundoff_but_rejects_changed_evidence() -> None:
+    from copy import deepcopy
+    from models.check import assert_snapshot_equal
+    from pipeline.common import DataError
+    expected=dict(metrics=[dict(mae=28.334155804968983,n=4371,beats_naive=True)],model='lightgbm_blend')
+    rounded=deepcopy(expected)
+    rounded['metrics'][0]['mae']=np.nextafter(expected['metrics'][0]['mae'],np.inf)
+    assert rounded!=expected
+    assert_snapshot_equal(rounded,expected)
+    for key,bad in [('mae',28.34),('mae',float('nan')),('mae',float('inf')),
+                    ('n',4372),('n',4371.0),('beats_naive',False),('beats_naive',1)]:
+        changed=deepcopy(expected);changed['metrics'][0][key]=bad
+        with pytest.raises(DataError,match=key):
+            assert_snapshot_equal(changed,expected)
+    with pytest.raises(DataError,match='fields'):
+        assert_snapshot_equal({},expected)
+    with pytest.raises(DataError,match='lengths'):
+        assert_snapshot_equal([],expected['metrics'])
+    with pytest.raises(DataError,match='model'):
+        assert_snapshot_equal({**expected,'model':'naive'},expected)
+
+
+def test_full_model_check_handles_bootstrap_roundoff_without_hiding_errors(monkeypatch) -> None:
+    from models import check
+    from pipeline.common import DataError
+    original=check.evaluate
+    def rounded(*args):
+        result=original(*args)
+        stats=result['metrics'][0]['trust_bootstrap']
+        stats['ci95_low_pct']=float(np.nextafter(stats['ci95_low_pct'],np.inf))
+        return result
+    monkeypatch.setattr(check,'evaluate',rounded)
+    check.main()
+    def corrupted(*args):
+        result=original(*args);result['metrics'][0]['mae']+=.01
+        return result
+    monkeypatch.setattr(check,'evaluate',corrupted)
+    with pytest.raises(DataError,match=r'review.metrics\[0\].mae'):
+        check.main()
+
+
 def test_bootstrap_resamples_whole_trusts_not_individual_dates() -> None:
     rows=pd.DataFrame(dict(org_code=['A','A','A'],last_value=[10.,10.,10.],
         actual=[20.,20.,20.],prediction=[20.,0.,10.]))

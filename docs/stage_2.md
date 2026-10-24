@@ -1,6 +1,7 @@
 # Stage 2 handoff (historical)
 
-Stage 3 adds models; current run/upload instructions are in README and web_upload.md.
+Historical results below; Stage 5 reruns these baselines on merged trusts.
+Current run/upload instructions are in README and web_upload.md.
 
 Done: 29 tests pass; seven snapshot checks pass. 133 core trusts, all geocoded;
 178 backlog weeks from 9 April 2023. Monthly datasets still start October 2023.
@@ -35,14 +36,7 @@ as future forecasts. Direction metrics distinguish unchanged predictions explici
 Expected: `29 passed`, snapshot checks passed, a 12-row baseline table and
 `Stage 2 backtest complete. No ML model has been trained.` No raw downloads needed.
 
-Commit after these checks:
-
-```sh
-git add .
-git diff --cached --stat
-git commit -m "Fix release timing and test simple backlog forecasts against NHS history" -m "Revised files were making older observations look unavailable, so release timing now follows the same first-release assumption across datasets. Added the core NHS trust list, filled the map gaps and kept April backlog history for training. The backtest compares last-value and recent-trend forecasts using only data available at each issue date, with the revised-value limitation shown. Last-value forecasts performed better, giving us a benchmark for the next model."
-git push -u origin main
-```
+Use the current [web-upload instructions](web_upload.md) after the README checks.
 
 ## Files changed
 

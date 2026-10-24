@@ -6,7 +6,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from config import FORECAST_HORIZONS_WEEKS, OUTPUTS_DIR
+from config import FORECAST_HORIZONS_WEEKS, OUTPUTS_DIR, STATIC_DIR
 from models.backtest import score
 from models.calibration import past_errors
 from pipeline.common import DataError
@@ -118,12 +118,47 @@ def evaluate(raw: pd.DataFrame, adjusted: pd.DataFrame) -> dict:
                 scope='Sum over identical scored trusts at each issue; coverage varies, not the official England series.')))
     return dict(metrics=metrics,
         bias_rule=f'Per-horizon expanding mean actual-minus-raw-prediction from earlier issues with target release <= issue; zero until {BIAS_MIN_CASES} cases.',
-        blend_rule='Fixed 50:50 LightGBM/last-value blend at every horizon; weight not fitted or searched.',
+        blend_rule='Fixed 50:50 LightGBM/last-value blend selected post-hoc on the Stage 3/4 back-test; weight not continuously fitted or searched. This is not independent validation.',
         large_swings_rule='abs(actual - last) > 0.30 * last; zero last includes any nonzero actual.',
         large_swings_caveat='Outcome-defined, post-hoc diagnostic slice; not a group identifiable at forecast time.',
         evaluation_caveat='Requested after inspection of Stage 3 results; all additions and selection remain exploratory.',
         national_display=dict(enabled=False,
             reason='Only paired cohort sums have been evaluated; full England coverage and aggregate intervals are not established. No national model forecasts exported.'))
+
+
+def merger_impact(report: dict, raw: pd.DataFrame, adjusted: pd.DataFrame, latest: dict) -> dict:
+    """Reproduce before/after comparisons from the frozen Stage 4 audit reference."""
+    from pipeline.mergers import mergers
+    old=json.loads((STATIC_DIR/'stage4_reference.json').read_text())
+    previous=pd.read_parquet(STATIC_DIR/'stage4_reference_cases.parquet')
+    mapping=mergers(); changed=set(mapping.predecessor)|set(mapping.successor)
+    impact=dict(interpretation='Overall results use changed trust units/cohorts; changes are not an isolated causal effect of merger correction. The 50:50 blend was selected post-hoc in Stage 4.',
+        old_core_trusts=old['core_trusts'],new_core_trusts=report['core_trusts'],overall=[],latest_forecasts=[],unchanged_trusts_common_cases=[])
+    current=pd.concat([raw.loc[raw.model.eq('lightgbm')],adjusted.loc[adjusted.model.eq('lightgbm_blend')]],ignore_index=True)
+    for model in ['lightgbm','lightgbm_blend']:
+        for h in FORECAST_HORIZONS_WEEKS:
+            before=next(m for m in old['metrics'] if m['model']==model and m['horizon_weeks']==h)
+            after=next(m for m in report['review']['metrics'] if m['model']==model and m['horizon_weeks']==h)
+            fields=['n','mae','mase','mean_signed_error','national_sum','large_swings','trust_bootstrap']
+            impact['overall'].append(dict(model=model,horizon_weeks=h,
+                before={k:before[k] for k in fields},after={k:after[k] for k in fields}))
+        a=previous.loc[previous.model.eq(model)&~previous.org_code.isin(changed)]
+        b=current.loc[current.model.eq(model)]
+        common=a.merge(b,on=KEY,suffixes=('_before','_after'),validate='one_to_one')
+        if not np.allclose(common.actual_before,common.actual_after):
+            raise DataError('Unchanged-footprint comparison targets differ; update the comparison scope')
+        for h, rows in common.groupby('horizon_weeks'):
+            impact['unchanged_trusts_common_cases'].append(dict(model=model,horizon_weeks=int(h),n=len(rows),
+                before_mae=float(rows.absolute_error_before.mean()),after_mae=float(rows.absolute_error_after.mean()),
+                scope='Same target counts and exact keys, excluding changed footprints and their predecessors.'))
+    for code in ['RA7','RAL']:
+        for h in FORECAST_HORIZONS_WEEKS:
+            a=next(f for t in old['trusts'] if t['org_code']==code for f in t['forecasts'] if f['horizon_weeks']==h)
+            b=next(f for t in latest['trusts'] if t['org_code']==code for f in t['forecasts'] if f['horizon_weeks']==h)
+            impact['latest_forecasts'].append(dict(org_code=code,horizon_weeks=h,issue_date=b['issue_date'],
+                before_point=a['point_forecast'],after_point=b['point_forecast'],
+                after_lower=b['lower_80'],after_upper=b['upper_80'],change=b['point_forecast']-a['point_forecast']))
+    return impact
 
 
 def run() -> dict:
@@ -143,6 +178,8 @@ def run() -> dict:
               and all(blend[h]['national_sum']['beats_naive'] for h in FORECAST_HORIZONS_WEEKS))
     review['selected_trust_model'] = 'lightgbm_blend' if accept else report['gate']['selected']
     review['selection_rule'] = 'Use fixed blend if it beats both original baselines on trust MAE/MASE at 8/12w and naive paired-sum MAE at all horizons; otherwise retain Stage 3 selection.'
+    if 'merger_impact' in report.get('review', {}):
+        review['merger_impact'] = report['review']['merger_impact']
     report['review'] = review
     report['limitations'] = [s for s in report['limitations'] if 'no significance claim' not in s]
     report['limitations'].append('Trust-cluster bootstrap preserves within-trust dependence but not common national shocks or retrospective selection uncertainty.')
@@ -168,6 +205,10 @@ def run() -> dict:
     export_latest(sources, load_core_trusts(), panel, report['features'], raw,
                   review['selected_trust_model'], latest_issue, report['gate'], classifier,
                   national_display=review['national_display'])
+    if (STATIC_DIR/'stage4_reference.json').exists():
+        latest=json.loads((OUTPUTS_DIR/'forecasts_latest.json').read_text())
+        review['merger_impact']=merger_impact(report,raw,adjusted,latest)
+        write_json(OUTPUTS_DIR/'backtest_model.json',report)
     for m in review['metrics']:
         print(f'{m["horizon_weeks"]:2}w {m["model"]:25} MAE {m["mae"]:6.2f} bias {m["mean_signed_error"]:+6.2f} '
               f'paired-sum MAE {m["national_sum"]["model_mae"]:7.2f}')

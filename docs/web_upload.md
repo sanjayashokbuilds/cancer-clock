@@ -1,39 +1,49 @@
 # GitHub web upload
 
-1. Test the updated project locally (README commands).
-2. For uploading, extract a **fresh copy of the delivered ZIP** into a separate
-   folder. Do not upload the working folder after running Python: tests recreate
-   caches and web uploads do not obey `.gitignore`.
-3. Open your repository on GitHub. Remove these directories using the directory's
-   top-right `…` menu -> **Delete directory** -> review -> **Commit changes**:
-   - `__pycache__/`
-   - `pipeline/__pycache__/`
-   - `tests/__pycache__/`
-   - `.pytest_cache/`
-   Remove any other `__pycache__` directory too, including one under `models/`.
-   Delete only these generated caches, not `pipeline/`, `tests/` or `models/`.
-   Suggested cleanup message: `Remove local Python and test caches from the repo`.
-4. At the repository root choose **Add file -> Upload files**. Open the freshly
-   extracted `cancer-clock` folder and drag its **contents** into the upload box.
-   Do not upload the ZIP or add a second enclosing `cancer-clock/` folder.
-5. In Finder, press **Command + Shift + .** to show hidden files. Include
-   `.gitignore` and `.env.example`; the clean ZIP contains no `.env` or `.git`.
-6. Check paths such as `models/forecast.py` and `README.md`, then commit the upload.
-   If your branch is protected, use the offered new-branch/pull-request flow.
+1. Run the README checks in your local project. No git CLI is needed.
+2. Extract a **fresh copy of cancer-clock-stage-5.zip** into a separate upload
+   folder. Python tests recreate caches; upload this fresh copy, not the tested
+   working folder.
+3. On [your repository](https://github.com/sanjayashokbuilds/cancer-clock), remove
+   any old cache directories using the directory's top-right **… → Delete
+   directory → Commit changes**. Check `__pycache__/`, `pipeline/__pycache__/`,
+   `tests/__pycache__/`, `models/__pycache__/`, `analysis/__pycache__/`,
+   `sim/__pycache__/` and `.pytest_cache/`; delete matching caches at any depth.
+   If absent, skip them. Keep their parent source folders.
+4. Delete only these obsolete placeholder files if present: `analysis/.gitkeep`
+   and `sim/.gitkeep` (open each, **… → Delete file**). Web upload does not
+   remove files missing from the new ZIP.
+5. At the repository root choose **Add file → Upload files**. Drag the **contents**
+   of the freshly extracted `cancer-clock` folder into the upload box. Do not
+   upload the ZIP itself or nest another `cancer-clock/` folder.
+6. Finder **Command + Shift + .** reveals hidden files; include `.gitignore` and
+   `.env.example`. Check paths such as `sim/simulator.py` and `README.md`.
+   Use the message below, then **Commit changes** (or propose a new branch/PR
+   if your repository requires it).
 
-Upload summary:
-`Add bottleneck checks and temper the longer-range backlog forecasts`
+Cleanup message: `Remove generated Python caches and unused placeholder files`.
+
+Upload commit message:
+
+```text
+Join merged hospital histories and add daily recovery-plan simulations
+```
 
 Optional description:
-`The longer forecasts tended to come in low, so they now split the difference
-with the last known backlog. Added diagnosis and treatment signals with the
-underlying volumes, and ten hospitals for Rounak to check. The report keeps the
-original model results, including the large swings where it helped most.`
 
-Web uploads overwrite files but do **not** delete old files or respect ignore
-rules. The packaged ZIP excludes caches at every depth, raw downloads, virtual
-environments, node_modules and secrets. No source-code files need deletion.
+```text
+The Bristol and Royal Free mergers were making ordinary changes look like
+backlog jumps. Their older counts now include the hospitals that joined them,
+and the forecasts have been rerun. Diagnosis labels now follow the relevant
+cancer pathways, with routine diagnostic waits kept as context. Added a daily
+two-stage simulator to compare extra diagnosis and treatment capacity, with
+fit errors and assumptions shown. The ten hospital examples still need
+Rounak's clinical review.
+```
 
-Official instructions:
-- https://docs.github.com/en/repositories/working-with-files/managing-files/deleting-files-in-a-repository
-- https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository
+The complete ZIP has 100 files, each below 25 MB. It excludes caches at every
+depth, raw downloads, virtual environments and secrets. Web upload ignores
+`.gitignore`, so use the supplied clean ZIP.
+
+Official guidance: [upload files](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository),
+[delete files/directories](https://docs.github.com/en/repositories/working-with-files/managing-files/deleting-files-in-a-repository).

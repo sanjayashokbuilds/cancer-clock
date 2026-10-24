@@ -7,18 +7,22 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED = {'.git', '.venv', 'venv', 'node_modules', '__pycache__', '.pytest_cache',
-            '.mypy_cache', '.ruff_cache', 'dist', 'build', 'htmlcov'}
+            '.mypy_cache', '.ruff_cache', 'dist', 'build', 'htmlcov', '__MACOSX'}
+OBSOLETE_PLACEHOLDERS = {'analysis/.gitkeep', 'sim/.gitkeep'}
 
 
 def main() -> None:
     """Package source and small outputs; fail rather than omit oversized outputs."""
-    target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / 'cancer-clock-stage-4.zip'
+    target = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT.parent / 'cancer-clock-stage-5.zip'
     if target.is_relative_to(ROOT):
         raise ValueError('Save the archive outside the repository')
     files = []
     for path in sorted(ROOT.rglob('*')):
         relative = path.relative_to(ROOT)
         if not path.is_file() or EXCLUDED.intersection(relative.parts):
+            continue
+        # ZIP overlays leave old files in place; Finder can add resource-fork files.
+        if relative.as_posix() in OBSOLETE_PLACEHOLDERS or any(part.startswith('._') for part in relative.parts):
             continue
         if relative.parts[:2] == ('data', 'raw') or path.suffix in {'.pyc', '.pyo', '.log', '.pem', '.key'}:
             continue

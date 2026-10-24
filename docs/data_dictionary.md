@@ -31,8 +31,8 @@ counts may include halves because of shared care; they are not rounded to people
 
 Referral-labelled tables are titled as waits to the first outpatient attendance
 in the older source workbooks. They are not measured arrival counts. The Oxford
-plot deliberately labels this series as first attendances. A later simulator
-must source true arrivals or state its proxy assumption explicitly.
+plot labels this series as first attendances. Stage 5 uses it as an explicitly
+assumed arrival proxy; it is not a measurement of incoming referrals.
 
 DM01 dates are read from the file name and checked against the internal Period
 field. This handles a March 2025 link whose page label incorrectly says March
@@ -65,14 +65,28 @@ assumptions. It does not prove what values were known at a historical date.
 
 ## Geography and scope
 
-`core_trusts.csv` is the shared modelling/simulation/UI universe: 133 NHS trusts
-with observed backlog from October 2023 onwards. CWT's broader provider tables
-remain available for source audit, including independent providers.
+`core_trusts.csv` is the shared modelling/simulation/UI universe: 130 current NHS
+acute/specialist trusts with observed evaluation-era backlog and recent cancer
+treatment activity. `provider_scope.csv` records exclusions and successor notes.
+CWT's broader raw tables remain available for audit, including independent providers.
 Use `pipeline.universe.load_core_trusts()` and `core_locations()` downstream.
 
 Locations are postcode centroids: ODS headquarters or verified representative
 hospital sites (`location_kind`). Five explicit overrides retain address and
 geocoding URLs in `location_overrides.csv`. Bridgewater uses its listed trust
-address, not a supposed main hospital. All 133 core trusts have coordinates.
-RVY has 13 April–July 2023 values but none in the evaluation era: it remains in
-source data and is excluded from core/map. No code-merger crosswalk is inferred.
+address, not a supposed main hospital; it is now a retired community provider.
+All 130 current core trusts have coordinates. RVJ, RAP, RY2 and RVY location rows
+remain for audit with successor notes but are excluded from `core_locations()`.
+
+`trust_mergers.csv` records predecessor, successor, effective week/month, legal
+date and evidence. `pipeline.mergers.load_harmonized()` builds current successor
+histories in memory before modelling, labels and simulation: pre-merger counts
+sum and rates are rebuilt; post-merger predecessor values are removed. Source
+parquets remain raw. This uses retrospective organisation knowledge.
+
+`dm01_bottleneck_reference.parquet` contains core/predecessor counts plus ENGLAND
+from all reporting providers with English commissioners. It excludes NONC and
+is separate from the original DM01 snapshot. `outputs/merger_audit.json` holds
+detector suggestions and applied decisions. `simulation_calibration.json` gives
+fits/failures, capacity ratios and daily-age end states; `simulation_examples.json`
+gives paired plan trajectories, process ranges and assumptions.

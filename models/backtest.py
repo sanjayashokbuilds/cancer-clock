@@ -122,7 +122,8 @@ def summarize(rows: pd.DataFrame) -> list[dict]:
 def run(start: str = '2024-01-07', end: str | None = None,
         output_dir: Path = OUTPUTS_DIR) -> dict:
     """Reproduce results from bundled data offline and save row-level audit evidence."""
-    backlog = pd.read_parquet(PROCESSED_DIR / 'backlog_trust.parquet')
+    from pipeline.mergers import load_harmonized, GEOGRAPHY
+    backlog = load_harmonized('backlog_trust')
     core = load_core_trusts()
     start_date, end_date = pd.Timestamp(start), pd.Timestamp(end or backlog.week_ending.max())
     if start_date.dayofweek != 6 or start_date < pd.Timestamp(EVALUATION_START) or end_date < start_date:
@@ -145,15 +146,17 @@ def run(start: str = '2024-01-07', end: str | None = None,
             'mase': 'MAE scaled per case by mean absolute consecutive weekly change in available training history; zero scales excluded from MASE only.',
             'direction': 'Three-way sign: shrink/unchanged/grow. Persistence predicts unchanged. grow_shrink_accuracy excludes unchanged actual outcomes; persistence abstentions count as incorrect.',
             'interval': '80% symmetric empirical absolute-error band, last 52 eligible within-trust residuals, minimum 8; calibration targets must be published by issue. Coverage is measured, not guaranteed.',
-            'cohort': 'Fixed historical NHS trust cohort with observations in the evaluation era; no retrospective code-merger stitching.',
+            'cohort': GEOGRAPHY,
             'aggregation': 'Paired forecast-case mean; both baselines evaluated on identical trust/origin/target cases.',
         }, limitations=['Approximate release dates and latest revised values are not a strict historical-vintage backtest.',
             'Overlapping horizons and residuals are dependent; no significance or causal claim.',
-            'Retired codes and missing weeks are retained; cases without sufficient observed history or outcomes are skipped.',
+            'Confirmed mergers use retrospective current footprints; retired codes are excluded. Missing component counts remain unknown.',
             'Only overdue >62-day backlogs are forecast, not the entire waiting list or personal waits.'],
         metrics=summarize(rows), input_sha256={
             'backlog_trust.parquet': hashlib.sha256((PROCESSED_DIR/'backlog_trust.parquet').read_bytes()).hexdigest(),
-            'core_trusts.csv': hashlib.sha256((STATIC_DIR/'core_trusts.csv').read_bytes()).hexdigest()})
+            'core_trusts.csv': hashlib.sha256((STATIC_DIR/'core_trusts.csv').read_bytes()).hexdigest(),
+            'trust_mergers.csv': hashlib.sha256((STATIC_DIR/'trust_mergers.csv').read_bytes()).hexdigest(),
+            'provider_scope.csv': hashlib.sha256((STATIC_DIR/'provider_scope.csv').read_bytes()).hexdigest()})
     (output_dir/'backtest_baselines.json').write_text(json.dumps(report, indent=2, allow_nan=False)+'\n')
     print('Stage 2 baseline backtest | '+LABEL)
     print('Anchor       Horizon Model       N     MAE    MASE  Direction  Coverage80  Issue lead')

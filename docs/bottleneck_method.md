@@ -1,57 +1,46 @@
 # Bottleneck screening method
 
-These labels describe relative pressure in aggregate measures. They do not
-identify why cancer patients are delayed or estimate spare capacity.
+Use the latest three common published CWT/DM01 months, with each source filtered
+to `published_on <= as_of`. Use all 130 current acute/specialist core trusts and
+merged counts; missing recent evidence stays explicit. This screens relative
+pressure, not causes or spare capacity. Rounak's clinical review is pending.
 
-## Window and references
+Diagnosis drivers are **cancer-type-specific FDS**, ALL ROUTES. Exclude pooled
+ALL CANCERS, missing types and breast symptoms not suspected cancer. Treatment
+drivers are **31D by surgery, radiotherapy and anti-cancer drugs**, ALL CANCERS /
+ALL STAGES. Compare against matching England types/modalities and matching months.
+Pool numerators and denominators; never average percentages.
 
-Filter every source to `published_on <= as_of`. Use the latest common CWT/DM01
-month and its two preceding calendar months. Do not substitute old months for a
-trust with missing recent data. Keep all 133 core trusts, with explicit evidence status.
+Require ≥2 valid months, completed volume ≥100 for FDS or ≥30 for treatment,
+and ≥2 months worse than England. Shrink the adverse pooled gap by
+`volume / (volume + 100)`. Each side's score is its largest qualifying gap;
+≥5 percentage points signals that side. Both sides imply mixed; show both top
+drivers. Confidence is heuristic: high requires three adverse months, volume
+≥200 and gap ≥10 points; otherwise a signal is medium. Missing a whole side
+caps strength at low. No clear signal is not evidence of adequate capacity.
 
-FDS uses ALL CANCERS / ALL ROUTES. Treatment uses ALL CANCERS / ALL STAGES / each
-of surgery, radiotherapy and anti-cancer drugs. Compare count-weighted performance
-with published England CWT totals for the same scope and available months.
+**DM01 never drives a label.** Each test is context, using its six-week-wait
+fraction and matching England reference. A context is corroborated only if both
+it and a linked FDS pathway meet the adverse-gap/volume/persistence rules:
 
-DM01 compares each test's six-week-wait proportion separately. The reference
-uses full provider–commissioner extracts, excludes `NONC` (non-English
-commissioners), and includes all NHS-funded reporting providers. Only core trusts
-receive labels. Count commissioners once; exclude CDC-only extracts. Missing
-counts propagate, never become zero. The original Stage 3 DM01 snapshot is
-preserved for reproducibility; Stage 4 uses a separate English-scope reference.
+| Diagnostic test | Matching FDS pathway |
+| --- | --- |
+| Colonoscopy / flexi sigmoidoscopy | Lower gastrointestinal |
+| Gastroscopy | Upper gastrointestinal |
+| Cystoscopy | Urological, excluding testicular |
+| CT | Lung, lower/upper GI, urological |
+| MRI / non-obstetric ultrasound | Broad non-cancer demand; no specific corroboration assigned |
 
-For each component pool numerator/denominator across matching valid months;
-never average percentages. CWT volume is completed pathways. DM01's pooled
-denominator is patient-months: its **minimum monthly list**, not the sum, is used
-for evidence strength because patients can recur across snapshots.
+English DM01 counts exclude NONC commissioners, include NHS-funded independent
+care in the England reference, and retain raw predecessor counts for merger
+harmonisation. Repeated monthly waiting lists are not unique people: use the
+minimum monthly list (≥100) for shrinkage/strength; pooled counts supply the rate.
+Uncorroborated means no qualifying linked adverse pair, not proof of no connection.
 
-## Explicit assumed rules
+RTH/RRK gastroscopy and RJ1/RM1 cystoscopy are uncorroborated because the matching
+FDS pathway outperforms England. R0A's lower GI FDS is **59.2% vs 67.4%, n=1,926**
+and qualifies; its largest signal is sarcoma. National No-DTT/With-DTT remains
+context only, never an observed trust split.
 
-Require at least two usable months and volume >=100 for FDS, >=30 per treatment
-modality, or minimum monthly list >=100 for a diagnostic test. A bad gap is
-England minus trust performance for CWT; trust minus England six-week waits for DM01.
-
-Shrink positive gaps towards zero by `volume / (volume + 100)`. A component
-scores zero unless at least two months are worse than England. Diagnosis score
-is the larger of FDS and the mean of the two highest eligible DM01 scores (one
-if only one qualifies). Treatment score is the largest eligible modality score.
-Both scores use percentage points. The 5-point signal threshold gives the four
-labels: diagnosis-limited, treatment-limited, mixed, or no clear bottleneck.
-
-Confidence means heuristic evidence strength. Medium: a qualifying signal.
-High: three adverse months, effective volume >=200 and side score >=10 points;
-diagnosis also requires an FDS signal. Mixed takes the weaker side. Missing a
-whole side caps confidence at low and sets `partial_evidence`; missing both sets
-`insufficient_data`. No clear signal has low confidence. A high score does not
-mean a high probability of a causal bottleneck. These thresholds need Rounak's
-clinical review and have not been fitted to outcomes.
-
-National No-DTT/With-DTT counts are displayed only as observed national context;
-they never enter a trust score or supply a fabricated trust split. All labels
-retain `approximate: latest revised values`. Case mix, referral networks and
-DM01's non-cancer demand can explain differences; above-average FDS alongside
-poor DM01 waits is explicitly flagged.
-
-Sources: [CWT definitions](https://www.england.nhs.uk/long-read/national-cancer-waiting-times-monitoring-dataset-guidance/),
-[DM01 FAQs, including NONC and repeated diagnostic clocks](https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2025/01/DM01-FAQs-v5.pdf).
-Per-file URLs and hashes remain in the bundled inputs and source manifest.
+Definitions: [NHS CWT guidance](https://www.england.nhs.uk/long-read/national-cancer-waiting-times-monitoring-dataset-guidance/),
+[DM01 FAQs](https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2025/01/DM01-FAQs-v5.pdf).
