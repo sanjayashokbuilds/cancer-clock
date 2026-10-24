@@ -1,39 +1,20 @@
-# GitHub web upload
+# Uploading Stage 8
 
-1. Test the updated project locally (README commands).
-2. For uploading, extract a **fresh copy of the delivered ZIP** into a separate
-   folder. Do not upload the working folder after running Python: tests recreate
-   caches and web uploads do not obey `.gitignore`.
-3. Open your repository on GitHub. Remove these directories using the directory's
-   top-right `…` menu -> **Delete directory** -> review -> **Commit changes**:
-   - `__pycache__/`
-   - `pipeline/__pycache__/`
-   - `tests/__pycache__/`
-   - `.pytest_cache/`
-   Remove any other `__pycache__` directory too, including one under `models/`.
-   Delete only these generated caches, not `pipeline/`, `tests/` or `models/`.
-   Suggested cleanup message: `Remove local Python and test caches from the repo`.
-4. At the repository root choose **Add file -> Upload files**. Open the freshly
-   extracted `cancer-clock` folder and drag its **contents** into the upload box.
-   Do not upload the ZIP or add a second enclosing `cancer-clock/` folder.
-5. In Finder, press **Command + Shift + .** to show hidden files. Include
-   `.gitignore` and `.env.example`; the clean ZIP contains no `.env` or `.git`.
-6. Check paths such as `models/forecast.py` and `README.md`, then commit the upload.
-   If your branch is protected, use the offered new-branch/pull-request flow.
+The project now has more than 100 files. Use the [terminal workflow](git_workflow.md)
+to upload the complete project in one commit.
 
-Upload summary:
-`Add bottleneck checks and temper the longer-range backlog forecasts`
+For browser uploads, extract a fresh Stage 8 ZIP, show hidden files in Finder
+(Command + Shift + .), and upload its contents at the repository root in batches
+of at most 100 files. Include `web/dist`, which contains the ready-to-run app.
+Do not upload Python caches, local environments or `web/node_modules`.
 
-Optional description:
-`The longer forecasts tended to come in low, so they now split the difference
-with the last known backlog. Added diagnosis and treatment signals with the
-underlying volumes, and ten hospitals for Rounak to check. The report keeps the
-original model results, including the large swings where it helped most.`
+Delete any previously committed `__pycache__` and `.pytest_cache` directories
+at every depth, plus `analysis/.gitkeep` and `sim/.gitkeep` if present. Use the
+file/directory's … menu. Uploads do not delete older files automatically.
 
-Web uploads overwrite files but do **not** delete old files or respect ignore
-rules. The packaged ZIP excludes caches at every depth, raw downloads, virtual
-environments, node_modules and secrets. No source-code files need deletion.
+Commit message: `Show capacity trade-offs with uncertainty in a working dashboard`.
 
-Official instructions:
-- https://docs.github.com/en/repositories/working-with-files/managing-files/deleting-files-in-a-repository
-- https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository
+Description: `The simulator now varies fitted capacities as well as daily arrivals,
+so the ranges show more of the uncertainty. Added a dose-response view to compare
+diagnosis and treatment capacity, with prior conflicts and assumptions visible.
+The API serves precomputed results so switching hospitals and plans is immediate.`

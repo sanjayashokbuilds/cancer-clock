@@ -1,0 +1,348 @@
+{
+  "geography_label": "Retrospectively harmonised current organisation footprint; merger mapping uses later information",
+  "limitation": "Count availability is issue-filtered, but the fixed present-day cohort and merger mapping are retrospective, not an as-was organisational backtest.",
+  "detector": [
+    {
+      "predecessor": "RAP",
+      "candidate_week": "2025-01-05",
+      "last_positive_week": "2024-12-29",
+      "monthly_activity_continues": false,
+      "signal": "needs_review",
+      "candidates": [
+        {
+          "successor": "RAL",
+          "jump": 146.0,
+          "predecessor_last": 126.0,
+          "jump_to_predecessor_ratio": 1.1587301587301588,
+          "distance_km": 9.168138141675911,
+          "discrepancy": 0.23900609617361762
+        },
+        {
+          "successor": "RAJ",
+          "jump": 41.0,
+          "predecessor_last": 126.0,
+          "jump_to_predecessor_ratio": 0.3253968253968254,
+          "distance_km": 52.99238424076179,
+          "discrepancy": 1.652633682654788
+        },
+        {
+          "successor": "RHU",
+          "jump": 45.0,
+          "predecessor_last": 126.0,
+          "jump_to_predecessor_ratio": 0.35714285714285715,
+          "distance_km": 109.37805424557686,
+          "discrepancy": 2.123399959636927
+        },
+        {
+          "successor": "RHQ",
+          "jump": 63.0,
+          "predecessor_last": 126.0,
+          "jump_to_predecessor_ratio": 0.5,
+          "distance_km": 220.21399065651008,
+          "discrepancy": 2.895287087125046
+        },
+        {
+          "successor": "RXP",
+          "jump": 33.0,
+          "predecessor_last": 126.0,
+          "jump_to_predecessor_ratio": 0.2619047619047619,
+          "distance_km": 338.7228427865015,
+          "discrepancy": 4.727002773350012
+        }
+      ],
+      "automatic_application": false
+    },
+    {
+      "predecessor": "RET",
+      "candidate_week": "2025-10-12",
+      "last_positive_week": "2025-10-05",
+      "monthly_activity_continues": true,
+      "signal": "weak_or_contradicted",
+      "candidates": [
+        {
+          "successor": "RY2",
+          "jump": 1.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 1.0,
+          "distance_km": 27.30045861481856,
+          "discrepancy": 0.27300458614818557
+        },
+        {
+          "successor": "RCF",
+          "jump": 1.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 1.0,
+          "distance_km": 79.6653111958245,
+          "discrepancy": 0.796653111958245
+        },
+        {
+          "successor": "RM3",
+          "jump": 2.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 2.0,
+          "distance_km": 40.20571717614691,
+          "discrepancy": 1.0952043523214143
+        },
+        {
+          "successor": "RWD",
+          "jump": 2.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 2.0,
+          "distance_km": 161.85025415088023,
+          "discrepancy": 2.3116497220687475
+        },
+        {
+          "successor": "RGM",
+          "jump": 1.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 1.0,
+          "distance_km": 250.8440970940095,
+          "discrepancy": 2.5084409709400948
+        }
+      ],
+      "automatic_application": false
+    },
+    {
+      "predecessor": "RP6",
+      "candidate_week": "2026-07-05",
+      "last_positive_week": "2026-06-28",
+      "monthly_activity_continues": true,
+      "signal": "weak_or_contradicted",
+      "candidates": [
+        {
+          "successor": "RAN",
+          "jump": 2.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 2.0,
+          "distance_km": 19.186100561243393,
+          "discrepancy": 0.8850081861723792
+        },
+        {
+          "successor": "R1F",
+          "jump": 1.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 1.0,
+          "distance_km": 123.84538204703146,
+          "discrepancy": 1.2384538204703146
+        },
+        {
+          "successor": "RGP",
+          "jump": 2.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 2.0,
+          "distance_km": 168.57633758536272,
+          "discrepancy": 2.3789105564135724
+        },
+        {
+          "successor": "RXF",
+          "jump": 1.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 1.0,
+          "distance_km": 258.1654174021548,
+          "discrepancy": 2.5816541740215477
+        },
+        {
+          "successor": "RCB",
+          "jump": 1.0,
+          "predecessor_last": 1.0,
+          "jump_to_predecessor_ratio": 1.0,
+          "distance_km": 279.14567256441916,
+          "discrepancy": 2.7914567256441916
+        }
+      ],
+      "automatic_application": false
+    },
+    {
+      "predecessor": "RVJ",
+      "candidate_week": "2026-07-05",
+      "last_positive_week": "2026-06-28",
+      "monthly_activity_continues": false,
+      "signal": "needs_review",
+      "candidates": [
+        {
+          "successor": "RA7",
+          "jump": 187.0,
+          "predecessor_last": 222.0,
+          "jump_to_predecessor_ratio": 0.8423423423423423,
+          "distance_km": 3.92407893428224,
+          "discrepancy": 0.2108095543605153
+        }
+      ],
+      "automatic_application": false
+    },
+    {
+      "predecessor": "RVY",
+      "candidate_week": "2023-07-09",
+      "last_positive_week": "2023-07-02",
+      "monthly_activity_continues": false,
+      "signal": "needs_review",
+      "candidates": [
+        {
+          "successor": "RC9",
+          "jump": 109.0,
+          "predecessor_last": 85.0,
+          "jump_to_predecessor_ratio": 1.2823529411764707,
+          "distance_km": null,
+          "discrepancy": 0.24869662573882734
+        },
+        {
+          "successor": "RBN",
+          "jump": 63.0,
+          "predecessor_last": 85.0,
+          "jump_to_predecessor_ratio": 0.7411764705882353,
+          "distance_km": null,
+          "discrepancy": 0.2995165300987837
+        },
+        {
+          "successor": "RCX",
+          "jump": 50.0,
+          "predecessor_last": 85.0,
+          "jump_to_predecessor_ratio": 0.5882352941176471,
+          "distance_km": null,
+          "discrepancy": 0.5306282510621704
+        },
+        {
+          "successor": "RDU",
+          "jump": 50.0,
+          "predecessor_last": 85.0,
+          "jump_to_predecessor_ratio": 0.5882352941176471,
+          "distance_km": null,
+          "discrepancy": 0.5306282510621704
+        },
+        {
+          "successor": "RM1",
+          "jump": 38.0,
+          "predecessor_last": 85.0,
+          "jump_to_predecessor_ratio": 0.4470588235294118,
+          "distance_km": null,
+          "discrepancy": 0.8050650967639307
+        }
+      ],
+      "automatic_application": false
+    },
+    {
+      "predecessor": "RY2",
+      "candidate_week": "2026-04-05",
+      "last_positive_week": "2026-03-29",
+      "monthly_activity_continues": false,
+      "signal": "needs_review",
+      "candidates": [
+        {
+          "successor": "RWW",
+          "jump": 11.0,
+          "predecessor_last": 9.0,
+          "jump_to_predecessor_ratio": 1.2222222222222223,
+          "distance_km": 5.940554918262419,
+          "discrepancy": 0.2600762446447754
+        },
+        {
+          "successor": "RM3",
+          "jump": 8.0,
+          "predecessor_last": 9.0,
+          "jump_to_predecessor_ratio": 0.8888888888888888,
+          "distance_km": 15.76395721976443,
+          "discrepancy": 0.27542260785402783
+        },
+        {
+          "successor": "RBN",
+          "jump": 8.0,
+          "predecessor_last": 9.0,
+          "jump_to_predecessor_ratio": 0.8888888888888888,
+          "distance_km": 17.043774536897647,
+          "discrepancy": 0.28822078102536
+        },
+        {
+          "successor": "RBL",
+          "jump": 10.0,
+          "predecessor_last": 9.0,
+          "jump_to_predecessor_ratio": 1.1111111111111112,
+          "distance_km": 38.00458450608812,
+          "discrepancy": 0.4854063607187076
+        },
+        {
+          "successor": "RMC",
+          "jump": 13.0,
+          "predecessor_last": 9.0,
+          "jump_to_predecessor_ratio": 1.4444444444444444,
+          "distance_km": 16.81043503590395,
+          "discrepancy": 0.5358291304843569
+        }
+      ],
+      "automatic_application": false
+    }
+  ],
+  "applied": [
+    {
+      "predecessor": "RVJ",
+      "successor": "RA7",
+      "effective_week": "2026-07-05",
+      "effective_month": "2026-07-01",
+      "legal_date": "2026-07-01",
+      "evidence": "Confirmed Bristol merger; RA7 201 to 388 and RVJ 222 to unavailable; RVJ August zeros are retired-code placeholders. https://www.uhbristol.nhs.uk/"
+    },
+    {
+      "predecessor": "RAP",
+      "successor": "RAL",
+      "effective_week": "2025-01-05",
+      "effective_month": "2025-01-01",
+      "legal_date": "2025-01-01",
+      "evidence": "Confirmed acquisition; RAL 298 to 444 and RAP 126 to unavailable. https://www.royalfree.nhs.uk/about-us"
+    },
+    {
+      "predecessor": "RY2",
+      "successor": "RWW",
+      "effective_week": "2026-04-05",
+      "effective_month": "2026-04-01",
+      "legal_date": "2026-04-01",
+      "evidence": "Community predecessor acquired by acute successor; RWW 25 to 36 and RY2 9 to unavailable. https://www.england.nhs.uk/publication/north-cheshire-and-mersey-nhs-foundation-trust/"
+    },
+    {
+      "predecessor": "RVY",
+      "successor": "RBN",
+      "effective_week": "2023-07-09",
+      "effective_month": "2023-07-01",
+      "legal_date": "2023-07-01",
+      "evidence": "Legal transfer 1 July; backlog reporting boundary is 9 July (RVY still reports 85 on 2 July); RBN 176 to 239. https://www.england.nhs.uk/publication/southport-and-ormskirk-hospital-nhs-trust/"
+    }
+  ],
+  "excluded": [
+    {
+      "org_code": "RAP",
+      "name": "NORTH MIDDLESEX UNIVERSITY HOSPITAL NHS TRUST",
+      "service_scope": "acute_or_specialist",
+      "included": false,
+      "successor": "RAL",
+      "note": "merged into RAL",
+      "evidence": "Reviewed hospital service scope and positive 31D completed-treatment count in latest 12 published months"
+    },
+    {
+      "org_code": "RVJ",
+      "name": "NORTH BRISTOL NHS TRUST",
+      "service_scope": "acute_or_specialist",
+      "included": false,
+      "successor": "RA7",
+      "note": "merged into RA7",
+      "evidence": "Reviewed hospital service scope and positive 31D completed-treatment count in latest 12 published months"
+    },
+    {
+      "org_code": "RVY",
+      "name": "SOUTHPORT AND ORMSKIRK HOSPITAL NHS TRUST",
+      "service_scope": "acute_or_specialist",
+      "included": false,
+      "successor": "RBN",
+      "note": "merged into RBN",
+      "evidence": "Reviewed hospital service scope and positive 31D completed-treatment count in latest 12 published months"
+    },
+    {
+      "org_code": "RY2",
+      "name": "BRIDGEWATER COMMUNITY HEALTHCARE NHS FOUNDATION TRUST",
+      "service_scope": "community",
+      "included": false,
+      "successor": "RWW",
+      "note": "merged into RWW",
+      "evidence": "Reviewed hospital service scope and positive 31D completed-treatment count in latest 12 published months"
+    }
+  ],
+  "core_trusts": 130,
+  "retired_post_boundary_zeros_masked": 10
+}

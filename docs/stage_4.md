@@ -1,5 +1,8 @@
 # Stage 4 handoff
 
+Historical checkpoint. Its counts, driver rules and scores are superseded by
+[Stage 5](stage_5.md); the results below describe the original Stage 4 run.
+
 Built the requested Stage 3 review changes and bottleneck screening. No Stage 5
 simulation has been added. All 52 tests pass with warnings treated as errors;
 pipeline, model/review and bottleneck snapshot checks pass.

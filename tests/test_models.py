@@ -101,7 +101,7 @@ def test_saved_pairing_training_cutoffs_and_gate() -> None:
     panel=pd.read_parquet(OUTPUTS_DIR/'model_features.parquet')
     assert comparison(base,predictions)==report['metrics']
     assert choose_model(report['metrics'])[1]==report['gate']
-    assert len(paired_cases(base,panel))==12547
+    assert len(paired_cases(base,panel))==len(base.loc[base.anchor.eq('issue') & base.model.eq('naive')])
     assert predictions.target_date.eq(predictions.as_of_date+pd.to_timedelta(predictions.horizon_weeks*7,unit='D')).all()
     assert predictions.feature_max_published_on.le(predictions.as_of_date).all()
     assert predictions.training_max_target_published_on.le(predictions.as_of_date).all()
@@ -141,7 +141,7 @@ def test_latest_forecasts_and_classifier_artifacts() -> None:
     p=p.loc[p.model.eq('lightgbm')]
     for h in (4,8,12):
         m=next(x for x in report['metrics'] if x['horizon_weeks']==h and x['model']=='calibrated')
-        assert probability_metrics(p.loc[p.horizon_weeks.eq(h)],'prob_growth')['brier']==m['brier']
+        assert probability_metrics(p.loc[p.horizon_weeks.eq(h)],'prob_growth')['brier']==pytest.approx(m['brier'],rel=1e-12,abs=1e-10)
 
 
 def test_web_upload_archive_excludes_generated_caches(tmp_path: Path) -> None:
@@ -151,11 +151,39 @@ def test_web_upload_archive_excludes_generated_caches(tmp_path: Path) -> None:
     from zipfile import ZipFile
     from config import ROOT_DIR
     target=tmp_path/'upload.zip'
-    subprocess.run([sys.executable,str(ROOT_DIR/'scripts/package_repo.py'),str(target)],check=True,capture_output=True)
+    result=subprocess.run([sys.executable,str(ROOT_DIR/'scripts/package_repo.py'),str(target)],capture_output=True,text=True)
+    assert result.returncode==0,result.stderr
     with ZipFile(target) as archive:
         names=archive.namelist()
-        assert len(names)<=100 and all(n.startswith('cancer-clock/') for n in names)
+        assert all(n.startswith('cancer-clock/') for n in names)
+        assert 'cancer-clock/models/check.py' in names
+        if (ROOT_DIR/'web/dist/index.html').exists():
+            assert 'cancer-clock/web/dist/index.html' in names
         assert not any('__pycache__' in n or '.pytest_cache' in n or n.endswith(('.pyc','.pyo')) for n in names)
         assert not any('/data/raw/' in n or '/.venv/' in n or '/node_modules/' in n for n in names)
         assert 'cancer-clock/.env' not in names
         assert all(info.file_size<25_000_000 for info in archive.infolist())
+
+
+def test_web_upload_ignores_old_placeholders_and_finder_metadata(tmp_path: Path) -> None:
+    """An in-place update must still fit 100 files after old placeholders survive."""
+    import subprocess
+    import sys
+    from zipfile import ZipFile
+    from config import ROOT_DIR
+    root=tmp_path/'cancer-clock'
+    script=root/'scripts/package_repo.py';script.parent.mkdir(parents=True)
+    script.write_bytes((ROOT_DIR/'scripts/package_repo.py').read_bytes())
+    for i in range(99):
+        (root/f'file_{i}.txt').write_text('Included project file')
+    leftovers=['analysis/.gitkeep','sim/.gitkeep','__MACOSX/._README.md',
+        'data/processed/._cwt.parquet','.DS_Store','sim/__pycache__/old.pyc',
+        'nested/.pytest_cache/state','.env']
+    for name in leftovers:
+        p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('Local-only file')
+    target=tmp_path/'upload.zip'
+    result=subprocess.run([sys.executable,str(script),str(target)],capture_output=True,text=True)
+    assert result.returncode==0,result.stderr
+    with ZipFile(target) as archive:
+        assert len(archive.namelist())==100
+        assert not {f'cancer-clock/{name}' for name in leftovers}.intersection(archive.namelist())

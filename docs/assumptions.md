@@ -1,28 +1,36 @@
 # Assumptions and limits
 
-- Release timing: 14th of observation month + 2, with unverified historical
-  vintages and latest revised values. Exact source upload dates are separate.
-- The fixed cohort has 133 NHS trusts with observations in the evaluation era.
-  No historical merger crosswalk is inferred. Missing recent history yields an
-  unavailable forecast, not a fabricated continuation.
-- First outpatient attendances are a volume proxy, not incoming referrals.
-  DM01 includes non-cancer demand. Aggregate associations are not causal.
-- Early training permits a partial 26-week window (minimum nine observed weeks).
-  Paired evaluation retains all original Stage 2 eligibility requirements.
-- Interval warm-up borrows baseline widths. Later calibration uses issued errors
-  with published outcomes; dependence prevents a formal coverage guarantee.
-- Strike dates are sourced and used only as past calendar indicators. Time-of-day
-  boundaries are approximated to days; no strike capacity loss is inferred.
-  The future simulator's 0.952 factor remains an unverified editable assumption.
-- Probability calibration failed to improve Brier in this run. Scores are shown
-  alongside simple benchmarks; probabilities are experimental.
-- No personal waits, lives-saved estimates or causal recovery recommendations.
-- Stage 4 uses a fixed 50:50 blend after retrospective review, not independent
-  model selection. Trust-cluster bootstrap does not model shared national shocks.
-- Large-swings cases depend on future actuals and cannot be selected at issue.
-- Only 4-week qualitative growth signals are exported; thresholds 0.4/0.6 and
-  agreement with the count forecast are assumed, not calibrated confidence.
-- Bottleneck gaps, volume floors, shrinkage and confidence rules are screening
-  assumptions. DM01 contains non-cancer demand and repeated monthly patients.
-  FDS discordance and insufficient evidence are explicit. National DTT context
-  is never copied into trust-level splits. See `bottleneck_method.md`.
+- First release is approximated by month +2/day14; latest revised values are used.
+  Original historical vintages are unverified. Every fitted value obeys its release cutoff.
+- The 130-trust current acute/specialist cohort and four mergers use retrospective
+  organisation knowledge. This is not an as-was historical deployment test.
+  Independent/community-only providers are excluded; source tables remain raw.
+- The 50:50 blend was **selected post-hoc on the back-test**. Bootstrap intervals
+  handle within-trust dependence, not shared shocks or selection uncertainty.
+  Large-swings membership depends on future outcomes.
+- Forecast intervals are empirically calibrated, not guaranteed. Early training
+  can use 9–25 observed weeks; scored cases require 26-week history. Interval
+  warm-up uses baseline widths. Zero-scale MASE cases are counted separately.
+- Four-week growth categories are experimental; 0.4/0.6 thresholds are assumed.
+  Numeric probabilities and longer-horizon categories are not displayed.
+- Bottleneck thresholds/shrinkage are screening rules. FDS measures completed
+  pathways; DM01 includes non-cancer demand and repeat waiting-list snapshots.
+  Clinical review is pending; neither supplies causal capacity estimates.
+- Simulation uses first attendances as an arrival proxy and unmatched 62D-treated
+  / first-attendance counts as conversion. Fractional queues, age mix, 14-day
+  diagnosis eligibility, proportional service and uniform weekends are assumed.
+- Only total >62-day backlog is fitted. Two capacities, stage split and age mix
+  are not jointly identified. >104-day counts and the publication-gap nowcast
+  are modelled, not observed. Fit error is in-sample; prior conflicts are exposed.
+- Stage 7–8 adds joint capacity draws informed by calibration residual blocks
+  and parameter sensitivity, with bounded variation for weakly identified
+  directions. Combined ranges include parameter and process uncertainty, while
+  age shape, conversion, queue split and service order remain structural assumptions.
+  These sensitivity ranges are not validated predictive intervals. Strike
+  factor 0.952 is editable and unverified as a trust-level cancer effect.
+- Recovery is measured after the post-shock excess peak, within max(5 patients,
+  5% baseline) for 14 days. Non-recovery is censored at the horizon.
+- No personal waiting-time, lives-saved or causal recovery claims. National
+  model forecasts remain withheld. Every scenario includes parameter provenance.
+- A treatment modality label describes supporting bottleneck evidence. The
+  simulated extra capacity remains whole-stage, not a modality-specific estimate.

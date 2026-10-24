@@ -236,7 +236,8 @@ def export_latest(sources: dict, core: pd.DataFrame, panel: pd.DataFrame, featur
             entry['forecasts'].append(forecast)
         entry['status']='forecast_available' if entry['forecasts'] else 'unavailable_missing_recent_history'
         trusts.append(entry)
-    write_json(OUTPUTS_DIR/'forecasts_latest.json',dict(stage=4,issue_date=latest_issue,availability_label=LABEL,
+    from pipeline.mergers import GEOGRAPHY
+    write_json(OUTPUTS_DIR/'forecasts_latest.json',dict(stage=5,issue_date=latest_issue,availability_label=LABEL,geography_label=GEOGRAPHY,
         historical_vintage_verified=False,selected_model=selected,gate=gate,
         growth_display=classifier_report.get('display_policy'),
         national_model_forecasts=national_display or dict(enabled=False,reason='No national model forecasts exported.'),
@@ -280,12 +281,12 @@ def run() -> dict:
         core_trusts=len(core),origins=len(origins),features=features,metrics=metrics,gate=gate,
         target='log1p(target backlog) - log1p(latest published backlog)',
         fixed_lightgbm_parameters={**PARAMS,'num_boost_round':ROUNDS},
-        protocol='Fixed model settings. Weekly training snapshots; label release <= issue. Exact saved Stage 2 issue cases. No retuning on reported outcomes.',
+        protocol='Fixed original model settings. Weekly training snapshots; label release <= issue. Rebuilt paired Stage 2 cases on retrospectively harmonised current acute footprints. The 50:50 blend was selected post-hoc on the Stage 3/4 back-test.',
         limitations=['Approximate first releases and latest revised values; not reconstructed historical vintages.',
                      'Overlapping targets/trust outcomes are dependent; no significance claim.',
                      'Global reversion coefficients are predictive associations, not causal effects.',
                      'Model selection on this retrospective comparison needs independent future validation.'],
-        input_sha256={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [*(PROCESSED_DIR/f'{name}.parquet' for name in sources),STATIC_DIR/'core_trusts.csv',STATIC_DIR/'strike_dates.csv']},
+        input_sha256={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [*(PROCESSED_DIR/f'{name}.parquet' for name in sources),STATIC_DIR/'core_trusts.csv',STATIC_DIR/'strike_dates.csv',STATIC_DIR/'trust_mergers.csv',STATIC_DIR/'provider_scope.csv']},
         baseline_sha256=hashlib.sha256(baseline_path.read_bytes()).hexdigest(),
         versions={p:importlib.metadata.version(p) for p in ['numpy','pandas','scipy','lightgbm']},fit_audit=fit_log)
     predictions.to_parquet(OUTPUTS_DIR/'backtest_model_predictions.parquet',index=False)

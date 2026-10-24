@@ -1,0 +1,5 @@
+predecessor,successor,effective_week,effective_month,legal_date,evidence
+RVJ,RA7,2026-07-05,2026-07-01,2026-07-01,"Confirmed Bristol merger; RA7 201 to 388 and RVJ 222 to unavailable; RVJ August zeros are retired-code placeholders. https://www.uhbristol.nhs.uk/"
+RAP,RAL,2025-01-05,2025-01-01,2025-01-01,"Confirmed acquisition; RAL 298 to 444 and RAP 126 to unavailable. https://www.royalfree.nhs.uk/about-us"
+RY2,RWW,2026-04-05,2026-04-01,2026-04-01,"Community predecessor acquired by acute successor; RWW 25 to 36 and RY2 9 to unavailable. https://www.england.nhs.uk/publication/north-cheshire-and-mersey-nhs-foundation-trust/"
+RVY,RBN,2023-07-09,2023-07-01,2023-07-01,"Legal transfer 1 July; backlog reporting boundary is 9 July (RVY still reports 85 on 2 July); RBN 176 to 239. https://www.england.nhs.uk/publication/southport-and-ormskirk-hospital-nhs-trust/"

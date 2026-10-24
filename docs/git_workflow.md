@@ -1,50 +1,31 @@
-# Terminal update and push (Mac)
+# Terminal upload (Mac)
 
-Download `cancer-clock-stage-4.zip` into Downloads. This merges the delivered
-files into your existing folder and preserves `.git` and `.venv`:
-
-```sh
-(
-set -e
-unzip -o "$HOME/Downloads/cancer-clock-stage-4.zip" -d "$HOME/Documents/GITHUB/OXHACK"
-cd "$HOME/Documents/GITHUB/OXHACK/cancer-clock"
-.venv/bin/python -m pytest -q -W error
-.venv/bin/python -m pipeline.check
-.venv/bin/python -m models.check
-.venv/bin/python -m analysis.bottleneck --check
-)
-```
-
-Expect 52 tests and all three checks to pass. Dependencies are unchanged from
-Stage 3. The review and bottlenecks are already bundled; no retraining needed.
-
-Push **after those checks succeed**, from the same repository:
+Run the checks first. This copies your updated project into a fresh checkout of
+the existing GitHub history, then commits and pushes without rewriting history.
 
 ```sh
 (
 set -e
-cd "$HOME/Documents/GITHUB/OXHACK/cancer-clock"
-git rm -r --cached --ignore-unmatch -- \
-  ':(glob)**/__pycache__/**' \
-  ':(glob)**/.pytest_cache/**'
-git add README.md config.py analysis models pipeline tests docs outputs scripts \
-  data/processed/dm01_bottleneck_reference.parquet
+project_dir="$HOME/Documents/GITHUB/OXHACK/cancer-clock"
+test -f "$project_dir/config.py"
+push_dir=$(mktemp -d "$HOME/Documents/GITHUB/OXHACK/cancer-clock-push.XXXXXX")
+git clone https://github.com/sanjayashokbuilds/cancer-clock.git "$push_dir"
+rsync -a --exclude='.git/' --exclude='.venv/' --exclude='venv/' \
+  --exclude='data/raw/' --exclude='node_modules/' --exclude='__pycache__/' \
+  --exclude='.pytest_cache/' --exclude='__MACOSX/' --exclude='._*' \
+  --exclude='.DS_Store' --exclude='*.pyc' --exclude='*.zip' \
+  --include='.env.example' --exclude='.env*' "$project_dir/" "$push_dir/"
+cd "$push_dir"
+git rm -r -f --ignore-unmatch -- __pycache__ .pytest_cache \
+  ':(glob)**/__pycache__/**' ':(glob)**/.pytest_cache/**' \
+  analysis/.gitkeep sim/.gitkeep
+git add -A
 git diff --cached --stat
-if ! git diff --cached --quiet; then
-  git commit \
-    -m "Add bottleneck checks and temper the longer-range backlog forecasts" \
-    -m "The longer forecasts tended to come in low, so they now split the difference with the last known backlog. This reduced errors for trusts and for their combined totals. The report keeps the original model results, including the large swings where it helped most. Added diagnosis and treatment signals with the underlying volumes, and ten hospitals for Rounak to check."
-fi
-git pull --rebase origin main
-git push -u origin main
-git status
+git commit -m "Show capacity trade-offs with uncertainty in a working dashboard" \
+  -m "The simulator now varies fitted capacities as well as daily arrivals, so the ranges show more of the uncertainty. Added a dose-response view to compare diagnosis and treatment capacity, with prior conflicts and assumptions visible. The API serves precomputed results so switching hospitals and plans is immediate. The allocator and voice feature have been left out."
+git push origin HEAD
 )
 ```
 
-This assumes the existing `origin` points to your `sanjayashokbuilds/cancer-clock`
-repository. Success ends with an up-to-date branch and clean working tree.
-If a command fails or a rebase reports conflicts, the block stops: keep that
-output and resolve it before retrying. Do not force-push.
-
-No source files need deletion. Cache removal only untracks generated files;
-Python can keep using the local caches. For web uploads, use `web_upload.md`.
+If authentication or author identity is not configured, complete that setup
+before retrying the commit/push. The original working folder remains intact.

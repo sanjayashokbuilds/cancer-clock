@@ -7,541 +7,541 @@
     {
       "model": "raw",
       "horizon_weeks": 4,
-      "n": 4446,
-      "brier": 0.2353915098678525,
-      "accuracy": 0.6180836707152496,
-      "grow_shrink_accuracy": 0.6116846550915064,
-      "unchanged_n": 184,
-      "growth_rate": 0.4347728295096716,
-      "ece_10bin": 0.07301687629586177,
+      "n": 4371,
+      "brier": 0.23353963372615502,
+      "accuracy": 0.6266300617707619,
+      "grow_shrink_accuracy": 0.6206814391231832,
+      "unchanged_n": 174,
+      "growth_rate": 0.4317089910775566,
+      "ece_10bin": 0.07038360273638972,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 92,
-          "mean_probability": 0.08349714801184983,
-          "observed_growth_rate": 0.15217391304347827
+          "n": 104,
+          "mean_probability": 0.08129395494260276,
+          "observed_growth_rate": 0.14423076923076922
         },
         {
           "lower": 0.1,
           "upper": 0.2,
-          "n": 518,
-          "mean_probability": 0.1549593129777135,
-          "observed_growth_rate": 0.25096525096525096
+          "n": 515,
+          "mean_probability": 0.1572783156928541,
+          "observed_growth_rate": 0.23883495145631067
         },
         {
           "lower": 0.2,
           "upper": 0.3,
-          "n": 746,
-          "mean_probability": 0.25117274343070717,
-          "observed_growth_rate": 0.34048257372654156
+          "n": 765,
+          "mean_probability": 0.25240845247550703,
+          "observed_growth_rate": 0.3542483660130719
         },
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 755,
-          "mean_probability": 0.34662652660241045,
-          "observed_growth_rate": 0.39470198675496687
+          "n": 700,
+          "mean_probability": 0.34650646335621127,
+          "observed_growth_rate": 0.38142857142857145
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 648,
-          "mean_probability": 0.45078404730793636,
-          "observed_growth_rate": 0.42592592592592593
+          "n": 654,
+          "mean_probability": 0.44867788748546883,
+          "observed_growth_rate": 0.40825688073394495
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 556,
-          "mean_probability": 0.5499880631827535,
-          "observed_growth_rate": 0.49460431654676257
+          "n": 535,
+          "mean_probability": 0.5498835952845328,
+          "observed_growth_rate": 0.514018691588785
         },
         {
           "lower": 0.6,
           "upper": 0.7,
-          "n": 542,
-          "mean_probability": 0.6491946170398343,
-          "observed_growth_rate": 0.559040590405904
+          "n": 528,
+          "mean_probability": 0.6491155033517085,
+          "observed_growth_rate": 0.5662878787878788
         },
         {
           "lower": 0.7,
           "upper": 0.8,
-          "n": 424,
-          "mean_probability": 0.7469420892947698,
-          "observed_growth_rate": 0.6037735849056604
+          "n": 420,
+          "mean_probability": 0.7466155467667593,
+          "observed_growth_rate": 0.6023809523809524
         },
         {
           "lower": 0.8,
           "upper": 0.9,
-          "n": 165,
-          "mean_probability": 0.8254135385051413,
-          "observed_growth_rate": 0.7696969696969697
+          "n": 150,
+          "mean_probability": 0.8254136309683867,
+          "observed_growth_rate": 0.78
         }
       ]
     },
     {
       "model": "calibrated",
       "horizon_weeks": 4,
-      "n": 4446,
-      "brier": 0.24927258767010507,
-      "accuracy": 0.5913180386864597,
-      "grow_shrink_accuracy": 0.5802440168934773,
-      "unchanged_n": 184,
-      "growth_rate": 0.4347728295096716,
-      "ece_10bin": 0.06637827310678023,
+      "n": 4371,
+      "brier": 0.2468375563081798,
+      "accuracy": 0.5957446808510638,
+      "grow_shrink_accuracy": 0.586132952108649,
+      "unchanged_n": 174,
+      "growth_rate": 0.4317089910775566,
+      "ece_10bin": 0.0649050388030866,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 79,
-          "mean_probability": 0.0727181719385584,
-          "observed_growth_rate": 0.4810126582278481
+          "n": 96,
+          "mean_probability": 0.06481115095754285,
+          "observed_growth_rate": 0.5625
         },
         {
           "lower": 0.1,
           "upper": 0.2,
-          "n": 363,
-          "mean_probability": 0.1610491063941005,
-          "observed_growth_rate": 0.33884297520661155
+          "n": 364,
+          "mean_probability": 0.16179575940396806,
+          "observed_growth_rate": 0.31043956043956045
         },
         {
           "lower": 0.2,
           "upper": 0.3,
-          "n": 791,
-          "mean_probability": 0.25521482307653176,
-          "observed_growth_rate": 0.35651074589127685
+          "n": 804,
+          "mean_probability": 0.2563249802828209,
+          "observed_growth_rate": 0.332089552238806
         },
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 1236,
-          "mean_probability": 0.3491155189648573,
-          "observed_growth_rate": 0.3713592233009709
+          "n": 1204,
+          "mean_probability": 0.3493149203583251,
+          "observed_growth_rate": 0.3704318936877076
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 871,
-          "mean_probability": 0.44543628148123543,
-          "observed_growth_rate": 0.48220436280137774
+          "n": 817,
+          "mean_probability": 0.4457353850275283,
+          "observed_growth_rate": 0.4944920440636475
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 627,
-          "mean_probability": 0.5490714654364571,
-          "observed_growth_rate": 0.5454545454545454
+          "n": 604,
+          "mean_probability": 0.5498452999590469,
+          "observed_growth_rate": 0.5397350993377483
         },
         {
           "lower": 0.6,
           "upper": 0.7,
-          "n": 322,
-          "mean_probability": 0.6440759791602356,
-          "observed_growth_rate": 0.562111801242236
+          "n": 319,
+          "mean_probability": 0.6439231864278583,
+          "observed_growth_rate": 0.5642633228840125
         },
         {
           "lower": 0.7,
           "upper": 0.8,
-          "n": 130,
-          "mean_probability": 0.7366078545510596,
-          "observed_growth_rate": 0.5769230769230769
+          "n": 150,
+          "mean_probability": 0.7365099594434152,
+          "observed_growth_rate": 0.6066666666666667
         },
         {
           "lower": 0.8,
           "upper": 0.9,
-          "n": 27,
-          "mean_probability": 0.824473181159761,
-          "observed_growth_rate": 0.48148148148148145
+          "n": 13,
+          "mean_probability": 0.8190121374845138,
+          "observed_growth_rate": 0.46153846153846156
         }
       ]
     },
     {
       "model": "historical_frequency",
       "horizon_weeks": 4,
-      "n": 4446,
-      "brier": 0.2572738792106354,
-      "accuracy": 0.48897885739991004,
-      "grow_shrink_accuracy": 0.47301736274049744,
-      "unchanged_n": 184,
-      "growth_rate": 0.4347728295096716,
-      "ece_10bin": 0.08109017122677835,
+      "n": 4371,
+      "brier": 0.25706573730707183,
+      "accuracy": 0.4921070693205216,
+      "grow_shrink_accuracy": 0.4767691208005718,
+      "unchanged_n": 174,
+      "growth_rate": 0.4317089910775566,
+      "ece_10bin": 0.07936332913446466,
       "calibration_curve": [
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 263,
-          "mean_probability": 0.3766473534708922,
-          "observed_growth_rate": 0.467680608365019
+          "n": 257,
+          "mean_probability": 0.3765569955946955,
+          "observed_growth_rate": 0.4591439688715953
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 3658,
-          "mean_probability": 0.43356295079653284,
-          "observed_growth_rate": 0.4693821760524877
+          "n": 3601,
+          "mean_probability": 0.4321042260166596,
+          "observed_growth_rate": 0.4662593723965565
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 264,
-          "mean_probability": 0.5144245610728573,
-          "observed_growth_rate": 0.11742424242424243
+          "n": 258,
+          "mean_probability": 0.5153440638842097,
+          "observed_growth_rate": 0.11627906976744186
         },
         {
           "lower": 0.6,
           "upper": 0.7,
-          "n": 261,
-          "mean_probability": 0.6235645407187123,
-          "observed_growth_rate": 0.23754789272030652
+          "n": 255,
+          "mean_probability": 0.6263561134056741,
+          "observed_growth_rate": 0.23529411764705882
         }
       ]
     },
     {
       "model": "coin",
       "horizon_weeks": 4,
-      "n": 4446,
+      "n": 4371,
       "brier": 0.25,
-      "accuracy": 0.4347728295096716,
-      "grow_shrink_accuracy": 0.45354293758798686,
-      "unchanged_n": 184,
-      "growth_rate": 0.4347728295096716,
-      "ece_10bin": 0.06522717049032839,
+      "accuracy": 0.4317089910775566,
+      "grow_shrink_accuracy": 0.4496068620443174,
+      "unchanged_n": 174,
+      "growth_rate": 0.4317089910775566,
+      "ece_10bin": 0.06829100892244339,
       "calibration_curve": [
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 4446,
+          "n": 4371,
           "mean_probability": 0.5,
-          "observed_growth_rate": 0.4347728295096716
+          "observed_growth_rate": 0.4317089910775566
         }
       ]
     },
     {
       "model": "persistence_zero",
       "horizon_weeks": 4,
-      "n": 4446,
-      "brier": 0.4347728295096716,
-      "accuracy": 0.5652271704903283,
-      "grow_shrink_accuracy": 0.5464570624120132,
-      "unchanged_n": 184,
-      "growth_rate": 0.4347728295096716,
-      "ece_10bin": 0.4347728295096716,
+      "n": 4371,
+      "brier": 0.4317089910775566,
+      "accuracy": 0.5682910089224433,
+      "grow_shrink_accuracy": 0.5503931379556827,
+      "unchanged_n": 174,
+      "growth_rate": 0.4317089910775566,
+      "ece_10bin": 0.4317089910775566,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 4446,
+          "n": 4371,
           "mean_probability": 0.0,
-          "observed_growth_rate": 0.4347728295096716
+          "observed_growth_rate": 0.4317089910775566
         }
       ]
     },
     {
       "model": "raw",
       "horizon_weeks": 8,
-      "n": 4182,
-      "brier": 0.25298479256412537,
-      "accuracy": 0.5908656145384983,
-      "grow_shrink_accuracy": 0.582360248447205,
-      "unchanged_n": 157,
-      "growth_rate": 0.4366331898613104,
-      "ece_10bin": 0.11136925249150592,
+      "n": 4113,
+      "brier": 0.2509479717095926,
+      "accuracy": 0.5915390226112327,
+      "grow_shrink_accuracy": 0.5844483716233274,
+      "unchanged_n": 152,
+      "growth_rate": 0.4352054461463652,
+      "ece_10bin": 0.1064886060349286,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 171,
-          "mean_probability": 0.07717273875496651,
-          "observed_growth_rate": 0.28654970760233917
+          "n": 190,
+          "mean_probability": 0.07614329103481354,
+          "observed_growth_rate": 0.28421052631578947
         },
         {
           "lower": 0.1,
           "upper": 0.2,
-          "n": 669,
-          "mean_probability": 0.1543382614466822,
-          "observed_growth_rate": 0.34080717488789236
+          "n": 666,
+          "mean_probability": 0.15322810090295963,
+          "observed_growth_rate": 0.3333333333333333
         },
         {
           "lower": 0.2,
           "upper": 0.3,
-          "n": 807,
-          "mean_probability": 0.24965196224506042,
-          "observed_growth_rate": 0.4052044609665427
+          "n": 793,
+          "mean_probability": 0.24854210046054642,
+          "observed_growth_rate": 0.3858764186633039
         },
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 697,
-          "mean_probability": 0.3492448219815936,
-          "observed_growth_rate": 0.4261119081779053
+          "n": 669,
+          "mean_probability": 0.3482673951358071,
+          "observed_growth_rate": 0.43647234678624813
         },
         {
           "lower": 0.4,
           "upper": 0.5,
           "n": 629,
-          "mean_probability": 0.4490345274656698,
-          "observed_growth_rate": 0.41812400635930047
+          "mean_probability": 0.44974667111323874,
+          "observed_growth_rate": 0.4419713831478537
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 512,
-          "mean_probability": 0.5475949549507915,
-          "observed_growth_rate": 0.478515625
+          "n": 478,
+          "mean_probability": 0.5482503981374062,
+          "observed_growth_rate": 0.4497907949790795
         },
         {
           "lower": 0.6,
           "upper": 0.7,
-          "n": 376,
-          "mean_probability": 0.6488095826657965,
-          "observed_growth_rate": 0.5425531914893617
+          "n": 372,
+          "mean_probability": 0.6465758825112926,
+          "observed_growth_rate": 0.5698924731182796
         },
         {
           "lower": 0.7,
           "upper": 0.8,
-          "n": 264,
-          "mean_probability": 0.745933091975806,
-          "observed_growth_rate": 0.6590909090909091
+          "n": 249,
+          "mean_probability": 0.74505059315354,
+          "observed_growth_rate": 0.6546184738955824
         },
         {
           "lower": 0.8,
           "upper": 0.9,
-          "n": 57,
-          "mean_probability": 0.831539465485582,
-          "observed_growth_rate": 0.6842105263157895
+          "n": 67,
+          "mean_probability": 0.8297220552444134,
+          "observed_growth_rate": 0.7164179104477612
         }
       ]
     },
     {
       "model": "calibrated",
       "horizon_weeks": 8,
-      "n": 4182,
-      "brier": 0.25908909368677463,
-      "accuracy": 0.5703012912482066,
-      "grow_shrink_accuracy": 0.56,
-      "unchanged_n": 157,
-      "growth_rate": 0.4366331898613104,
-      "ece_10bin": 0.06827901452553621,
+      "n": 4113,
+      "brier": 0.258089588992353,
+      "accuracy": 0.5681983953318746,
+      "grow_shrink_accuracy": 0.5589497601615754,
+      "unchanged_n": 152,
+      "growth_rate": 0.4352054461463652,
+      "ece_10bin": 0.07100711095059746,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 220,
-          "mean_probability": 0.06617966064857753,
-          "observed_growth_rate": 0.45454545454545453
+          "n": 223,
+          "mean_probability": 0.06177498985780282,
+          "observed_growth_rate": 0.45739910313901344
         },
         {
           "lower": 0.1,
           "upper": 0.2,
           "n": 186,
-          "mean_probability": 0.1468184425683481,
-          "observed_growth_rate": 0.5
+          "mean_probability": 0.1506058153334982,
+          "observed_growth_rate": 0.4838709677419355
         },
         {
           "lower": 0.2,
           "upper": 0.3,
-          "n": 305,
-          "mean_probability": 0.2589380702471984,
-          "observed_growth_rate": 0.34098360655737703
+          "n": 320,
+          "mean_probability": 0.25816043224823504,
+          "observed_growth_rate": 0.315625
         },
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 1407,
-          "mean_probability": 0.35908945562516226,
-          "observed_growth_rate": 0.39303482587064675
+          "n": 1390,
+          "mean_probability": 0.35606412276447313,
+          "observed_growth_rate": 0.3985611510791367
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 1175,
-          "mean_probability": 0.44787827036595096,
-          "observed_growth_rate": 0.44
+          "n": 1116,
+          "mean_probability": 0.4477392636301426,
+          "observed_growth_rate": 0.4453405017921147
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 673,
-          "mean_probability": 0.5402238967730598,
-          "observed_growth_rate": 0.5052005943536404
+          "n": 645,
+          "mean_probability": 0.5397994920606906,
+          "observed_growth_rate": 0.4868217054263566
         },
         {
           "lower": 0.6,
           "upper": 0.7,
-          "n": 135,
-          "mean_probability": 0.6291623971908441,
-          "observed_growth_rate": 0.5851851851851851
+          "n": 154,
+          "mean_probability": 0.6387461718380002,
+          "observed_growth_rate": 0.564935064935065
         },
         {
           "lower": 0.7,
           "upper": 0.8,
-          "n": 53,
-          "mean_probability": 0.7457232146850934,
-          "observed_growth_rate": 0.4528301886792453
+          "n": 55,
+          "mean_probability": 0.7458183267414555,
+          "observed_growth_rate": 0.5818181818181818
         },
         {
           "lower": 0.8,
           "upper": 0.9,
-          "n": 28,
-          "mean_probability": 0.8334880603162684,
-          "observed_growth_rate": 0.5714285714285714
+          "n": 24,
+          "mean_probability": 0.8394421528318468,
+          "observed_growth_rate": 0.5416666666666666
         }
       ]
     },
     {
       "model": "historical_frequency",
       "horizon_weeks": 8,
-      "n": 4182,
-      "brier": 0.25795607423146116,
-      "accuracy": 0.5150645624103299,
-      "grow_shrink_accuracy": 0.4993788819875776,
-      "unchanged_n": 157,
-      "growth_rate": 0.4366331898613104,
-      "ece_10bin": 0.10036136743316125,
+      "n": 4113,
+      "brier": 0.2583065722741538,
+      "accuracy": 0.5006078288354,
+      "grow_shrink_accuracy": 0.4854834637717748,
+      "unchanged_n": 152,
+      "growth_rate": 0.4352054461463652,
+      "ece_10bin": 0.10109875036072928,
       "calibration_curve": [
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 2096,
-          "mean_probability": 0.3790171507002678,
-          "observed_growth_rate": 0.5009541984732825
+          "n": 2058,
+          "mean_probability": 0.3774244872597844,
+          "observed_growth_rate": 0.5
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 1826,
-          "mean_probability": 0.43646926903036376,
-          "observed_growth_rate": 0.4090909090909091
+          "n": 1671,
+          "mean_probability": 0.4298904887932377,
+          "observed_growth_rate": 0.419509275882705
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 260,
-          "mean_probability": 0.5505319277838362,
-          "observed_growth_rate": 0.11153846153846154
+          "n": 384,
+          "mean_probability": 0.5370097610437906,
+          "observed_growth_rate": 0.15625
         }
       ]
     },
     {
       "model": "coin",
       "horizon_weeks": 8,
-      "n": 4182,
+      "n": 4113,
       "brier": 0.25,
-      "accuracy": 0.4366331898613104,
-      "grow_shrink_accuracy": 0.4536645962732919,
-      "unchanged_n": 157,
-      "growth_rate": 0.4366331898613104,
-      "ece_10bin": 0.06336681013868961,
+      "accuracy": 0.4352054461463652,
+      "grow_shrink_accuracy": 0.45190608432214086,
+      "unchanged_n": 152,
+      "growth_rate": 0.4352054461463652,
+      "ece_10bin": 0.0647945538536348,
       "calibration_curve": [
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 4182,
+          "n": 4113,
           "mean_probability": 0.5,
-          "observed_growth_rate": 0.4366331898613104
+          "observed_growth_rate": 0.4352054461463652
         }
       ]
     },
     {
       "model": "persistence_zero",
       "horizon_weeks": 8,
-      "n": 4182,
-      "brier": 0.4366331898613104,
-      "accuracy": 0.5633668101386896,
-      "grow_shrink_accuracy": 0.5463354037267081,
-      "unchanged_n": 157,
-      "growth_rate": 0.4366331898613104,
-      "ece_10bin": 0.4366331898613104,
+      "n": 4113,
+      "brier": 0.4352054461463652,
+      "accuracy": 0.5647945538536349,
+      "grow_shrink_accuracy": 0.5480939156778591,
+      "unchanged_n": 152,
+      "growth_rate": 0.4352054461463652,
+      "ece_10bin": 0.4352054461463652,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 4182,
+          "n": 4113,
           "mean_probability": 0.0,
-          "observed_growth_rate": 0.4366331898613104
+          "observed_growth_rate": 0.4352054461463652
         }
       ]
     },
     {
       "model": "raw",
       "horizon_weeks": 12,
-      "n": 3919,
-      "brier": 0.25259692250973725,
-      "accuracy": 0.5963255932635877,
-      "grow_shrink_accuracy": 0.5883443708609272,
-      "unchanged_n": 144,
-      "growth_rate": 0.4447563153865782,
-      "ece_10bin": 0.1109282955501063,
+      "n": 3855,
+      "brier": 0.2514099744664134,
+      "accuracy": 0.5974059662775616,
+      "grow_shrink_accuracy": 0.5897228948076406,
+      "unchanged_n": 138,
+      "growth_rate": 0.4430609597924773,
+      "ece_10bin": 0.10883787479291576,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 198,
-          "mean_probability": 0.07586712805083,
-          "observed_growth_rate": 0.3484848484848485
+          "n": 193,
+          "mean_probability": 0.07756221512808237,
+          "observed_growth_rate": 0.33678756476683935
         },
         {
           "lower": 0.1,
           "upper": 0.2,
-          "n": 797,
-          "mean_probability": 0.15117538549894427,
-          "observed_growth_rate": 0.3337515683814304
+          "n": 765,
+          "mean_probability": 0.15014832869938669,
+          "observed_growth_rate": 0.33464052287581697
         },
         {
           "lower": 0.2,
           "upper": 0.3,
-          "n": 702,
-          "mean_probability": 0.248199863429798,
-          "observed_growth_rate": 0.3575498575498576
+          "n": 711,
+          "mean_probability": 0.250331963584165,
+          "observed_growth_rate": 0.36427566807313644
         },
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 614,
-          "mean_probability": 0.3480770397127182,
-          "observed_growth_rate": 0.4592833876221498
+          "n": 608,
+          "mean_probability": 0.3494893866289277,
+          "observed_growth_rate": 0.44901315789473684
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 509,
-          "mean_probability": 0.44956689149368606,
-          "observed_growth_rate": 0.481335952848723
+          "n": 532,
+          "mean_probability": 0.4492361449468369,
+          "observed_growth_rate": 0.4774436090225564
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 438,
-          "mean_probability": 0.5465374187234973,
-          "observed_growth_rate": 0.502283105022831
+          "n": 429,
+          "mean_probability": 0.549896642955067,
+          "observed_growth_rate": 0.4965034965034965
         },
         {
           "lower": 0.6,
           "upper": 0.7,
-          "n": 363,
-          "mean_probability": 0.6473289250261008,
-          "observed_growth_rate": 0.5619834710743802
+          "n": 308,
+          "mean_probability": 0.6465237986454959,
+          "observed_growth_rate": 0.5811688311688312
         },
         {
           "lower": 0.7,
           "upper": 0.8,
-          "n": 219,
-          "mean_probability": 0.749102552620757,
-          "observed_growth_rate": 0.6757990867579908
+          "n": 232,
+          "mean_probability": 0.7485329992685633,
+          "observed_growth_rate": 0.646551724137931
         },
         {
           "lower": 0.8,
           "upper": 0.9,
-          "n": 78,
-          "mean_probability": 0.8270052373122255,
-          "observed_growth_rate": 0.7307692307692307
+          "n": 76,
+          "mean_probability": 0.8300894438747458,
+          "observed_growth_rate": 0.7631578947368421
         },
         {
           "lower": 0.9,
           "upper": 1.0,
           "n": 1,
-          "mean_probability": 0.9020385804629382,
+          "mean_probability": 0.9092547834363092,
           "observed_growth_rate": 1.0
         }
       ]
@@ -549,82 +549,82 @@
     {
       "model": "calibrated",
       "horizon_weeks": 12,
-      "n": 3919,
-      "brier": 0.2563385051943683,
-      "accuracy": 0.5677468742026027,
-      "grow_shrink_accuracy": 0.5576158940397351,
-      "unchanged_n": 144,
-      "growth_rate": 0.4447563153865782,
-      "ece_10bin": 0.06841196027345438,
+      "n": 3855,
+      "brier": 0.2549281461729229,
+      "accuracy": 0.57094682230869,
+      "grow_shrink_accuracy": 0.5612052730696798,
+      "unchanged_n": 138,
+      "growth_rate": 0.4430609597924773,
+      "ece_10bin": 0.06428098219942824,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 187,
-          "mean_probability": 0.07357383987410744,
-          "observed_growth_rate": 0.43315508021390375
+          "n": 175,
+          "mean_probability": 0.07269129278154345,
+          "observed_growth_rate": 0.4
         },
         {
           "lower": 0.1,
           "upper": 0.2,
-          "n": 304,
-          "mean_probability": 0.14826787441209652,
-          "observed_growth_rate": 0.4243421052631579
+          "n": 290,
+          "mean_probability": 0.14783929448481548,
+          "observed_growth_rate": 0.39655172413793105
         },
         {
           "lower": 0.2,
           "upper": 0.3,
-          "n": 195,
-          "mean_probability": 0.25279938296731447,
-          "observed_growth_rate": 0.3641025641025641
+          "n": 215,
+          "mean_probability": 0.24642413405094182,
+          "observed_growth_rate": 0.44651162790697674
         },
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 862,
-          "mean_probability": 0.3688424553674687,
-          "observed_growth_rate": 0.35730858468677495
+          "n": 899,
+          "mean_probability": 0.3661393764403609,
+          "observed_growth_rate": 0.36262513904338156
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 1452,
-          "mean_probability": 0.43892086063289903,
-          "observed_growth_rate": 0.46143250688705234
+          "n": 1374,
+          "mean_probability": 0.4369886295916426,
+          "observed_growth_rate": 0.4534206695778748
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 628,
-          "mean_probability": 0.54327467119664,
-          "observed_growth_rate": 0.5047770700636943
+          "n": 611,
+          "mean_probability": 0.5437116849174778,
+          "observed_growth_rate": 0.5090016366612111
         },
         {
           "lower": 0.6,
           "upper": 0.7,
-          "n": 233,
-          "mean_probability": 0.6421199554080378,
-          "observed_growth_rate": 0.5836909871244635
+          "n": 225,
+          "mean_probability": 0.6396688842960806,
+          "observed_growth_rate": 0.5644444444444444
         },
         {
           "lower": 0.7,
           "upper": 0.8,
-          "n": 34,
-          "mean_probability": 0.745622612974437,
-          "observed_growth_rate": 0.5
+          "n": 45,
+          "mean_probability": 0.7464811601178974,
+          "observed_growth_rate": 0.6
         },
         {
           "lower": 0.8,
           "upper": 0.9,
-          "n": 23,
-          "mean_probability": 0.8419745042613155,
-          "observed_growth_rate": 0.5652173913043478
+          "n": 20,
+          "mean_probability": 0.8413044301540655,
+          "observed_growth_rate": 0.6
         },
         {
           "lower": 0.9,
           "upper": 1.0,
           "n": 1,
-          "mean_probability": 0.9020385804629382,
+          "mean_probability": 0.9092547834363092,
           "observed_growth_rate": 1.0
         }
       ]
@@ -632,74 +632,74 @@
     {
       "model": "historical_frequency",
       "horizon_weeks": 12,
-      "n": 3919,
-      "brier": 0.25781775184034134,
-      "accuracy": 0.5164582801735137,
-      "grow_shrink_accuracy": 0.5011920529801325,
-      "unchanged_n": 144,
-      "growth_rate": 0.4447563153865782,
-      "ece_10bin": 0.10745925734734171,
+      "n": 3855,
+      "brier": 0.2576385298019375,
+      "accuracy": 0.5180285343709469,
+      "grow_shrink_accuracy": 0.5030938929244014,
+      "unchanged_n": 138,
+      "growth_rate": 0.4430609597924773,
+      "ece_10bin": 0.10642587917128726,
       "calibration_curve": [
         {
           "lower": 0.3,
           "upper": 0.4,
-          "n": 2226,
-          "mean_probability": 0.3594243189674042,
-          "observed_growth_rate": 0.4982030548068284
+          "n": 2187,
+          "mean_probability": 0.35926994294906894,
+          "observed_growth_rate": 0.49565614997713764
         },
         {
           "lower": 0.4,
           "upper": 0.5,
-          "n": 1433,
-          "mean_probability": 0.4268575137772831,
-          "observed_growth_rate": 0.4047452896022331
+          "n": 1412,
+          "mean_probability": 0.425994490328624,
+          "observed_growth_rate": 0.40439093484419264
         },
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 260,
-          "mean_probability": 0.517402101241643,
-          "observed_growth_rate": 0.2076923076923077
+          "n": 256,
+          "mean_probability": 0.5253551136363637,
+          "observed_growth_rate": 0.20703125
         }
       ]
     },
     {
       "model": "coin",
       "horizon_weeks": 12,
-      "n": 3919,
+      "n": 3855,
       "brier": 0.25,
-      "accuracy": 0.4447563153865782,
-      "grow_shrink_accuracy": 0.46172185430463575,
-      "unchanged_n": 144,
-      "growth_rate": 0.4447563153865782,
-      "ece_10bin": 0.05524368461342177,
+      "accuracy": 0.4430609597924773,
+      "grow_shrink_accuracy": 0.4595103578154426,
+      "unchanged_n": 138,
+      "growth_rate": 0.4430609597924773,
+      "ece_10bin": 0.05693904020752272,
       "calibration_curve": [
         {
           "lower": 0.5,
           "upper": 0.6,
-          "n": 3919,
+          "n": 3855,
           "mean_probability": 0.5,
-          "observed_growth_rate": 0.4447563153865782
+          "observed_growth_rate": 0.4430609597924773
         }
       ]
     },
     {
       "model": "persistence_zero",
       "horizon_weeks": 12,
-      "n": 3919,
-      "brier": 0.4447563153865782,
-      "accuracy": 0.5552436846134218,
-      "grow_shrink_accuracy": 0.5382781456953643,
-      "unchanged_n": 144,
-      "growth_rate": 0.4447563153865782,
-      "ece_10bin": 0.4447563153865782,
+      "n": 3855,
+      "brier": 0.4430609597924773,
+      "accuracy": 0.5569390402075227,
+      "grow_shrink_accuracy": 0.5404896421845574,
+      "unchanged_n": 138,
+      "growth_rate": 0.4430609597924773,
+      "ece_10bin": 0.4430609597924773,
       "calibration_curve": [
         {
           "lower": 0.0,
           "upper": 0.1,
-          "n": 3919,
+          "n": 3855,
           "mean_probability": 0.0,
-          "observed_growth_rate": 0.4447563153865782
+          "observed_growth_rate": 0.4430609597924773
         }
       ]
     }
@@ -713,7 +713,7 @@
     "8": {
       "calibration_improved_brier": false,
       "beats_coin": false,
-      "beats_historical_frequency": false
+      "beats_historical_frequency": true
     },
     "12": {
       "calibration_improved_brier": false,
@@ -733,10 +733,10 @@
     "horizons_8_12_displayed": false,
     "caveat": "Experimental categories, not validated probabilities; thresholds are assumptions.",
     "retrospective_4w": {
-      "n": 4446,
-      "decisive_n": 3093,
-      "decisive_accuracy": 0.630779178790818,
-      "unclear_n": 1353
+      "n": 4371,
+      "decisive_n": 3027,
+      "decisive_accuracy": 0.6346217376940866,
+      "unclear_n": 1344
     }
   }
 }

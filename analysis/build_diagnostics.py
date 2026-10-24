@@ -8,6 +8,7 @@ from pipeline.build import read_manifest
 from pipeline.common import assert_unique
 from pipeline.parse_cwt import PROVENANCE
 from pipeline.parse_dm01 import parse_zip
+from pipeline.mergers import mergers
 from pipeline.universe import load_core_trusts
 
 REFERENCE_PATH = PROCESSED_DIR / 'dm01_bottleneck_reference.parquet'
@@ -17,7 +18,8 @@ SCOPE = 'English commissioners, all reporting providers; NONC excluded; seven te
 def run() -> pd.DataFrame:
     """Bundle core trusts and a full England reference; do not alter Stage 3 inputs."""
     manifest = read_manifest()
-    core = set(load_core_trusts().org_code)
+    # Keep raw predecessor counts for later harmonisation into current successors.
+    core = set(load_core_trusts().org_code) | set(mergers().predecessor)
     parts = []
     measures = ['total_waiting_list', 'waiting_6plus']
     for item in manifest.loc[manifest.dataset.eq('dm01')].sort_values('period').to_dict('records'):

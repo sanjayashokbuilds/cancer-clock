@@ -23,7 +23,8 @@ TEST_NAMES = {'CT':'ct', 'MRI':'mri', 'Non-obstetric ultrasound':'ultrasound',
 
 def load_sources() -> dict[str, pd.DataFrame]:
     """Keep source data unchanged; models use only the explicit core trust cohort."""
-    return {name: pd.read_parquet(PROCESSED_DIR/f'{name}.parquet') for name in
+    from pipeline.mergers import load_harmonized
+    return {name: load_harmonized(name) for name in
             ['backlog_trust', 'backlog_national', 'cwt_trust_month', 'cwt_first_seen', 'dm01']}
 
 

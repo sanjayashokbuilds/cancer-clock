@@ -61,10 +61,10 @@ def test_four_labels_and_missing_side_confidence(diagnosis: float,treatment: flo
     assert empty['evidence_status']=='insufficient_data' and empty['label']=='no clear bottleneck'
 
 
-def test_two_test_mean_limits_single_test_domination() -> None:
-    r=classify([component('dm01_CT','diagnosis',8),component('dm01_MRI','diagnosis',0),
+def test_dm01_cannot_drive_a_label_even_if_mistagged() -> None:
+    r=classify([component('dm01_CT','diagnosis',80),component('dm01_MRI','diagnosis',90),
         component('d31_surgery','treatment',0)])
-    assert r['diagnosis']['score_pp']==4
+    assert r['diagnosis']['score_pp'] is None
     assert r['label']=='no clear bottleneck'
 
 
@@ -88,10 +88,11 @@ def test_past_labels_ignore_future_values_and_national_dtt_split() -> None:
 def test_saved_bottlenecks_cover_only_core_and_auditable_published_window() -> None:
     report=json.loads((OUTPUTS_DIR/'bottlenecks.json').read_text())
     assert {t['org_code'] for t in report['trusts']}==set(load_core_trusts().org_code)
-    assert len(report['window_months'])==3 and sum(report['counts'].values())==133
+    assert len(report['window_months'])==3 and sum(report['counts'].values())==len(load_core_trusts())
     for trust in report['trusts']:
         assert trust['label'] in LABELS
-        assert len(trust['indicators'])==11
+        assert sum(r.get('role')=='context' for r in trust['indicators'])==7
+        assert not any(r['key'].startswith('dm01_') for r in trust['main_drivers'])
         for row in trust['indicators']:
             assert set(row['periods']).issubset(report['window_months'])
             if row['max_published_on']:
@@ -102,5 +103,20 @@ def test_saved_bottlenecks_cover_only_core_and_auditable_published_window() -> N
     assert ref.published_on.eq(first_release(ref.period)).all()
     assert (ref.published_on-ref.period).dt.days.between(44,75).all()
     assert not ref.historical_vintage_verified.any()
-    assert set(ref.org_code)-{'ENGLAND'}<=set(load_core_trusts().org_code)
+    from pipeline.mergers import load_harmonized
+    assert set(load_harmonized('dm01_bottleneck_reference').org_code)-{'ENGLAND'}<=set(load_core_trusts().org_code)
     assert ref.loc[ref.org_code.eq('ENGLAND'),'provider_count'].max()>133
+
+
+def test_diagnostic_reference_rebuild_retains_predecessor_counts(monkeypatch, tmp_path) -> None:
+    from analysis import build_diagnostics as builder
+    raw=pd.read_parquet(REFERENCE_PATH)
+    raw=raw.loc[raw.period.eq(raw.period.min()) & raw.org_code.isin({'RA7','RVJ','RAL','RAP'})].copy()
+    assert {'RA7','RVJ','RAL','RAP'}<=set(raw.org_code)
+    monkeypatch.setattr(builder,'read_manifest',lambda: pd.DataFrame([dict(dataset='dm01',period='2023-10',local_path='unused')]))
+    monkeypatch.setattr(builder,'parse_zip',lambda *args,**kwargs: raw)
+    monkeypatch.setattr(builder,'load_core_trusts',lambda: pd.DataFrame(dict(org_code=['RA7','RAL'])))
+    monkeypatch.setattr(builder,'REFERENCE_PATH',tmp_path/'reference.parquet')
+    rebuilt=builder.run()
+    assert {'RA7','RVJ','RAL','RAP','ENGLAND'}<=set(rebuilt.org_code)
+    assert rebuilt.loc[rebuilt.org_code.eq('RVJ'),'total_waiting_list'].sum()==raw.loc[raw.org_code.eq('RVJ'),'total_waiting_list'].sum()

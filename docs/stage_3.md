@@ -1,7 +1,7 @@
 # Stage 3 handoff
 
-Historical Stage 3 handoff. Stage 4's review, blend, display restrictions and
-current test count supersede this page; see `stage_4.md` and the README.
+Historical Stage 3 handoff. Stage 5 reruns these models on merged trust histories;
+current results, checks and upload instructions are in `stage_5.md` and README.
 
 **Done:** all 38 tests pass with warnings treated as errors; pipeline/model snapshot
 checks pass. Full fit took 234 seconds on this Linux runtime, without warnings.

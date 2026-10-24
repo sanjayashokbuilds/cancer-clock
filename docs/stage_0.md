@@ -1,5 +1,7 @@
 # Stage 0 handoff
 
+Historical checkpoint; see README and `stage_5.md` for the current project.
+
 Delivered: complete repository skeleton only. No later stage is implemented.
 
 ## Files changed

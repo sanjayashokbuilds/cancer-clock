@@ -22,24 +22,33 @@ from pipeline.vintages import available_at
 RULES = dict(months=3, minimum_months=2, minimum_fds_volume=100,
     minimum_treatment_volume=30, minimum_dm01_monthly_list=100,
     shrinkage_volume=100, signal_threshold_pp=5., high_strength_threshold_pp=10.,
-    high_strength_volume=200, high_diagnosis_requires_fds_corroboration=True,
+    high_strength_volume=200, dm01_role='supporting context only; never a driver',
     status='Assumed screening rules, not fitted or clinically validated thresholds')
 CWT_MEASURES = [
-    ('fds', 'Faster diagnosis (28-day)', 'diagnosis'),
     ('d31_surgery', 'Surgery 31-day', 'treatment'),
     ('d31_radiotherapy', 'Radiotherapy 31-day', 'treatment'),
     ('d31_drugs', 'Anti-cancer drug treatment 31-day', 'treatment')]
 LABELS = {'diagnosis-limited', 'treatment-limited', 'mixed', 'no clear bottleneck'}
 INPUTS = [PROCESSED_DIR / f'{n}.parquet' for n in ['cwt_trust_month', 'cwt_national', 'backlog_national']]
-INPUTS += [REFERENCE_PATH, STATIC_DIR / 'core_trusts.csv']
+INPUTS += [REFERENCE_PATH, STATIC_DIR / 'core_trusts.csv', STATIC_DIR / 'trust_mergers.csv', STATIC_DIR / 'provider_scope.csv']
+
+LOWER_GI = 'Suspected lower gastrointestinal cancer'
+UPPER_GI = 'Suspected upper gastrointestinal cancer'
+UROLOGY = 'Suspected urological malignancies (excluding testicular)'
+LUNG = 'Suspected lung cancer'
+DM_LINKS = {'Colonoscopy': [LOWER_GI], 'Flexi sigmoidoscopy': [LOWER_GI],
+    'Gastroscopy': [UPPER_GI], 'Cystoscopy': [UROLOGY], 'CT': [LUNG, LOWER_GI, UPPER_GI, UROLOGY],
+    'MRI': [], 'Non-obstetric ultrasound': []}
+PATHWAY_NAMES = {LOWER_GI: 'Lower GI', UPPER_GI: 'Upper GI', UROLOGY: 'Urology', LUNG: 'Lung'}
 
 
 def load_inputs() -> dict[str, pd.DataFrame]:
     """Use the shared core cohort; England references retain their official scope."""
     if not REFERENCE_PATH.exists():
         raise DataError('Missing bundled DM01 reference; rebuild with python -m analysis.build_diagnostics after fetching sources.')
-    return dict(cwt=pd.read_parquet(INPUTS[0]), national_cwt=pd.read_parquet(INPUTS[1]),
-        backlog_national=pd.read_parquet(INPUTS[2]), dm01=pd.read_parquet(REFERENCE_PATH))
+    from pipeline.mergers import load_harmonized
+    return dict(cwt=load_harmonized('cwt_trust_month'), national_cwt=pd.read_parquet(INPUTS[1]),
+        backlog_national=pd.read_parquet(INPUTS[2]), dm01=load_harmonized('dm01_bottleneck_reference'))
 
 
 def indicator(key: str, name: str, side: str, trust: pd.DataFrame, national: pd.DataFrame,
@@ -83,37 +92,25 @@ def indicator(key: str, name: str, side: str, trust: pd.DataFrame, national: pd.
 
 
 def side_summary(indicators: list[dict], side: str) -> dict:
-    """Diagnosis uses FDS or the top-two test mean; treatment uses worst modality."""
-    eligible = [r for r in indicators if r['side'] == side and r['eligible']]
+    """Only cancer-specific FDS and treatment modalities may drive a label."""
+    eligible = [r for r in indicators if r['side'] == side and r['eligible']
+                and r.get('role', 'driver') == 'driver' and not r['key'].startswith('dm01_')]
     if not eligible:
         return dict(score_pp=None, signal=False, driver=None, confidence='low', eligible_indicators=0)
-    if side == 'diagnosis':
-        fds = next((r for r in eligible if r['key'] == 'fds'), None)
-        dm = sorted([r for r in eligible if r['key'] != 'fds'], key=lambda r: r['score_pp'], reverse=True)[:2]
-        dm_score = float(np.mean([r['score_pp'] for r in dm])) if dm else -1.
-        if fds is not None and fds['score_pp'] >= dm_score:
-            value, driver = fds['score_pp'], fds
-        else:
-            value, driver = dm_score, dm[0]
-    else:
-        driver = max(eligible, key=lambda r: r['score_pp'])
-        value = driver['score_pp']
-    signal = value >= RULES['signal_threshold_pp']
+    driver = max(eligible, key=lambda r: r['score_pp'])
+    value = driver['score_pp']; signal = value >= RULES['signal_threshold_pp']
     strength = 'low'
     if signal:
         strength = 'high' if (driver['months_used'] == 3 and driver['positive_months'] == 3
             and driver['effective_volume'] >= RULES['high_strength_volume']
             and value >= RULES['high_strength_threshold_pp']) else 'medium'
-        if side == 'diagnosis' and not any(r['key'] == 'fds' and r['score_pp'] >= RULES['signal_threshold_pp'] for r in eligible):
-            strength = 'medium'  # DM01 includes non-cancer demand; FDS corroboration matters.
     return dict(score_pp=value, signal=signal, driver=driver['key'] if signal else None,
         confidence=strength, eligible_indicators=len(eligible))
 
 
 def classify(indicators: list[dict]) -> dict:
-    """Keep evidence availability separate from the four required display labels."""
-    diagnosis = side_summary(indicators, 'diagnosis')
-    treatment = side_summary(indicators, 'treatment')
+    """Expose both drivers for mixed labels, with missing evidence kept explicit."""
+    diagnosis = side_summary(indicators, 'diagnosis'); treatment = side_summary(indicators, 'treatment')
     label = ('mixed' if diagnosis['signal'] and treatment['signal'] else
              'diagnosis-limited' if diagnosis['signal'] else
              'treatment-limited' if treatment['signal'] else 'no clear bottleneck')
@@ -122,32 +119,43 @@ def classify(indicators: list[dict]) -> dict:
     active = [r for r in [diagnosis, treatment] if r['signal']]
     confidence = 'low' if status != 'screened' or not active else (
         'high' if all(r['confidence'] == 'high' for r in active) else 'medium')
-    strongest = max(active, key=lambda r: r['score_pp']) if active else None
     lookup = {r['key']: r for r in indicators}
-    driver = lookup[strongest['driver']]['name'] if strongest else None
-    caveats = []
-    fds = lookup.get('fds')
-    if diagnosis['signal'] and not (fds and fds['eligible'] and fds['score_pp'] >= RULES['signal_threshold_pp']):
-        caveats.append('Diagnostic-test pressure is not corroborated by an FDS signal; DM01 includes non-cancer demand.')
+    drivers = [lookup[r['driver']] for r in active]
+    caveats = ['DM01 is routine diagnostic context and includes non-cancer demand; it never determines this label.']
     if status != 'screened':
         caveats.append('One or both pathway sides lack comparable evidence; missing data does not mean no bottleneck.')
     return dict(label=label, evidence_status=status, confidence=confidence,
         confidence_meaning='Heuristic evidence strength, not a probability or confidence in causation',
-        main_driver=driver, diagnosis=diagnosis, treatment=treatment, caveats=caveats)
+        main_driver=' + '.join(r['name'] for r in drivers) if drivers else None,
+        main_drivers=drivers, diagnosis_driver=lookup.get(diagnosis['driver']),
+        treatment_driver=lookup.get(treatment['driver']), diagnosis=diagnosis, treatment=treatment, caveats=caveats)
+
+
+def supporting_context(row: dict, cancer_indicators: list[dict], test: str) -> dict:
+    """Require a qualifying matching cancer FDS gap before calling DM01 corroborated."""
+    matches = [r for r in cancer_indicators if r.get('cancer_type') in DM_LINKS[test]]
+    adverse = [r for r in matches if r['eligible'] and r['score_pp'] >= RULES['signal_threshold_pp']]
+    dm_adverse = row['eligible'] and row['score_pp'] >= RULES['signal_threshold_pp']
+    row.update(role='context', matching_cancer_types=DM_LINKS[test],
+        corroboration='corroborated' if dm_adverse and adverse else 'uncorroborated',
+        corroborated_cancer_types=[r['cancer_type'] for r in adverse] if dm_adverse else [],
+        cancer_type_evidence=matches,
+        context_note='Broad test with substantial non-cancer demand; no unique cancer mapping' if not DM_LINKS[test]
+            else 'Directional concordance of aggregate data, not proof that routine waits delay cancer diagnosis')
+    return row
 
 
 def build(sources: dict[str, pd.DataFrame], core: pd.DataFrame, issue: pd.Timestamp) -> dict:
     """Select a common calendar window after publication filtering, never backfill it."""
     known = {k: available_at(v, issue, allow_approximate=True) for k, v in sources.items()}
     national_cwt = tidy(known['national_cwt'])
-    national_cwt = national_cwt.loc[national_cwt.cancer_type.eq('ALL CANCERS')]
     dm = known['dm01']
     national_dm = dm.loc[dm.org_code.eq('ENGLAND')]
     if national_cwt.empty or national_dm.empty:
         raise DataError('No common published CWT/DM01 reference at this issue')
     last = min(national_cwt.period.max(), national_dm.period.max())
     months = pd.date_range(last - pd.DateOffset(months=2), last, freq='MS')
-    cwt = known['cwt'].loc[known['cwt'].cancer_type.eq('ALL CANCERS') & known['cwt'].period.isin(months)]
+    cwt = known['cwt'].loc[known['cwt'].period.isin(months)]
     national_cwt = national_cwt.loc[national_cwt.period.isin(months)]
     dm = dm.loc[dm.period.isin(months)]
     national_dm = national_dm.loc[national_dm.period.isin(months)]
@@ -156,15 +164,25 @@ def build(sources: dict[str, pd.DataFrame], core: pd.DataFrame, issue: pd.Timest
         c = cwt.loc[cwt.org_code.eq(trust.org_code)]
         d = dm.loc[dm.org_code.eq(trust.org_code)]
         indicators = []
+        cancer_types = sorted(national_cwt.loc[national_cwt.cancer_type.str.startswith('Suspected ') & national_cwt.fds_total.notna(), 'cancer_type'].unique())
+        for cancer in cancer_types:
+            name = PATHWAY_NAMES.get(cancer, cancer.removeprefix('Suspected ').removesuffix(' cancer').capitalize()) + ' FDS'
+            row = indicator('fds_' + cancer, name, 'diagnosis', c.loc[c.cancer_type.eq(cancer)],
+                national_cwt.loc[national_cwt.cancer_type.eq(cancer)], 'fds_within', 'fds_total', RULES['minimum_fds_volume'])
+            row.update(cancer_type=cancer, role='driver', reference_scope='Published England FDS, same suspected cancer type and ALL ROUTES')
+            indicators.append(row)
+        cancer_indicators = indicators.copy()
         for prefix, name, side in CWT_MEASURES:
-            minimum = RULES['minimum_fds_volume'] if prefix == 'fds' else RULES['minimum_treatment_volume']
-            indicators.append(indicator(prefix, name, side, c, national_cwt, prefix + '_within', prefix + '_total', minimum))
+            row = indicator(prefix, name, side, c.loc[c.cancer_type.eq('ALL CANCERS')],
+                national_cwt.loc[national_cwt.cancer_type.eq('ALL CANCERS')], prefix + '_within', prefix + '_total', RULES['minimum_treatment_volume'])
+            row['role'] = 'driver'; indicators.append(row)
         for test in TESTS.values():
-            name = f'Endoscopy ({test.lower()}) waits' if test in ['Colonoscopy', 'Flexi sigmoidoscopy', 'Gastroscopy', 'Cystoscopy'] else f'{test} diagnostic waits'
-            indicators.append(indicator('dm01_' + test, name, 'diagnosis', d.loc[d.test.eq(test)],
-                national_dm.loc[national_dm.test.eq(test)], 'waiting_6plus', 'total_waiting_list',
-                RULES['minimum_dm01_monthly_list'], waiting_list=True))
-        trusts.append(dict(org_code=trust.org_code, name=trust.name, **classify(indicators), indicators=indicators))
+            row = indicator('dm01_' + test, test + ' 6+ week waits', 'diagnostic_context', d.loc[d.test.eq(test)],
+                national_dm.loc[national_dm.test.eq(test)], 'waiting_6plus', 'total_waiting_list', RULES['minimum_dm01_monthly_list'], waiting_list=True)
+            indicators.append(supporting_context(row, cancer_indicators, test))
+        corroborated = sorted({cancer for r in indicators if r.get('corroboration') == 'corroborated' for cancer in r['corroborated_cancer_types']})
+        trusts.append(dict(org_code=trust.org_code, name=trust.name, **classify(indicators),
+            corroborated_cancer_types=corroborated, indicators=indicators))
     backlog = known['backlog_national'].sort_values('week_ending')
     context = None
     if len(backlog):
@@ -173,7 +191,8 @@ def build(sources: dict[str, pd.DataFrame], core: pd.DataFrame, issue: pd.Timest
             no_dtt=row.no_dtt, with_dtt=row.with_dtt, no_dtt_fraction=row.no_dtt / row.total if row.total else None,
             scope='Observed England backlog only; never assigned to a trust or used in its label.',
             interpretation='No recorded decision to treat / recorded decision to treat; this split does not identify the cause of a delay.')
-    return dict(stage=4, as_of_date=issue, window_months=list(months), availability_label=LABEL,
+    from pipeline.mergers import GEOGRAPHY
+    return dict(stage=5, geography_label=GEOGRAPHY, as_of_date=issue, window_months=list(months), availability_label=LABEL,
         historical_vintage_verified=False, rules=RULES,
         interpretation='Descriptive screening for clinical review, not a causal diagnosis or a capacity estimate.',
         national_context=context, trusts=trusts, counts=dict(Counter(t['label'] for t in trusts)),
@@ -181,23 +200,32 @@ def build(sources: dict[str, pd.DataFrame], core: pd.DataFrame, issue: pd.Timest
 
 
 def examples(report: dict) -> str:
-    """Ten named examples including sparse providers, prepared for Rounak to review."""
+    """Ten live acute trusts; clinical review is explicitly still pending."""
     lookup = {t['org_code']: t for t in report['trusts']}
-    codes = ['RTH', 'RRK', 'RWP', 'RVJ', 'RAP', 'RY2', 'RGT', 'RJ1', 'R0A', 'RM1']
-    codes = [c for c in codes if c in lookup]
-    codes += [c for c in sorted(lookup) if c not in codes][:10 - len(codes)]
-    text = ['# Rounak: Stage 4 sanity check', '',
+    codes = ['RTH', 'RRK', 'RWP', 'RA7', 'RAL', 'RX1', 'RGT', 'RJ1', 'R0A', 'RM1']
+    text = ['# Rounak: clinical review pending', '',
         'Window: ' + ', '.join(str(pd.Timestamp(m).date())[:7] for m in report['window_months']) + '.',
-        'These are heuristic labels, not a clinical review already completed. Low evidence is not evidence of a healthy pathway.', '',
-        '| Trust | Label | Evidence / strength | Diagnosis / treatment score (pp) | Main driver |',
-        '| --- | --- | --- | ---: | --- |']
+        'Cancer-specific FDS drives diagnosis labels; DM01 is supporting context only. Percentages below are trust vs England.', '',
+        '| Trust | Label / strength | Diagnosis evidence | Treatment evidence | DM01 context and cancer corroboration |',
+        '| --- | --- | --- | --- | --- |']
+    def evidence(row: dict | None) -> str:
+        if row is None:
+            return 'No qualifying signal'
+        return f'{row["name"]}: {row["trust_rate_pct"]:.1f}% vs {row["national_rate_pct"]:.1f}%, n={row["denominator"]:.0f}'
     for code in codes:
         t = lookup[code]
-        def show(value: float | None) -> str:
-            return '—' if value is None else f'{value:.1f}'
-        scores = show(t['diagnosis']['score_pp']) + ' / ' + show(t['treatment']['score_pp'])
-        text.append(f'| {code} — {t["name"]} | {t["label"]} | {t["evidence_status"]} / {t["confidence"]} | {scores} | {t["main_driver"] or "No persistent signal / insufficient evidence"} |')
-    text += ['', 'Review whether the main service and label fit local knowledge; check referral networks and specialist case mix before interpreting a difference as capacity pressure. Component rates, volumes and matched England rates are in `outputs/bottlenecks.json`.']
+        contexts = [r for r in t['indicators'] if r.get('role') == 'context' and r['eligible'] and r['key'] not in ['dm01_MRI','dm01_Non-obstetric ultrasound']]
+        # Audit the previously misleading examples directly, even if another test is worse.
+        preferred = {'RTH':'dm01_Gastroscopy','RRK':'dm01_Gastroscopy','RJ1':'dm01_Cystoscopy','RM1':'dm01_Cystoscopy','R0A':'dm01_Colonoscopy'}.get(code)
+        context = next((r for r in contexts if r['key'] == preferred), None) or (max(contexts,key=lambda r:r['score_pp']) if contexts else None)
+        note = 'No comparable diagnostic context'
+        if context:
+            linked = context['cancer_type_evidence']
+            note = evidence(context) + '; **' + context['corroboration'] + '**'
+            if linked:
+                note += '; ' + ' / '.join(evidence(r) for r in linked if r['trust_rate_pct'] is not None)
+        text.append(f'| {code} | {t["label"]} / {t["confidence"]} | {evidence(t["diagnosis_driver"])} | {evidence(t["treatment_driver"])} | {note} |')
+    text += ['', 'Please review case mix, referral networks and the clinical interpretation. No clinical sign-off has been recorded. Full component counts, periods, shrinkage and gaps are in `outputs/bottlenecks.json`.']
     return '\n'.join(text) + '\n'
 
 

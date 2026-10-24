@@ -1,0 +1,11 @@
+# Interface sources
+
+The map is England's real boundary, not a schematic. `web/public/assets/england-boundary.geojson` contains ONS country E92000001 from [Countries (December 2024) Boundaries UK BGC](https://www.data.gov.uk/dataset/c0ebe11c-0c81-4eed-81b3-a0394d4116a9/countries-december-2024-boundaries-uk-bgc1), downloaded 24 October 2026. The [ONS feature service](https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Countries_December_2024_Boundaries_UK_BGC/FeatureServer/0) supplied WGS84 GeoJSON with a 0.003-degree display generalisation and five decimal places. It includes islands; coordinates are longitude, latitude.
+
+Source: Office for National Statistics licensed under the Open Government Licence v.3.0. Contains OS data © Crown copyright and database right 2024. [Licence and attribution requirements](https://www.ons.gov.uk/methodology/geography/licences).
+
+IBM Plex Sans Regular, Medium and SemiBold are bundled locally as WOFF2, from the official [IBM Plex repository](https://github.com/IBM/plex/tree/master/packages/plex-sans/fonts/complete/woff2). Their original SIL Open Font License is included as `web/public/assets/IBM-Plex-LICENSE.txt`. The app does not fetch fonts or map tiles at runtime.
+
+The national headline is read from `data/processed/backlog_national.parquet`: **17,841** at **week ending 30 August 2026**, from the NHS England weekly backlog workbook. This is a published snapshot, not a live count. It includes people still on an urgent suspected-cancer pathway, including those without a confirmed diagnosis.
+
+Use **“The 62-day target has not been met since December 2015.”** December 2015 was the last month it was met; it was not itself a missed month. The [government's 2024 NHS investigation, technical annex, section III.12.16](https://assets.publishing.service.gov.uk/media/66e1b517dd4e6b59f0cb2553/Independent-Investigation-of-the-National-Health-Service-in-England-Technical-Annex.pdf) records this history; [Cancer Research UK's 12 October 2026 update](https://news.cancerresearchuk.org/2026/10/12/cancer-waiting-times-latest-updates-and-analysis/) continues to report it. Referral routes covered by the 62-day standard expanded in October 2023.
