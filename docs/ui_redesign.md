@@ -1,26 +1,41 @@
-# Guided demo interface
+# Map-first demo interface
 
-The map, hospital panel and recovery plan are designed for 1440×900 at 100% zoom.
-Use IBM Plex Sans locally, neutral panels and colour only for direction or stage.
-The England boundary is real ONS geography. This is an independent tool, not an
-NHS service. Sources and font licensing are in [ui_sources.md](ui_sources.md).
+Designed for 1440×900 at 100% zoom: a dark UK basemap, one selected hospital
+card, search, three map controls and four forecast stops. Oxford opens by default.
+The design reference's 210→248 values are not used. All displayed numbers come
+from the existing snapshot; the issue and observation dates stay explicit.
+
+The overview is the minimum zoom and stays fixed; higher zoom permits bounded
+panning. Only UK/Ireland geographic context is rendered. Reported mode uses
+neutral dots; future stops show direction arrows. The card names the actual
+forecast date and explains the count change in plain English.
+
+The full animated onboarding for the voiceover recording is **still to build**.
+About this demo currently opens a short explanation, not that guided tour.
 
 ## Recording route
 
-1. Open the map. Pause on the dated national count, then play the weekly history.
-   The reporting gap remains visible; forecast dots are softer and outlined.
-2. Find Oxford University Hospitals (RTH). Show the backlog history and forecast,
-   then the treatment-stage pressure and radiotherapy evidence.
-3. Select Test a recovery plan. Turn on the five-day strike, choose Treatment,
-   and move extra capacity from 0 to 5, 10 and 20%. Compare the six-month totals.
-4. Switch to Diagnosis: the limited response illustrates why the stage matters.
-   Open How this works briefly to show the assumptions, then return to the result.
+1. Start on Oxford. Move between +4, +8 and +12 weeks, or press the outlook preview button.
+2. Point out the actual backlog outlook and radiotherapy pressure. Search for
+   another English hospital or select a marker; clusters reveal nearby trusts.
+3. Select Test a recovery plan. With the five-day strike selected, choose
+   Treatment and move capacity from 0 to 5, 10 and 20%.
+4. Switch to Diagnosis to compare the limited response. Open How this works
+   to show the assumptions; Evidence contains the model checks.
 
-The exact grid covers all eight combinations of strike, winter pressure and
-referral surge at nine capacity levels. Every displayed result comes from the
-existing daily queue model with the same 256 parameter/process draws. Animation
-changes presentation, not the underlying estimate. Original inputs, model code
-and Stage 1–8 results are preserved.
+The direction key now follows displayed whole-person counts: estimated rise,
+unchanged, estimated fall, or no forecast. A one-person rise is coral, not a
+severity warning. At 4/8/12 weeks there are 3/17/32 rising rounded estimates;
+all usable 80% ranges include the latest count. Model outputs are unchanged.
+Cluster rims expose the mix of directions without enlarging the markers.
+
+A larger dated forecast count, smaller reported reference, animated clock detail
+and highlighted pathway make the hospital story easier to read. The map headline
+is “Every week matters.” Reduced-motion preferences are respected.
+
+Review-blocked hospitals show View planning options. That page explains the
+same-date mismatch and offers Open Oxford example, explicitly switching hospital
+data. The guard has not been removed and no model has been recalibrated.
 
 ## Outstanding section F
 
@@ -40,9 +55,10 @@ Clinical review remains pending. Neither screen predicts an individual's wait.
 
 ## Checks
 
-122 Python tests pass with warnings treated as errors. TypeScript and the
-production build pass. Browser review covered search, hospital navigation,
-capacity changes, all-pressure comparisons, drawers and the RNS review state.
-All three main screens fit a 1440×900 viewport without scrolling. The original
-49 data/model/simulation/output files are byte-for-byte unchanged. All 130
-trusts have a grid record: 124 ready and six unavailable.
+TypeScript and the production build pass. Browser checks at 1440×900 cover the
+map and recovery screen without page scrolling, exact horizon values, zoom/reset,
+search by keyboard, cluster selection, missing forecasts, the RNS review guard,
+capacity comparisons, combined pressures and the assumptions/Evidence views.
+All 130 trusts remain reachable through 62 compact markers/clusters at the default view.
+The existing data, model, simulation and API files remain unchanged.
+No model was refitted and no new illustrative patient counts were introduced.

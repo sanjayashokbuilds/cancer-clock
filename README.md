@@ -1,7 +1,7 @@
 # Cancer Clock
 
 An independent planning tool using public NHS data. Follow one story:
-**England's waiting list → one hospital's pressure → a recovery plan.**
+**Find a hospital → understand the pressure → test a recovery plan.**
 The interface is designed for a 1440×900 recording. Technical evidence and
 assumptions sit behind Details and How this works; they travel with the results.
 Stage 6 allocation and Stage 11 voice remain skipped.
@@ -24,15 +24,21 @@ are not needed to run the app.
 
 ## What the screens mean
 
-The map plays weekly observed counts from April 2023, then shows the published
-4/8/12-week forecasts. The gap after the last observation is explicit. Dot colour
-summarises the central 12-week change, with a threshold of the larger of 10 people
-or 10%; it is not a probability of growth. England's headline is observed only.
+The opening page introduces the 62-day target using the supplied landing-page
+design and an illustrative animated clock. The England count and date come from
+the published snapshot. **Take me to Cancer Clock** scrolls to a quieter map.
+Choose a hospital by search or marker to scroll to its separate outlook; the map
+is no longer behind the figures. Switch between 4, 8 and 12 weeks there, then
+open a recovery plan. Details and Evidence hold the longer analysis.
 
-A hospital opens with its forecast and diagnosis/treatment evidence. The recovery
-screen compares doing nothing with the selected extra capacity under the same
-chosen disruptions. Exact cached additions are 0, 1, 2, 3, 4, 5, 10, 15 and 20%.
-The three disruption switches can be combined. Extra capacity starts in week four.
+Individual map markers show the 8-week direction: **Estimated rise** (coral),
+**Unchanged** (yellow), **Estimated fall** (mint), or **No forecast** (slate).
+Colours compare rounded people counts, so 96→99 is coral. They do not indicate
+severity, confidence or individual risk. Nearby trusts use numbered groups with a thin rim showing the mix of directions. All 130 trusts remain searchable; data cover England only.
+
+The recovery screen compares no extra capacity with the selected addition under
+the same disruptions. Exact cached additions are 0, 1, 2, 3, 4, 5, 10, 15 and 20%.
+All three disruption switches can be combined. Extra capacity starts in week four.
 The whole treatment stage changes even where radiotherapy or surgery names the
 observed pressure; this is not a measured modality-specific staffing effect.
 
@@ -42,6 +48,8 @@ Age mix, queue split, conversion and service order remain assumptions. A separat
 quality screen flags disagreements between the simulator's unchanged-capacity
 path and the statistical forecast at the same 12-week date. Flagged hospitals
 need review before absolute recovery totals are presented as a decision headline.
+Their planning screen explains the aligned comparison and offers an explicitly
+labelled Oxford example, without substituting its results for another hospital.
 
 See [recording guide and outstanding review](docs/ui_redesign.md),
 [uncertainty method](docs/uncertainty.md) and [interface sources](docs/ui_sources.md).

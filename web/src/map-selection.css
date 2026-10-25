@@ -1,0 +1,27 @@
+.map-selection{height:calc(100svh - 70px);min-height:680px;isolation:isolate;scroll-margin-top:70px}
+.map-selection .atlas-map{inset:0;width:100%;height:100%;max-width:none;touch-action:pan-y}
+.map-selection .atlas-left-shade{background:linear-gradient(90deg,#080F1Bdf,rgba(8,15,27,.55) 28%,transparent 47%)}
+.map-selection .map-selection-content{top:clamp(88px,17vh,160px);left:clamp(32px,4vw,64px);width:350px;gap:28px}
+.map-selection-heading h2{font-size:36px;line-height:1.16;font-weight:500;letter-spacing:-1.1px;color:#F4F7FC;margin:0}
+.map-selection-heading p{font-size:16px;line-height:1.6;color:#A8B5C7;margin:15px 0 0;max-width:290px}
+.map-selection .atlas-search-field{height:58px;border-radius:18px;background:#152133df;border-color:#A8B5C735;box-shadow:none}
+.map-selection .atlas-search-field input{font-size:16px}
+.map-selection .atlas-map-controls{top:32px;right:32px}
+.map-selection .atlas-marker-disc{stroke-width:.7;filter:drop-shadow(0 1px 2px #0007)}
+.map-selection .atlas-marker.is-cluster .atlas-marker-disc{stroke:#9BADCA65;fill:#24344A;stroke-width:1}
+.map-selection .atlas-marker.is-cluster .atlas-marker-symbol{font-size:10px;font-weight:500;fill:#DCE6F5}
+.map-selection .atlas-marker:hover .atlas-marker-disc,.map-selection .atlas-marker:focus-visible .atlas-marker-disc{stroke:#F4F7FC;stroke-width:1.6}
+.map-selection .atlas-selection-ring{stroke-width:1.6}
+.map-selection .atlas-country-labels{opacity:.24}
+.map-selection .atlas-city-labels text{font-size:12px;fill:#C7D4E4;font-weight:400}
+.map-selection-key{position:absolute;left:clamp(32px,4vw,64px);bottom:70px;width:330px;z-index:4;color:#A8B5C7}
+.map-selection-key-heading{display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.5;margin-bottom:15px;color:#B6C5D8}
+.map-selection-key-heading button{padding:0;display:flex;color:#9EB0C8}
+.map-selection-key-heading button:hover{color:#67E8F9}
+.map-selection-key-items{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;font-size:13px;line-height:1.4}
+.map-selection-key-items>span{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.map-selection-key-items b{font-family:Arial,sans-serif;display:inline-block;min-width:15px;font-size:19px;font-weight:400;line-height:1}
+.map-selection .atlas-cluster-list{max-height:320px}
+@media(max-width:1100px){.map-selection .map-selection-content{width:300px;left:28px}.map-selection-heading h2{font-size:32px}.map-selection-key{left:28px;width:300px}.map-selection .atlas-map{width:125%;left:-15%}}
+@media(max-width:760px){.map-selection{height:940px;min-height:940px}.map-selection .map-selection-content{left:24px;right:24px;top:38px;width:auto;max-width:370px;gap:20px}.map-selection-heading h2{font-size:30px}.map-selection-heading p{font-size:15px;margin-top:10px}.map-selection .atlas-map{width:230%;left:-133%;top:200px;height:670px}.map-selection .atlas-map-controls{top:270px;right:20px}.map-selection .atlas-left-shade{display:block;background:linear-gradient(180deg,#080F1B 2%,#080F1B99 24%,transparent 42%)}.map-selection-key{left:24px;bottom:26px;width:330px;max-width:calc(100% - 48px)}.map-selection-key-heading{margin-bottom:12px}.map-selection-key-items{font-size:12px}.map-selection .atlas-cluster-list{left:24px!important;right:24px!important;top:380px!important;width:auto;max-height:285px}}
+@media(prefers-reduced-motion:reduce){.map-selection .atlas-marker,.map-selection .atlas-selection-halo{animation:none;opacity:1}}

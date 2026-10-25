@@ -1,86 +1,67 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { AnimatedNumber, C, day, directionColor, Icon, number, timestamp, title, useReducedMotion, type Json, type Trust } from './ui';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
+import { Icon, title, type Json, type Trust } from './ui';
+import { centralStatus, searchTrusts, featureList, forecastAt, geometryPath, mapStatuses, project, constrainCamera, zoomCamera, HOME_CAMERA, MIN_MAP_ZOOM, MAX_MAP_ZOOM, type MapCamera, type MapStatus } from './mapModel';
 
-type Props = {data: Json; boundary: Json | null; onSelect: (code: string) => void; onDetails: () => void; onPrefetch: (code: string) => void};
-const rad = Math.PI/180;
-const mercator = ([lon,lat]: number[]) => [lon*rad, -Math.log(Math.tan(Math.PI/4+lat*rad/2))];
-const geoBounds = [mercator([-6.43,55.83]),mercator([1.79,49.84])];
-const scale = Math.min(660/(geoBounds[1][0]-geoBounds[0][0]), 600/(geoBounds[1][1]-geoBounds[0][1]));
-const mapWidth = (geoBounds[1][0]-geoBounds[0][0])*scale;
-const project = (coord: number[]) => {const [x,y] = mercator(coord);return [650+(660-mapWidth)/2+(x-geoBounds[0][0])*scale,22+(y-geoBounds[0][1])*scale];};
-function outline(geo: Json) {
-  const features = geo.type === 'FeatureCollection' ? geo.features : geo.type === 'Feature' ? [geo] : [{geometry:geo}];
-  return features.flatMap((f:Json) => f.geometry.type==='MultiPolygon' ? f.geometry.coordinates : [f.geometry.coordinates]).map((poly:number[][][]) => poly.map(ring=>ring.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`;}).join(' ')+' Z').join(' ')).join(' ');
-}
-const cities = [{name:'Newcastle',lon:-1.61,lat:54.98,dx:15,dy:-10},{name:'Leeds',lon:-1.55,lat:53.80,dx:20,dy:-3},{name:'Manchester',lon:-2.24,lat:53.48,dx:-90,dy:-9},{name:'Birmingham',lon:-1.90,lat:52.49,dx:15,dy:21},{name:'Oxford',lon:-1.26,lat:51.75,dx:-49,dy:18},{name:'Bristol',lon:-2.59,lat:51.45,dx:-50,dy:18},{name:'London',lon:-.12,lat:51.51,dx:18,dy:16},{name:'Plymouth',lon:-4.14,lat:50.38,dx:-30,dy:25}];
-function displayValue(trust: Trust, date: string, observedEnd: string) {
-  if (date <= observedEnd) {const point = trust.history.find((p:Json)=>p.week_ending===date);return {value:point?.backlog ?? null,kind:'observed',date};}
-  // A held exact value is clearly labelled; no weekly forecasts are manufactured between the three model outputs.
-  const points = trust.forecasts.filter((p:Json)=>p.target_date<=date);
-  const point = points.at(-1);
-  if (point) return {value:point.point_forecast,kind:point.target_date===date?'forecast':'held_forecast',date:point.target_date};
-  return {value:trust.latest_backlog,kind:'unobserved',date:trust.latest_observed_week};
-}
-export default function MapView({data,boundary,onSelect,onDetails,onPrefetch}: Props) {
-  const trusts:Trust[]=data.trusts || []; const weeks:string[]=data.weeks || []; const observedEnd=data.latest_observed_week || data.national?.latest?.week_ending;
-  const latestIndex=Math.max(0,weeks.indexOf(observedEnd));
-  const [week,setWeek]=useState(latestIndex); const [playing,setPlaying]=useState(false); const [query,setQuery]=useState(''); const [searchOpen,setSearchOpen]=useState(false); const [active,setActive]=useState(0); const [hover,setHover]=useState<string|null>(null); const reduced=useReducedMotion();
-  const timer=useRef(0); const searchRef=useRef<HTMLDivElement>(null);
-  useEffect(()=>{setWeek(latestIndex);setPlaying(false);},[latestIndex]);
-  useEffect(()=>{if(!playing)return;let previous=0;const animate=(now:number)=>{if(now-previous>135){previous=now;setWeek(current=>{if(current>=weeks.length-1){setPlaying(false);return current;}return current+1;});}timer.current=requestAnimationFrame(animate);};timer.current=requestAnimationFrame(animate);return()=>cancelAnimationFrame(timer.current);},[playing,weeks.length]);
-  useEffect(()=>{const close=(e:PointerEvent)=>{if(!searchRef.current?.contains(e.target as Node))setSearchOpen(false);};document.addEventListener('pointerdown',close);return()=>document.removeEventListener('pointerdown',close);},[]);
-  const selectedDate=weeks[week] || observedEnd; const future=selectedDate>observedEnd;
-  const firstTarget=trusts.flatMap(t=>t.forecasts).map((p:Json)=>p.target_date).sort()[0];
-  const knownForecast=trusts.flatMap(t=>t.forecasts).some((p:Json)=>p.target_date===selectedDate);
-  const visibleForecast=firstTarget && selectedDate>=firstTarget;
-  const observedNational=(data.national?.history || []).find((p:Json)=>p.week_ending===selectedDate);
-  const national=data.national?.latest;
-  const nationalValue=observedNational?.total ?? national?.total;
-  const path=useMemo(()=>boundary?outline(boundary):'', [boundary]);
-  const matches=trusts.filter(t=>`${t.name} ${t.org_code}`.toLowerCase().includes(query.toLowerCase())).slice(0,7);
-  const chosen=trusts.find(t=>t.org_code===hover);
-  const choose=(code:string)=>{setPlaying(false);setSearchOpen(false);setQuery('');onSelect(code);};
-  const currentTime=timestamp(new Date().toISOString().slice(0,10)); const todayPosition=weeks.length>1?Math.max(0,Math.min(100,(currentTime-timestamp(weeks[0]))/(timestamp(weeks.at(-1)!)-timestamp(weeks[0]))*100)):95;
-  const observedPosition=weeks.length>1?latestIndex/(weeks.length-1)*100:90;
-  const flag=visibleForecast ? (knownForecast?'Forecast':'Last forecast point held') : future?'No newer observation':'Recorded week';
-  return <div className="map-screen">
-    <div className="map-stage">
-      <svg className="england-map" viewBox="0 0 1440 660" role="group" aria-label="Map of English hospital trusts. Select a hospital to explore its history and forecast.">
-        <defs><pattern id="forecast-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="5" stroke="white" strokeWidth="1.5"/></pattern></defs>
-        <path d={path} className="england-outline" fillRule="evenodd"/>
-        <g className="city-labels">{cities.map(city=>{const[x,y]=project([city.lon,city.lat]);return <text key={city.name} x={x+city.dx} y={y+city.dy}>{city.name}</text>;})}</g>
-        <g>{trusts.filter(t=>t.lat!=null&&t.lon!=null&&t.map_eligible!==false).sort((a,b)=>(b.latest_backlog??0)-(a.latest_backlog??0)).map(t=>{
-          const[x,y]=project([t.lon!,t.lat!]); const p=displayValue(t,selectedDate,observedEnd); const missing=p.value==null; const radius=missing?3:Math.max(3,Math.sqrt(Math.max(0,p.value))*0.55); const color=directionColor(t.direction);const selected=hover===t.org_code;const isForecast=p.kind==='forecast'||p.kind==='held_forecast';
-          return <g key={t.org_code} className="trust-dot" style={{'--dot-delay':`${Math.min(700,Math.floor((56-t.lat!)*1.15)*90)}ms`} as CSSProperties} role="button" tabIndex={0} aria-label={`${title(t.name)}, ${number(p.value)} people waiting over 62 days, ${t.direction || 'unclear'} forecast direction`} onClick={()=>choose(t.org_code)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(t.org_code);}}} onMouseEnter={()=>{setHover(t.org_code);onPrefetch(t.org_code);}} onMouseLeave={()=>setHover(null)} onFocus={()=>{setHover(t.org_code);onPrefetch(t.org_code);}} onBlur={()=>setHover(null)}>
-            <circle cx={x} cy={y} r={Math.max(12,radius+4)} fill="transparent"/>
-            <circle className={`dot-disc ${isForecast?'forecast-dot':future?'unobserved-dot':''}`} cx={x} cy={y} r={radius} fill={missing?'white':color} stroke={selected?C.ink:isForecast?color:'white'} strokeWidth={selected?2.5:isForecast?1.3:1.1} strokeDasharray={isForecast?'2 2':undefined} opacity={future ? .45 : .85}/>
-            {isForecast&&!missing&&<circle cx={x} cy={y} r={radius} fill="url(#forecast-hatch)" pointerEvents="none"/>}
-            {selected&&<circle className="dot-focus-ring" cx={x} cy={y} r={radius+5} fill="none" stroke={C.ink} strokeWidth="1"/>}
-          </g>;
-        })}</g>
-        {chosen&&chosen.lon!=null&&chosen.lat!=null&&(()=>{const[x,y]=project([chosen.lon,chosen.lat]);const p=displayValue(chosen,selectedDate,observedEnd);const px=x>1100?x-300:x+20;const py=Math.min(565,Math.max(55,y-40));return <g className="map-tooltip" transform={`translate(${px},${py})`} pointerEvents="none"><rect width="284" height="91" rx="10"/><text x="16" y="26" className="tooltip-title">{title(chosen.name).length>32?title(chosen.name).slice(0,30)+'…':title(chosen.name)}</text><text x="16" y="53">{number(p.value)} people waiting over 62 days</text><text x="16" y="75" className="tooltip-date">{p.kind==='observed'?'Recorded':p.kind==='unobserved'?'Last recorded':'Forecast for'} {day(p.date,true)}</text></g>;})()}
-      </svg>
-      <div className="map-intro">
-        <div className="scope-label">Across England</div>
-        <h1><AnimatedNumber value={nationalValue}/><span>people waiting over 62 days<br className="desktop-break"/> for cancer treatment</span></h1>
-        <p className="observed-date">{future?'Latest recorded week':'Week ending'} {day(observedNational?.week_ending || national?.week_ending)}</p>
-        <div className="hero-rule"/>
-        <p className="target-line">The 62-day target has not been met since December 2015.</p>
-        <button className="quiet-link map-detail-link" onClick={onDetails}>About these numbers <Icon name="chevron" size={16}/></button>
-        <div className="map-legend"><span className="legend-title">12-week forecast direction</span><span><i style={{background:C.teal}}/>Improving</span><span><i style={{background:C.orange}}/>Worsening</span><span><i style={{background:C.slate}}/>Unclear</span></div>
-        <p className="dot-explanation"><span className="size-key"><i/><i/><i/></span>Larger dots mean more people waiting.</p>
-      </div>
-      <div className="map-search" ref={searchRef}>
-        <label className="search-field"><Icon name="search"/><input placeholder="Find a hospital" aria-label="Find a hospital" role="combobox" aria-expanded={searchOpen} aria-controls="hospital-results" aria-autocomplete="list" aria-activedescendant={searchOpen&&matches[active]?`result-${matches[active].org_code}`:undefined} value={query} onFocus={()=>setSearchOpen(true)} onChange={e=>{setQuery(e.target.value);setActive(0);setSearchOpen(true);}} onKeyDown={e=>{if(e.key==='ArrowDown'){e.preventDefault();setActive(a=>Math.min(matches.length-1,a+1));setSearchOpen(true);}if(e.key==='ArrowUp'){e.preventDefault();setActive(a=>Math.max(0,a-1));}if(e.key==='Enter'&&searchOpen&&matches[active])choose(matches[active].org_code);if(e.key==='Escape')setSearchOpen(false);}}/>{query&&<button className="clear-search" onClick={()=>{setQuery('');setActive(0);}} aria-label="Clear search"><Icon name="close" size={17}/></button>}</label>
-        {searchOpen&&<div className="search-results" id="hospital-results" role="listbox">{matches.length?matches.map((t,i)=><button key={t.org_code} id={`result-${t.org_code}`} role="option" aria-selected={i===active} className={i===active?'active':''} onMouseEnter={()=>{setActive(i);onPrefetch(t.org_code);}} onMouseDown={e=>e.preventDefault()} onClick={()=>choose(t.org_code)}><span>{title(t.name)}</span><Icon name="arrow" size={17}/></button>):<p>No hospitals match “{query}”.</p>}</div>}
-      </div>
-      <div className={`map-time-tag ${future?'future-tag':''}`}><span className="time-tag-dot"/>{flag}<strong>{day(selectedDate)}</strong></div>
-      {!path&&<p className="map-asset-notice">Loading the England boundary…</p>}
-      <div className="map-instruction"><Icon name="person" size={18}/><span>Select a hospital to see what could change.</span></div>
+type Props={data:Json;boundary:Json|null;context:Json|null;roads:Json|null;selected:Trust|undefined;current:Json|null;trustError:string;onSelect:(code:string)=>void;onDetails:()=>void;onHospital:()=>void;onPlan:()=>void;onPrefetch:(code:string)=>void};
+type Marker={trust:Trust;x:number;y:number;status:MapStatus;value:number|null};
+type Cluster={x:number;y:number;members:Marker[]};
+const defaultCamera:MapCamera=HOME_CAMERA;
+const visibleCountries=new Set(['England','Scotland','Wales','Northern Ireland','Ireland','Isle of Man']);
+const outlookWeeks=8;
+const cities=[{name:'Newcastle',lon:-1.61,lat:54.98,dx:16,dy:-12},{name:'Leeds',lon:-1.55,lat:53.80,dx:20,dy:-9},{name:'Manchester',lon:-2.24,lat:53.48,dx:-106,dy:-7},{name:'Birmingham',lon:-1.90,lat:52.49,dx:18,dy:21},{name:'Oxford',lon:-1.26,lat:51.75,dx:24,dy:-12},{name:'Bristol',lon:-2.59,lat:51.45,dx:-58,dy:22},{name:'London',lon:-.12,lat:51.51,dx:24,dy:28}];
+const countryLabels=[{name:'Scotland',lon:-3.15,lat:55.95},{name:'Northern Ireland',lon:-6.5,lat:54.65},{name:'Ireland',lon:-7.1,lat:52.85},{name:'Wales',lon:-3.7,lat:52.1},{name:'England',lon:.1,lat:52.9}];
+
+export default function MapView({data,boundary,context,roads,selected,onSelect,onDetails,onPrefetch}:Props) {
+  const trusts:Trust[]=data.trusts||[];
+  const [camera,setCamera]=useState<MapCamera>(defaultCamera);
+  const [mapReady,setMapReady]=useState(false);
+  const [query,setQuery]=useState(''),[searchOpen,setSearchOpen]=useState(false),[active,setActive]=useState(0);
+  const [hover,setHover]=useState<string|null>(null),[openCluster,setOpenCluster]=useState<Cluster|null>(null),[dragging,setDragging]=useState(false);
+  const searchRef=useRef<HTMLDivElement>(null);
+  const clusterListRef=useRef<HTMLElement>(null),clusterTriggerRef=useRef<SVGGElement|null>(null);
+  const closeCluster=()=>{setOpenCluster(null);if(clusterTriggerRef.current?.isConnected)clusterTriggerRef.current.focus({preventScroll:true});};
+  const drag=useRef<{pointerId:number;startX:number;startY:number;camera:MapCamera}|null>(null);
+  const cameraRef=useRef(camera);cameraRef.current=camera;
+  const panFrame=useRef(0),pendingPan=useRef<MapCamera|null>(null);
+  useEffect(()=>()=>cancelAnimationFrame(panFrame.current),[]);
+  useEffect(()=>{const timer=window.setTimeout(()=>setMapReady(true),1400);return()=>window.clearTimeout(timer);},[]);
+  useEffect(()=>{const outside=(event:globalThis.PointerEvent)=>{if(!searchRef.current?.contains(event.target as Node))setSearchOpen(false);};document.addEventListener('pointerdown',outside);return()=>document.removeEventListener('pointerdown',outside);},[]);
+  useEffect(()=>{setOpenCluster(null);},[camera]);
+  useEffect(()=>{if(!openCluster)return;clusterListRef.current?.querySelector<HTMLButtonElement>('button')?.focus({preventScroll:true});const escape=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();closeCluster();}};document.addEventListener('keydown',escape);return()=>document.removeEventListener('keydown',escape);},[openCluster]);
+  const matches=searchTrusts(trusts,query);
+  const choose=(code:string)=>{setSearchOpen(false);setQuery('');setOpenCluster(null);setHover(null);onSelect(code);};
+  const englandPath=useMemo(()=>featureList(boundary).map(f=>geometryPath(f.geometry,defaultCamera)).join(''),[boundary]);
+  const countryPaths=useMemo(()=>featureList(context).filter(f=>visibleCountries.has(f.properties?.name)).map((f,i)=>({name:f.properties?.name||`Country ${i}`,path:geometryPath(f.geometry,defaultCamera)})),[context]);
+  const roadPath=useMemo(()=>featureList(roads).map(f=>geometryPath(f.geometry,defaultCamera)).join(''),[roads]);
+  const reliefNW=project([-11,59],defaultCamera),reliefSE=project([4,49],defaultCamera);
+  const markers=useMemo<Marker[]>(()=>trusts.filter(t=>t.lat!=null&&t.lon!=null&&t.map_eligible!==false).map(trust=>{const[x,y]=project([trust.lon!,trust.lat!],camera),point=forecastAt(trust,outlookWeeks);return {trust,x,y,status:centralStatus(trust.latest_backlog,point?.point_forecast),value:point?.point_forecast??null};}),[trusts,camera]);
+  const clusters=useMemo(()=>{const groups:Cluster[]=[];for(const marker of markers.filter(m=>m.trust.org_code!==selected?.org_code)){const close=groups.find(group=>Math.hypot(group.x-marker.x,group.y-marker.y)<34);if(close){const count=close.members.length;close.x=(close.x*count+marker.x)/(count+1);close.y=(close.y*count+marker.y)/(count+1);close.members.push(marker);}else groups.push({x:marker.x,y:marker.y,members:[marker]});}const focus=markers.find(m=>m.trust.org_code===selected?.org_code);if(focus)groups.push({x:focus.x,y:focus.y,members:[focus]});return groups;},[markers,selected?.org_code]);
+  const hovered=markers.find(m=>m.trust.org_code===hover);
+  const cancelPan=()=>{cancelAnimationFrame(panFrame.current);panFrame.current=0;pendingPan.current=null;drag.current=null;setDragging(false);};
+  const zoom=(amount:number)=>{cancelPan();setCamera(previous=>zoomCamera(previous,amount));};
+  const mapPoint=(event:PointerEvent<SVGSVGElement>)=>{const matrix=event.currentTarget.getScreenCTM();if(!matrix)return null;return new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());};
+  const beginDrag=(event:PointerEvent<SVGSVGElement>)=>{if(event.button!==0||(event.target as Element).closest('[role="button"]'))return;event.preventDefault();const point=mapPoint(event);if(!point)return;cancelPan();drag.current={pointerId:event.pointerId,startX:point.x,startY:point.y,camera:cameraRef.current};event.currentTarget.setPointerCapture(event.pointerId);};
+  const moveDrag=(event:PointerEvent<SVGSVGElement>)=>{const start=drag.current;if(!start||start.pointerId!==event.pointerId)return;const point=mapPoint(event);if(!point)return;const dx=point.x-start.startX,dy=point.y-start.startY;if(Math.hypot(dx,dy)>3&&start.camera.zoom>MIN_MAP_ZOOM){setDragging(true);pendingPan.current=constrainCamera({...start.camera,x:start.camera.x+dx,y:start.camera.y+dy});if(!panFrame.current)panFrame.current=requestAnimationFrame(()=>{panFrame.current=0;if(pendingPan.current){cameraRef.current=pendingPan.current;setCamera(pendingPan.current);pendingPan.current=null;}});}};
+  const stopDrag=(event:PointerEvent<SVGSVGElement>)=>{if(drag.current?.pointerId!==event.pointerId)return;const finalPan=pendingPan.current;cancelPan();if(finalPan){cameraRef.current=finalPan;setCamera(finalPan);}if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);};
+  return <section className={`atlas-screen map-selection ${mapReady?'map-ready':''}`} aria-labelledby="map-selection-title">
+    <svg className={`atlas-map ${dragging?'is-dragging':''}`} viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" onPointerDown={beginDrag} onPointerMove={moveDrag} onPointerUp={stopDrag} onPointerCancel={stopDrag} onLostPointerCapture={cancelPan} role="group" aria-label="Map centred on England, with hospital trust markers. Zoom in to explore; the view stays within Britain.">
+      <defs><radialGradient id="atlas-water"><stop offset="0" stopColor="#102237"/><stop offset="1" stopColor="#080F1B"/></radialGradient><linearGradient id="atlas-land" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#263442"/><stop offset="1" stopColor="#1C2937"/></linearGradient><clipPath id="atlas-land-clip">{countryPaths.length?countryPaths.map((country,i)=><path key={i} d={country.path}/>):<path d={englandPath}/>}</clipPath><radialGradient id="atlas-selected-halo"><stop stopColor="#67E8F9" stopOpacity=".22"/><stop offset="1" stopColor="#67E8F9" stopOpacity="0"/></radialGradient></defs>
+      <rect width="1440" height="800" fill="url(#atlas-water)"/>
+      <g className="atlas-geography" transform={`matrix(${camera.zoom} 0 0 ${camera.zoom} ${(1-camera.zoom)*965+camera.x} ${(1-camera.zoom)*320+camera.y})`}>{countryPaths.map((country,i)=><path key={i} className="atlas-country" d={country.path} fillRule="evenodd"/>)}<path d={englandPath} className="atlas-england" fillRule="evenodd"/><image href="/assets/uk-relief.png" x={reliefNW[0]} y={reliefNW[1]} width={reliefSE[0]-reliefNW[0]} height={reliefSE[1]-reliefNW[1]} preserveAspectRatio="none" clipPath="url(#atlas-land-clip)" className="atlas-relief"/>{roadPath&&<path d={roadPath} className="atlas-roads" clipPath="url(#atlas-land-clip)"/>}</g>
+      <g className="atlas-country-labels" aria-hidden="true">{countryLabels.map(label=>{const[x,y]=project([label.lon,label.lat],camera);return <text key={label.name} x={x} y={y} textAnchor="middle">{label.name}</text>;})}</g>
+      <g className="atlas-sea-labels" aria-hidden="true">{[{name:'North Sea',lon:1.3,lat:54.5},{name:'Irish Sea',lon:-4.9,lat:53.5},{name:'English Channel',lon:-.1,lat:50.0}].map(label=>{const[x,y]=project([label.lon,label.lat],camera);return <text key={label.name} x={x} y={y}>{label.name}</text>;})}</g>
+      <g className="atlas-markers">{clusters.filter(group=>group.x>0&&group.x<1440&&group.y>0&&group.y<800).map(group=>{const single=group.members.length===1,marker=group.members[0],focus=single&&marker.trust.org_code===selected?.org_code,color=single?mapStatuses[marker.status].color:'#24344A',radius=focus?8.5:single?5.5:9;const activate=(trigger:SVGGElement)=>{if(single)choose(marker.trust.org_code);else{clusterTriggerRef.current=trigger;setOpenCluster(group);setSearchOpen(false);}};return <g key={group.members.map(member=>member.trust.org_code).join('-')} transform={`translate(${group.x},${group.y})`} className={`atlas-marker ${focus?'is-selected':''} ${single?'':'is-cluster'}`} role="button" tabIndex={0} aria-label={single?`${title(marker.trust.name)}: ${mapStatuses[marker.status].label.toLowerCase()} in 8 weeks. View hospital forecast.`:`${group.members.length} nearby hospital trusts. Open list.`} aria-expanded={single?undefined:openCluster===group} aria-controls={single?undefined:'nearby-hospitals'} onClick={event=>activate(event.currentTarget)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate(event.currentTarget);}}} onMouseEnter={()=>{if(single){setHover(marker.trust.org_code);onPrefetch(marker.trust.org_code);}}} onMouseLeave={()=>setHover(null)} onFocus={()=>{if(single){setHover(marker.trust.org_code);onPrefetch(marker.trust.org_code);}}} onBlur={()=>setHover(null)} style={{'--marker-color':color,'--marker-delay':`${Math.max(0,Math.min(650,(56-marker.trust.lat!)*90))}ms`} as CSSProperties}>
+        {focus&&<><circle className="atlas-selection-halo" r="34" fill="url(#atlas-selected-halo)"/><circle className="atlas-selection-ring" r={radius+6} fill="none" stroke="#67E8F9" strokeWidth="2"/></>}{!single&&<g className="atlas-cluster-rim" aria-hidden="true" style={{opacity:.8}}>{(Object.keys(mapStatuses) as MapStatus[]).map((key,index,keys)=>{const count=group.members.filter(member=>member.status===key).length;const offset=keys.slice(0,index).reduce((total,status)=>total+group.members.filter(member=>member.status===status).length,0);return count?<circle key={key} r="11" fill="none" stroke={mapStatuses[key].color} strokeWidth="1.2" pathLength="100" strokeDasharray={`${count/group.members.length*100} ${100-count/group.members.length*100}`} strokeDashoffset={-offset/group.members.length*100} transform="rotate(-90)"/>:null;})}</g>}<circle className="atlas-marker-hit" r={Math.max(14,radius+4)} fill="transparent"/><circle className="atlas-marker-disc" r={radius} fill={color}/><text className="atlas-marker-symbol" textAnchor="middle" dominantBaseline="central" fill={single?'#0D1825':'#E7EDF8'} fontSize={single?11:10}>{single?(focus?mapStatuses[marker.status].symbol:''):group.members.length}</text>{focus&&marker.trust.org_code==='RTH'&&<g className="atlas-oxford-tag" transform={`translate(${radius+12},-14)`}><rect width="70" height="28" rx="14"/><text x="35" y="19" textAnchor="middle">Oxford</text></g>}
+      </g>;})}</g>
+      <g className="atlas-city-labels" aria-hidden="true">{cities.filter(city=>city.name!=='Oxford'||selected?.org_code!=='RTH').map(city=>{const[x,y]=project([city.lon,city.lat],camera);return <g key={city.name}><text x={x+city.dx} y={y+city.dy}>{city.name}</text></g>;})}</g>
+      {hovered&&hovered.trust.org_code!==selected?.org_code&&!openCluster&&<g className="atlas-tooltip" transform={`translate(${Math.min(1125,Math.max(440,hovered.x-140))},${Math.max(35,hovered.y-65)})`} pointerEvents="none"><rect width="282" height="49" rx="12"/><text x="15" y="21">{title(hovered.trust.name).slice(0,34)}{title(hovered.trust.name).length>34?'…':''}</text><text className="atlas-tooltip-value" x="15" y="39">{mapStatuses[hovered.status].symbol} {mapStatuses[hovered.status].label}{hovered.status!=='unclear'?' in 8 weeks':''}</text></g>}
+    </svg>
+    <div className="atlas-left-shade" aria-hidden="true"/>
+    <div className="atlas-left-stack map-selection-content"><div className="map-selection-heading"><h2 id="map-selection-title">Find your hospital</h2><p>Choose a hospital to see its outlook.</p></div><div className="atlas-search" ref={searchRef}><label className="atlas-search-field"><Icon name="search" size={23}/><input placeholder="Find a hospital" aria-label="Find a hospital" role="combobox" aria-expanded={searchOpen} aria-controls="hospital-results" aria-autocomplete="list" aria-activedescendant={searchOpen&&matches[active]?`result-${matches[active].org_code}`:undefined} value={query} onFocus={()=>setSearchOpen(true)} onChange={event=>{setQuery(event.target.value);setActive(0);setSearchOpen(true);}} onKeyDown={event=>{if(event.key==='ArrowDown'){event.preventDefault();setActive(value=>Math.min(matches.length-1,value+1));setSearchOpen(true);}if(event.key==='ArrowUp'){event.preventDefault();setActive(value=>Math.max(0,value-1));}if(event.key==='Enter'&&searchOpen&&matches[active])choose(matches[active].org_code);if(event.key==='Escape')setSearchOpen(false);}}/>{query&&<button onClick={()=>{setQuery('');setActive(0);}} aria-label="Clear search"><Icon name="close" size={17}/></button>}</label>{searchOpen&&<div className="atlas-search-results" id="hospital-results" role="listbox">{matches.length?matches.map((trust,i)=><button key={trust.org_code} id={`result-${trust.org_code}`} role="option" aria-selected={i===active} className={i===active?'active':''} onMouseEnter={()=>{setActive(i);onPrefetch(trust.org_code);}} onMouseDown={event=>event.preventDefault()} onClick={()=>choose(trust.org_code)}><span>{title(trust.name)}</span><Icon name="arrow" size={17}/></button>):<p>No hospitals match “{query}”.</p>}</div>}</div>
     </div>
-    <div className="time-scrubber">
-      <button className={`play-button ${playing?'playing':''}`} onClick={()=>{if(playing)setPlaying(false);else{if(week>=latestIndex)setWeek(0);setPlaying(true);}}} aria-label={playing?'Pause timeline':'Play history and forecast'}><Icon name={playing?'pause':'play'} size={21}/></button>
-      <div className="scrubber-content"><div className="scrubber-heading"><strong>{day(selectedDate)}</strong><span>{future?(visibleForecast?'Forecasts at 4, 8 and 12 weeks':'Waiting for newer published data'):'Recorded history'}{playing&&reduced?' — automatic playback':''}</span><button className="quiet-link" onClick={()=>{setPlaying(false);setWeek(latestIndex);}}>Latest recorded week</button></div><div className="slider-track-wrap"><div className="timeline-phases"><i style={{width:`${observedPosition}%`}}/><span style={{left:`${observedPosition}%`,width:`${100-observedPosition}%`}}/></div><input type="range" aria-label="Week shown on the map" min="0" max={Math.max(0,weeks.length-1)} step="1" value={week} onChange={e=>{setPlaying(false);setWeek(Number(e.target.value));}} aria-valuetext={`${day(selectedDate)}, ${flag}`} className="time-slider"/><div className="today-marker" style={{left:`${todayPosition}%`}}><i/><span>Today</span></div></div><div className="timeline-labels">{[2023,2024,2025,2026].map(year=><span key={year} style={{left:`${weeks.length>1?Math.max(0,(timestamp(`${year}-04-09`)-timestamp(weeks[0]))/(timestamp(weeks.at(-1)!)-timestamp(weeks[0]))*100):0}%`}}>Apr {year}</span>)}<span style={{right:0}}>+12 weeks</span></div></div>
-    </div>
-  </div>;
+    <div className="atlas-map-controls" aria-label="Map controls"><div><button onClick={()=>zoom(.25)} disabled={camera.zoom>=MAX_MAP_ZOOM} aria-label="Zoom in"><Icon name="plus" size={20}/></button><button onClick={()=>zoom(-.25)} disabled={camera.zoom<=MIN_MAP_ZOOM} aria-label="Zoom out"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg></button></div><button className="atlas-reset" onClick={()=>{cancelPan();setCamera(defaultCamera);}} aria-label="Reset map view"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg></button></div>
+    {openCluster&&<aside ref={clusterListRef} id="nearby-hospitals" className="atlas-cluster-list" aria-label="Nearby hospitals" style={{left:`${Math.min(77,Math.max(34,openCluster.x/1440*100-10))}%`,top:`${Math.min(55,Math.max(9,openCluster.y/800*100-4))}%`}}><div><strong>Nearby hospitals</strong><button aria-label="Close nearby hospitals" onClick={closeCluster}><Icon name="close" size={18}/></button></div>{openCluster.members.map(marker=><button key={marker.trust.org_code} onClick={()=>choose(marker.trust.org_code)} onMouseEnter={()=>onPrefetch(marker.trust.org_code)}><span className="atlas-cluster-symbol" style={{color:mapStatuses[marker.status].color}}>{mapStatuses[marker.status].symbol}</span><span>{title(marker.trust.name)}</span><Icon name="chevron" size={15}/></button>)}</aside>}
+    <div className="map-selection-key"><div className="map-selection-key-heading"><span>8-week outlook</span><button type="button" onClick={onDetails} aria-label="How to read the map"><Icon name="info" size={16}/></button></div><div className="map-selection-key-items">{(Object.keys(mapStatuses) as MapStatus[]).map(key=><span key={key}><b aria-hidden="true" style={{color:mapStatuses[key].color}}>{mapStatuses[key].symbol}</b>{mapStatuses[key].label}</span>)}</div></div>
+
+  </section>;
 }

@@ -1,0 +1,15 @@
+/* Small, legible location markers keep the geography in the foreground. */
+.atlas-marker-disc{stroke:#F4F7FC65;stroke-width:.7;filter:drop-shadow(0 1px 3px #0008);transition:r .45s ease-out,fill .45s ease-out,stroke .2s ease}
+.atlas-marker-symbol{font-weight:600}
+.atlas-marker.is-cluster .atlas-marker-disc{stroke:#A6BAD27a;stroke-width:1}
+.atlas-marker.is-cluster .atlas-marker-symbol{font-family:Inter,Arial,sans-serif;font-weight:500}
+.atlas-marker:hover .atlas-marker-disc,.atlas-marker:focus-visible .atlas-marker-disc{stroke:#F4F7FC;stroke-width:1.8}
+.atlas-selection-ring{filter:drop-shadow(0 0 5px #67E8F94d)}
+.atlas-oxford-tag text{font-size:12px}
+.atlas-city-labels text{font-size:13px;font-weight:500;stroke-width:4px;fill:#DCE5F1}
+.atlas-country-labels{opacity:.29;font-size:13px;letter-spacing:1.6px}
+.atlas-sea-labels{opacity:.45;font-size:13px}
+.atlas-map-controls button:disabled{opacity:.3;cursor:default}
+@media(prefers-reduced-motion:reduce){.atlas-marker-disc{transition:none}}
+
+.atlas-map{user-select:none;-webkit-user-select:none}.map-ready .atlas-marker{animation:none;opacity:1}

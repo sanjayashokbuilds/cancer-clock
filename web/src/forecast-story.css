@@ -1,0 +1,100 @@
+.hospital-summary{position:relative;isolation:isolate;padding:23px 23px 18px;border:1px solid #a8c3df3d;border-radius:26px;background:rgba(15,28,45,.97);backdrop-filter:blur(24px);box-shadow:0 22px 60px #0004,0 1px 0 #e4efff08 inset;overflow:hidden;animation:summary-arrive .65s cubic-bezier(.16,1,.3,1)}
+.hospital-summary:before{content:'';position:absolute;left:23px;right:23px;top:0;height:1px;background:linear-gradient(90deg,transparent,#c4eaff80,transparent);pointer-events:none}
+.hospital-summary:after{content:'';position:absolute;left:0;top:120px;width:2px;height:128px;background:var(--outlook-color);opacity:.7;box-shadow:0 0 18px color-mix(in srgb,var(--outlook-color) 20%,transparent);pointer-events:none;transition:background .4s ease}
+.summary-kicker{display:flex;align-items:center;gap:7px;color:#A8B5C7;font-size:12px;line-height:1.5}
+.summary-selection-dot{width:5px;height:5px;background:#67E8F9;border-radius:50%;box-shadow:0 0 0 4px #67E8F90c;flex:none}
+.summary-horizon-label{margin-left:auto;display:flex;align-items:center;gap:5px;color:#C2D1E5;font-size:12px;white-space:nowrap}
+.summary-horizon-label svg{color:#C4B5FD}
+.summary-heading h1{font-size:26px;line-height:1.15;font-weight:600;letter-spacing:-.8px;margin:12px 0 0;color:#F4F7FC;max-width:100%;text-wrap:pretty}
+.summary-comparison{position:relative;isolation:isolate;margin-top:23px}
+.summary-clock-art{position:absolute;right:-95px;top:7px;width:220px;height:220px;z-index:-1;fill:none;stroke:var(--outlook-color);stroke-width:.8;opacity:.15;pointer-events:none;transition:stroke .4s ease}
+.summary-clock-art .summary-clock-hand{transform-origin:110px 110px;animation:summary-clock-turn .95s cubic-bezier(.16,1,.3,1)}
+.summary-clock-art .summary-clock-centre{fill:var(--outlook-color);stroke:none}
+.summary-unit{font-size:15px;line-height:1.45;color:#B7C6DA;margin:0}
+.summary-unit strong{font-weight:500;color:#ECF3FC}
+.summary-hero-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;min-height:89px}
+.summary-hero-value{font-size:84px;line-height:1.02;font-weight:500;letter-spacing:-5px;color:var(--outlook-color);font-variant-numeric:tabular-nums;transition:color .4s ease;text-shadow:0 0 40px color-mix(in srgb,var(--outlook-color) 8%,transparent)}
+.summary-status{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 10px;color:var(--outlook-color);font-size:12px;font-weight:500;line-height:1.3;border:1px solid color-mix(in srgb,var(--outlook-color) 28%,transparent);background:color-mix(in srgb,var(--outlook-color) 7%,#102033);border-radius:30px;max-width:126px;flex-shrink:0}
+.summary-status>span:first-child{font-family:Arial,sans-serif;font-size:20px;line-height:1}
+.summary-status>span:last-child{white-space:normal;max-width:85px}
+.summary-hero-date{font-size:13px;color:#91A5C0;line-height:1.5;margin:2px 0 0}
+.summary-hero-date strong{font-weight:400;color:#CBD8E9}
+.summary-baseline{display:flex;align-items:center;gap:12px;min-height:31px;margin-top:16px;font-size:13px;color:#91A5C0}
+.summary-baseline>div{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.summary-baseline-dot{width:5px;height:5px;border-radius:50%;background:#92A8C6}
+.summary-baseline strong{font-size:22px;font-weight:500;color:#E0E9F6;font-variant-numeric:tabular-nums;letter-spacing:-.7px;margin-left:1px}
+.summary-baseline>svg{flex:1;height:16px;min-width:25px;max-width:65px;fill:none;stroke:#647D9D;stroke-width:1;overflow:visible}
+.summary-baseline>span{margin-left:auto;white-space:nowrap}
+.summary-baseline-traveller{fill:#C5F7FF;stroke:none;opacity:0;animation:summary-travel 1.1s .12s cubic-bezier(.2,.8,.2,1)}
+.summary-explanation{position:relative;margin-top:11px;animation:summary-sentence .45s ease-out;min-height:43px}
+.summary-explanation p{font-size:15px;line-height:1.5;color:#AEBFD5;margin:0;max-width:31ch}
+.summary-explanation strong{font-weight:500;color:var(--outlook-color);white-space:nowrap}
+.summary-range{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 0;font-size:13px;line-height:1.5;color:#91A5C0;font-variant-numeric:tabular-nums}
+.summary-range strong{font-weight:500;color:#D3E0F1;font-size:14px}
+.summary-comparison.is-reported .summary-hero-value{color:#F4F7FC}
+.summary-comparison.is-reported .summary-explanation{margin-top:14px;min-height:43px}
+.summary-pressure{padding-top:18px;margin-top:18px;border-top:1px solid #abc3e125}
+.summary-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#EAF1FA;font-size:15px;font-weight:500;line-height:1.4}
+.summary-section-title>svg{color:#6E839F}
+.summary-pathway{display:grid;grid-template-columns:repeat(3,1fr);gap:0;width:100%;margin-top:15px}
+.summary-pathway-item{display:flex;flex-direction:column;gap:8px;min-width:0;color:#7E94AF}
+.summary-pathway-rail{display:flex;align-items:center;height:10px}
+.summary-pathway-rail i{width:7px;height:7px;border-radius:50%;background:#46607D;flex:none;position:relative}
+.summary-pathway-rail>span{height:1px;background:#3C526E;flex:1;margin:0 0 0 7px}
+.summary-pathway-item>span{font-size:12px;line-height:1.4}
+.summary-pathway-item.under-pressure>span{color:#DDD3FA;font-weight:500}
+.summary-pathway-item.under-pressure .summary-pathway-rail i{background:#C4B5FD;box-shadow:0 0 0 4px #C4B5FD14}
+.summary-pathway-item.under-pressure .summary-pathway-rail i:after{content:'';position:absolute;inset:-5px;border:1px solid #C4B5FD80;border-radius:50%;animation:summary-pressure-pulse 2.6s ease-out 3}
+.summary-drivers{margin-top:11px;display:flex;flex-direction:column;gap:3px}
+.summary-drivers strong{display:block;color:#F4F7FC;font-size:19px;line-height:1.25;font-weight:500;letter-spacing:-.3px;text-wrap:pretty}
+.summary-drivers strong>span{color:#A8B5C7;font-size:13px;font-weight:400;letter-spacing:0}
+.summary-drivers .summary-no-driver{color:#A8B5C7;font-size:15px;font-weight:400}
+.hospital-summary.has-two-drivers .summary-drivers strong{font-size:16px;line-height:1.3;letter-spacing:0}
+.hospital-summary.has-two-drivers .summary-pressure{padding-top:15px;margin-top:15px}
+.summary-recovery-button{display:flex;align-items:center;justify-content:space-between;gap:13px;width:100%;min-height:53px;border:1px solid #A8F5FF80;border-radius:15px;padding:8px 10px 8px 17px;margin-top:21px;color:#08212B;background:#67E8F9;font-size:16px;font-weight:600;box-shadow:0 7px 24px #67E8F912;transition:background .2s ease,box-shadow .2s ease,transform .2s ease}
+.summary-button-arrow{display:flex;align-items:center;justify-content:center;flex:none;width:34px;height:34px;border-radius:10px;background:#0D374F15;transition:background .2s ease}
+.summary-button-arrow svg{transition:transform .25s ease}
+.summary-recovery-button:hover{background:#9AEFF9;box-shadow:0 7px 30px #67E8F923;transform:translateY(-1px)}
+.summary-recovery-button:hover .summary-button-arrow{background:#0D374F23}
+.summary-recovery-button:hover .summary-button-arrow svg{transform:translateX(3px)}
+.summary-foot{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:12px;color:#8DA2BD;font-size:11px;line-height:1.4}
+.summary-foot button{display:flex;align-items:center;gap:2px;padding:3px 0 3px 5px;font-size:12px;color:#C4B5FD;white-space:nowrap}
+.summary-foot button:hover{color:#E5DDFF}
+.summary-error{margin:9px 0 0;color:#F4C66A;font-size:12px;line-height:1.4}
+.outlook-dock{position:absolute;left:437px;right:28px;bottom:24px;z-index:6}
+.forecast-control{display:grid;grid-template-columns:45px 147px minmax(0,1fr);align-items:center;gap:16px;padding:17px 22px 17px 18px;border:1px solid #9bb8da42;border-radius:24px;background:rgba(18,31,48,.96);backdrop-filter:blur(20px);box-shadow:0 12px 36px #0002}
+.forecast-preview{display:flex;align-items:center;justify-content:center;width:45px;height:45px;border-radius:50%;border:1px solid #A7BCD563;color:#E0ECF8;background:#162B43;box-shadow:inset 0 0 0 4px #0d1c2f;transition:border-color .2s,background .2s}
+.forecast-preview svg{margin-left:2px}
+.forecast-preview:hover,.forecast-control.is-playing .forecast-preview{color:#67E8F9;border-color:#67E8F9a6;background:#15384b}
+.forecast-control.is-playing .forecast-preview svg{margin:0}
+.forecast-intro strong{font-size:18px;font-weight:500;line-height:1.3;letter-spacing:-.2px;color:#F4F7FC;display:block}
+.forecast-intro span{font-size:12px;line-height:1.4;color:#A8B5C7;display:block;max-width:19ch;margin-top:4px}
+.forecast-choices{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;min-height:58px;isolation:isolate}
+.forecast-choices>button{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:flex-start;padding:10px 0 0;color:#A8B5C7;font-size:13px;line-height:1.4;white-space:nowrap;transition:color .25s ease}
+.forecast-choices>button.active{color:#67E8F9;font-weight:500}
+.forecast-choices>button:hover{color:#F4F7FC}
+.forecast-choice-dot{width:11px;height:11px;display:block;background:#8094B0;border-radius:50%;transition:background .4s ease,transform .4s ease}
+.forecast-choices>button.active .forecast-choice-dot{background:#0D2634;transform:scale(.9)}
+.forecast-route{position:absolute;left:12.5%;right:12.5%;height:2px;top:14px;background:#536884;z-index:-2;overflow:hidden}
+.forecast-route>i{position:absolute;inset:0 auto 0 0;width:calc(var(--horizon-index) / 3 * 100%);background:#67E8F9;box-shadow:0 0 8px #67E8F9a6;transition:width .48s cubic-bezier(.2,.8,.2,1)}
+.forecast-choice-focus{position:absolute;top:0;width:64px;height:31px;border-radius:20px;background:#67E8F9;left:calc(12.5% + var(--horizon-index) * 25% - 32px);box-shadow:0 0 24px #67E8F921;z-index:-1;transition:left .48s cubic-bezier(.2,.8,.2,1)}
+.outlook-caption{display:flex;align-items:center;gap:11px;padding:0 5px;margin-top:12px;color:#A8B5C7;font-size:11px;white-space:nowrap}
+.outlook-caption p{font-size:11px;line-height:1.4;margin:0;flex:1;color:#93A7C0}
+.outlook-caption p b{font-weight:400;color:#C0CFE1}
+.outlook-legend{display:flex;align-items:center;gap:10px}
+.outlook-legend>span{display:flex;align-items:center;gap:4px}
+.outlook-legend b{font-family:Arial,sans-serif;font-size:18px;line-height:1;font-weight:500}
+.outlook-help{display:flex;align-items:center;justify-content:center;color:#A8B5C7;padding:2px;flex:none}
+.outlook-help:hover{color:#67E8F9}
+
+@keyframes summary-arrive{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes summary-sentence{from{opacity:.2;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes summary-travel{0%{opacity:0;transform:translateX(0)}20%{opacity:.8}100%{opacity:0;transform:translateX(52px)}}
+@keyframes summary-clock-turn{from{transform:rotate(-45deg);opacity:0}to{transform:rotate(0);opacity:1}}
+@keyframes summary-pressure-pulse{0%{transform:scale(.7);opacity:.5}80%,100%{transform:scale(1.5);opacity:0}}
+@media(min-width:1600px){.hospital-summary{padding:25px 26px 20px}.summary-heading h1{font-size:28px}.summary-hero-value{font-size:90px}.outlook-dock{left:480px;right:35px}.outlook-caption,.outlook-caption p{font-size:12px}.forecast-choices>button{font-size:14px}.summary-foot{font-size:12px}}
+@media(max-height:850px) and (min-width:1100px){.hospital-summary{padding:19px 22px 15px}.summary-heading h1{font-size:24px;margin-top:10px}.summary-comparison{margin-top:17px}.summary-hero-value{font-size:74px}.summary-hero-row{min-height:77px}.summary-baseline{margin-top:11px}.summary-explanation{margin-top:9px;min-height:38px;font-size:14px}.summary-pressure{margin-top:13px;padding-top:13px}.summary-pathway{margin-top:11px}.summary-drivers{margin-top:8px}.summary-recovery-button{margin-top:16px;min-height:48px}.summary-foot{margin-top:9px}.outlook-dock{bottom:18px}.forecast-control{padding-top:14px;padding-bottom:14px}}
+@media(max-width:1250px){.hospital-summary{padding:21px 20px 17px}.summary-heading h1{font-size:24px}.summary-hero-value{font-size:74px}.summary-hero-row{min-height:78px}.summary-status{font-size:11px;max-width:112px;padding:6px 8px}.summary-horizon-label,.summary-kicker{font-size:11px}.summary-drivers strong{font-size:18px}.outlook-dock{left:397px;right:24px}.forecast-control{grid-template-columns:40px 105px minmax(0,1fr);gap:12px;padding:15px 14px}.forecast-preview{width:40px;height:40px}.forecast-intro strong{font-size:16px}.forecast-intro span{font-size:11px}.forecast-choices>button{font-size:11px}.forecast-choice-focus{width:52px;left:calc(12.5% + var(--horizon-index) * 25% - 26px)}.outlook-caption{flex-wrap:wrap;gap:7px 12px}.outlook-caption p{flex:1 0 100%}.outlook-help{margin-left:auto}}
+@media(max-width:1000px){.hospital-summary{padding:20px}.summary-heading h1{font-size:23px}.summary-hero-value{font-size:72px}.summary-recovery-button{padding-left:14px;font-size:15px}.outlook-dock{left:20px;right:20px;bottom:20px}.forecast-control{grid-template-columns:42px 140px minmax(0,1fr);gap:15px;padding:16px}.forecast-choices>button{font-size:13px}.outlook-caption{flex-wrap:nowrap}.outlook-caption p{flex:1 1 auto}}
+@media(max-width:650px){.hospital-summary{padding:21px}.summary-heading h1{font-size:25px}.summary-hero-value{font-size:82px}.summary-horizon-label,.summary-kicker{font-size:12px}.summary-comparison{margin-top:19px}.outlook-dock{left:18px;right:18px;bottom:18px}.forecast-control{grid-template-columns:37px minmax(0,1fr);gap:10px;padding:14px 12px;border-radius:22px}.forecast-preview{width:37px;height:37px}.forecast-intro{grid-column:2;grid-row:1}.forecast-intro strong{font-size:16px}.forecast-intro span{max-width:none;font-size:12px;margin-top:2px}.forecast-choices{grid-column:1 / -1;margin-top:8px}.forecast-choices>button{font-size:11px}.outlook-caption{flex-wrap:wrap;gap:8px}.outlook-caption p{flex-basis:100%;font-size:10px}.outlook-legend{gap:12px}.summary-recovery-button{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.hospital-summary,.summary-explanation,.summary-baseline-traveller,.summary-clock-art .summary-clock-hand,.summary-pathway-item.under-pressure .summary-pathway-rail i:after{animation:none}.summary-baseline-traveller,.summary-pathway-item.under-pressure .summary-pathway-rail i:after{display:none}.hospital-summary:after,.summary-clock-art,.summary-hero-value,.summary-recovery-button,.summary-button-arrow,.summary-button-arrow svg,.forecast-preview,.forecast-choices>button,.forecast-choice-dot,.forecast-route>i,.forecast-choice-focus{transition:none}.summary-recovery-button:hover{transform:none}}

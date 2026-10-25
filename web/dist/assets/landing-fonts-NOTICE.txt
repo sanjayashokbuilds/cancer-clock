@@ -1,0 +1,7 @@
+Fonts extracted without modification from the user-provided index (16).html landing page.
+Family and weight names reproduce the supplied @font-face declarations.
+
+BricolageGrotesque-landing.woff2: SHA-256 94d70a9a9bcd7134d4a291486c60e66ddb302f1f2ddf5268277ba11663b6c1b9
+InstrumentSans-Regular-landing.woff2: SHA-256 5e259329962f891219a6868e2ee3779b55263a3e9f025225e1332ad58977a983
+InstrumentSans-Medium-landing.woff2: SHA-256 28e3d2510b4d03f58aad3807721deec665bb7641d5271f2ccf2f7db157f022e3
+InstrumentSans-Semibold-landing.woff2: SHA-256 bd33983b2b0495fb2ec7e4529b223c249598d01085b76971dce90df6f573b839

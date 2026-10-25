@@ -1,0 +1,22 @@
+.atlas-story-intro{position:absolute;z-index:2;left:445px;top:35px;width:300px;pointer-events:none;animation:story-intro .8s .15s both cubic-bezier(.2,.7,.2,1)}
+.story-thread{display:flex;align-items:center;gap:8px;color:#B8C7D9;font-size:12px;line-height:1.4;letter-spacing:.05px}
+.story-thread i{width:5px;height:5px;background:#C4B5FD;border-radius:50%;box-shadow:0 0 12px #C4B5FD55}
+.atlas-story-intro h2{margin:13px 0 15px;color:#F4F7FC;font-size:48px;font-weight:500;letter-spacing:-2.1px;line-height:1.04;text-shadow:0 2px 22px #080D16aa}
+.atlas-story-intro em{font-style:normal;font-weight:300;color:#C4B5FD}
+.atlas-story-intro p{font-size:14px;line-height:1.6;color:#B2C3D6;margin:0;max-width:230px;text-shadow:0 1px 7px #080D16}
+.atlas-cluster-rim{opacity:.85;transition:opacity .3s ease}.atlas-marker:hover .atlas-cluster-rim{opacity:1}
+.atlas-city-labels text{fill:#D9E5F4}
+.outlook-legend{gap:11px}.outlook-caption{font-size:11px;gap:9px}.outlook-caption p{font-size:11px}.outlook-caption p b{color:#C6D4E4}
+@keyframes story-intro{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:1600px){.atlas-story-intro{left:490px;top:38px}.atlas-story-intro h2{font-size:54px}}
+@media(max-width:1250px){.atlas-story-intro{left:410px;width:245px}.atlas-story-intro h2{font-size:40px}.story-thread{font-size:10px}.atlas-story-intro p{font-size:12px}}
+@media(max-width:1000px){.atlas-story-intro{display:none}}
+@media(prefers-reduced-motion:reduce){.atlas-story-intro{animation:none}.atlas-cluster-rim{transition:none}}
+
+.hospital-summary{padding-top:21px;padding-bottom:16px}
+.summary-comparison{margin-top:17px}.summary-hero-row{min-height:84px}
+.summary-baseline{margin-top:10px}.summary-explanation{min-height:26px;margin-top:10px}
+.summary-pressure{margin-top:14px;padding-top:14px}.summary-pathway{margin-top:11px}
+.summary-pathway-item>span{font-size:14px}.summary-recovery-button{margin-top:17px}
+.summary-foot{font-size:12px}.summary-foot button{font-size:13px}
+@media(max-height:850px) and (min-width:1100px){.summary-comparison{margin-top:12px}.summary-hero-value{font-size:72px}.summary-hero-row{min-height:75px}.summary-pressure{margin-top:11px;padding-top:11px}.summary-recovery-button{margin-top:13px}}

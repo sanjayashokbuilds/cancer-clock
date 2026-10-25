@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 
 export type Json = Record<string, any>;
 export type Trust = Json & {org_code: string; name: string; lat: number | null; lon: number | null; latest_backlog: number | null; latest_observed_week: string | null; history: Json[]; forecasts: Json[]; direction: string};
-export const C = {ink: '#172033', muted: '#5B6B82', hairline: '#E3E8EF', teal: '#0E7C86', orange: '#C2410C', slate: '#94A3B8', diagnosis: '#2F6FB3', treatment: '#B7791F'};
+export const C = {bg: '#080D16', surface: '#101A2B', panel: '#152133', ink: '#F4F7FC', muted: '#A8B5C7', hairline: '#2A3648', cyan: '#67E8F9', lilac: '#C4B5FD', amber: '#F4C66A', teal: '#75D8B1', orange: '#FF7B78', slate: '#94A3B8', diagnosis: '#C4B5FD', treatment: '#F4C66A'};
 export const number = (n: unknown, digits = 0) => typeof n === 'number' && Number.isFinite(n) ? n.toLocaleString('en-GB', {maximumFractionDigits: digits, minimumFractionDigits: digits}) : '—';
 export const day = (value?: string, short = false) => value ? new Date(value.slice(0,10) + 'T12:00:00').toLocaleDateString('en-GB', {day: 'numeric', month: 'short', ...(short ? {} : {year: 'numeric'})}) : 'Date unavailable';
 export const timestamp = (v: string) => new Date(v.slice(0,10) + 'T12:00:00Z').getTime();
@@ -43,9 +43,9 @@ export function useReducedMotion() {
   useEffect(() => {const media = window.matchMedia('(prefers-reduced-motion: reduce)'); const update = () => setReduced(media.matches); media.addEventListener('change', update); return () => media.removeEventListener('change', update);}, []);
   return reduced;
 }
-export function AnimatedNumber({value, digits = 0, className = ''}: {value: number | undefined | null; digits?: number; className?: string}) {
+export function AnimatedNumber({value, digits = 0, className = '', from}: {value: number | undefined | null; digits?: number; className?: string; from?: number | null}) {
   const reduced = useReducedMotion();
-  const [shown, setShown] = useState(value ?? 0);
+  const [shown, setShown] = useState(reduced ? (value ?? 0) : (from ?? value ?? 0));
   const current = useRef(shown);
   useEffect(() => {
     if (value == null || !Number.isFinite(value)) return;
@@ -112,7 +112,7 @@ export function LineChart({series, label, ticks, tickFormat, height = 270, fixed
     {[0,.5,1].map(q => <g key={q}><line x1={left} x2={w-right} y1={y(q*maxY)} y2={y(q*maxY)} stroke={C.hairline}/><text className="chart-tick" x={left-10} y={y(q*maxY)+5} textAnchor="end">{number(q*maxY)}</text></g>)}
     {gap && <g><rect x={x(gap.from)} width={Math.max(0,x(gap.to)-x(gap.from))} y={top} height={ph} fill={`url(#${id}-gap)`}/><text className="chart-gap-label" textAnchor="middle" x={(x(gap.from)+x(gap.to))/2} y="16">{gap.label}</text></g>}
     {marker && <g><line x1={x(marker.x)} x2={x(marker.x)} y1={top} y2={top+ph} stroke={C.slate} strokeDasharray="3 5"/><text className="chart-gap-label" x={x(marker.x)+7} y="16">{marker.label}</text></g>}
-    <g clipPath={`url(#${id})`}>{plotted.map(s => <g key={s.name}>{s.band && <path d={`${line(s.p.map(p => ({x:p.x,y:p.high})))} ${s.p.slice().reverse().map(p => `L${p.x.toFixed(2)},${p.low.toFixed(2)}`).join(' ')} Z`} fill={s.color} opacity=".11"/>}<path d={line(s.p)} fill="none" stroke={s.color} strokeWidth="2.8" strokeLinejoin="round" strokeLinecap="round" strokeDasharray={s.dashed ? '6 6' : undefined}/>{s.points.length < 5 && s.p.map((p,i) => <circle key={i} cx={p.x} cy={p.y} r="3.8" fill="white" stroke={s.color} strokeWidth="2"/>)}</g>)}</g>
+    <g clipPath={`url(#${id})`}>{plotted.map(s => <g key={s.name}>{s.band && <path d={`${line(s.p.map(p => ({x:p.x,y:p.high})))} ${s.p.slice().reverse().map(p => `L${p.x.toFixed(2)},${p.low.toFixed(2)}`).join(' ')} Z`} fill={s.color} opacity=".11"/>}<path d={line(s.p)} fill="none" stroke={s.color} strokeWidth="2.8" strokeLinejoin="round" strokeLinecap="round" strokeDasharray={s.dashed ? '6 6' : undefined}/>{s.points.length < 5 && s.p.map((p,i) => <circle key={i} cx={p.x} cy={p.y} r="3.8" fill={C.surface} stroke={s.color} strokeWidth="2"/>)}</g>)}</g>
     {xticks.filter(t => t >= minX && t <= maxX).map((t,i) => <text className="chart-tick" key={i} x={x(t)} y={height-8} textAnchor={i===0 ? 'start' : i===xticks.length-1 ? 'end' : 'middle'}>{tickFormat(t)}</text>)}
   </svg>;
 }

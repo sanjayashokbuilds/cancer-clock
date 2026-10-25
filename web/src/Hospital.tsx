@@ -30,8 +30,48 @@ export function HospitalPanel({trust,current,onClose,onPlan,onDetails}: {trust: 
   </div></div>;
 }
 export function HospitalDetails({current,trust,onClose}: {current:Json;trust:Trust;onClose:()=>void}) {
-  const b=current.bottleneck || {}; const latest=current.history?.latest; const max=Math.max(1,...(latest?.bands || []).map((x:Json)=>x.count ?? 0));
-  return <Drawer heading="Hospital details" onClose={onClose}><p className="drawer-intro">{title(trust.name)}</p><section><h3>How strong is the pathway evidence?</h3><p>“Diagnosed within 28 days” includes a cancer diagnosis or cancer being ruled out within that time. The 31-day treatment clock starts at the decision to treat.</p><p><b>{b.confidence==='high'?'Strong':b.confidence==='medium'?'Moderate':'Limited'}</b> evidence from recent published data. This is a screening signal, not proof of the cause of a delay. Clinical review is still pending.</p>{[b.diagnosis_driver,b.treatment_driver].filter(Boolean).map((d:Json)=><div className="detail-fact" key={d.key}><b>{driverName(d)}</b><span>{number(d.denominator)} completed pathways over {d.months_used} months</span><span>{d.positive_months} months worse than the England comparison</span></div>)}<p>Small samples are reduced in weight. A driver needs enough patients and at least two adverse months.</p></section><section><h3>How long completed treatment pathways took</h3><p>{latest?day(latest.period):'No suitable record is available.'} These people have already started treatment. This is not the age of the current waiting list.</p>{latest?.bands_available===false?<Notice>Some wait bands are missing or suppressed. We cannot show a complete distribution.</Notice>:latest&&<div className="wait-bands">{latest.bands.map((band:Json)=><div key={band.label}><span>{band.label}</span><i><b style={{width:`${(band.count??0)/max*100}%`}}/></i><strong>{number(band.count)}</strong></div>)}</div>}</section><section><h3>Routine diagnostic queues</h3><p>These queues also include people without suspected cancer. They support the picture; they do not set the main bottleneck.</p><div className="table-scroll"><table><thead><tr><th>Test</th><th>Waiting 6+ weeks</th><th>England</th><th>Matching cancer signal</th></tr></thead><tbody>{(b.indicators||[]).filter((d:Json)=>d.role==='context').map((d:Json)=><tr key={d.key}><td>{d.name}</td><td>{number(d.trust_rate_pct)}%</td><td>{number(d.national_rate_pct)}%</td><td>{d.corroboration==='corroborated'?'Also adverse':'Not adverse or unavailable'}</td></tr>)}</tbody></table></div></section><section><h3>How to read the forecast</h3><p>Targets are 4, 8 and 12 weeks after the forecast date, not the older observation date. The faint dashed bridge across the reporting gap connects displayed points; it is not a new measurement or a separate weekly forecast.</p><p>Map direction follows the central 12-week forecast. A change must exceed both 10 people and 10% of the last recorded backlog to be coloured as improving or worsening. It is not a probability; the range can still include either direction.</p><p>Past counts follow current merged hospital organisations. Latest revised data use approximate first-release dates; original historical versions have not been verified.</p></section></Drawer>;
+  const b=current.bottleneck || {};
+  const latest=current.history?.latest;
+  const max=Math.max(1,...(latest?.bands || []).map((x:Json)=>x.count ?? 0));
+  const forecast=current.forecast || trust;
+  const history=(forecast.history || trust.history || []).filter((p:Json)=>typeof p.backlog==='number'&&Number.isFinite(p.backlog)).slice(-39);
+  const predictions=(forecast.forecasts || trust.forecasts || []).filter((p:Json)=>[4,8,12].includes(p.horizon_weeks)&&typeof p.point_forecast==='number'&&Number.isFinite(p.point_forecast)).sort((a:Json,b:Json)=>a.horizon_weeks-b.horizon_weeks);
+  const lastRecorded=history.at(-1),firstPrediction=predictions[0];
+  const series:ChartSeries[]=[{name:'Recorded',color:C.ink,points:history.map((p:Json)=>({x:timestamp(p.week_ending),y:p.backlog}))}];
+  if(lastRecorded&&firstPrediction)series.push({name:'Reporting gap',color:C.slate,dashed:true,points:[{x:timestamp(lastRecorded.week_ending),y:lastRecorded.backlog},{x:timestamp(firstPrediction.target_date),y:firstPrediction.point_forecast}]});
+  if(predictions.length)series.push({name:'Forecast',color:C.cyan,dashed:true,band:true,points:predictions.map((p:Json)=>({x:timestamp(p.target_date),y:p.point_forecast,low:p.lower_80,high:p.upper_80}))});
+  return <Drawer heading="Hospital details" onClose={onClose}>
+    <p className="drawer-intro">{title(trust.name)}</p>
+    <section>
+      <div className="chart-heading"><h3>Waiting-list history and forecast</h3><Legend items={[{label:'Recorded',color:C.ink},...(predictions.length?[{label:'Forecast',color:C.cyan,dashed:true}]:[])]}/></div>
+      <p>People waiting over 62 days. The latest 39 reported weeks{predictions.length?', followed by the 4-, 8- and 12-week estimates.':'.'}</p>
+      {history.length||predictions.length?<LineChart key={trust.org_code} series={series} label={`Recorded backlog and 4-, 8- and 12-week forecasts for ${title(trust.name)}`} height={270} tickFormat={x=>day(new Date(x).toISOString(),true)} ticks={history.length?[timestamp(history[0].week_ending),timestamp(lastRecorded.week_ending),...(predictions.length?[timestamp(predictions.at(-1).target_date)]:[])]:undefined} reveal gap={lastRecorded&&firstPrediction?{from:timestamp(lastRecorded.week_ending),to:timestamp(firstPrediction.target_date),label:'No newer observation'}:undefined}/>:<Notice>No suitable history or forecast is available.</Notice>}
+      <p className="chart-caption">{predictions.length?<>Forecast issued {day(forecast.issue_date || firstPrediction?.issue_date)}. Shading shows the 80% forecast range.</>:'A forecast is not available for this hospital.'} The dashed bridge across the reporting gap only connects displayed points; it is not an observed or predicted weekly path.</p>
+    </section>
+    <section>
+      <h3>How strong is the pathway evidence?</h3>
+      <p>“Diagnosed within 28 days” includes a cancer diagnosis or cancer being ruled out within that time. The 31-day treatment clock starts at the decision to treat.</p>
+      <p><b>{b.confidence==='high'?'Strong':b.confidence==='medium'?'Moderate':'Limited'}</b> evidence from recent published data. This is a screening signal, not proof of the cause of a delay. Clinical review is still pending.</p>
+      {[b.diagnosis_driver,b.treatment_driver].filter(Boolean).map((d:Json)=><div className="detail-fact" key={d.key}><b>{driverName(d)}</b><span><b>{number(d.trust_rate_pct,1)}%</b> {d.side==='diagnosis'?'diagnosed within 28 days':'started treatment within 31 days'} vs <b>{number(d.national_rate_pct,1)}%</b> across England</span><span>{number(d.denominator)} completed pathways over {d.months_used} months</span><span>{d.positive_months} months worse than the England comparison</span></div>)}
+      <p>Small samples are reduced in weight. A driver needs enough patients and at least two adverse months.</p>
+    </section>
+    <section>
+      <h3>How long completed treatment pathways took</h3>
+      <p>{latest?day(latest.period):'No suitable record is available.'} These people have already started treatment. This is not the age of the current waiting list.</p>
+      {latest?.bands_available===false?<Notice>Some wait bands are missing or suppressed. We cannot show a complete distribution.</Notice>:latest&&<div className="wait-bands">{latest.bands.map((band:Json)=><div key={band.label}><span>{band.label}</span><i><b style={{width:`${(band.count??0)/max*100}%`}}/></i><strong>{number(band.count)}</strong></div>)}</div>}
+    </section>
+    <section>
+      <h3>Routine diagnostic queues</h3>
+      <p>These queues also include people without suspected cancer. They support the picture; they do not set the main bottleneck.</p>
+      <div className="table-scroll"><table><thead><tr><th>Test</th><th>Waiting 6+ weeks</th><th>England</th><th>Matching cancer signal</th></tr></thead><tbody>{(b.indicators||[]).filter((d:Json)=>d.role==='context').map((d:Json)=><tr key={d.key}><td>{d.name}</td><td>{number(d.trust_rate_pct)}%</td><td>{number(d.national_rate_pct)}%</td><td>{d.corroboration==='corroborated'?'Also adverse':'Not adverse or unavailable'}</td></tr>)}</tbody></table></div>
+    </section>
+    <section>
+      <h3>How to read the forecast</h3>
+      <p>Targets are 4, 8 and 12 weeks after the forecast date, not the older observation date.</p>
+      <p>Map arrows compare the rounded estimated count with the rounded latest reported count: coral for an estimated rise, mint for an estimated fall, and yellow when unchanged. A rise can be as small as one person; colour does not measure severity or confidence. The 80% range may include either direction. Missing forecasts have a slate question mark.</p>
+      <p>Past counts follow current merged hospital organisations. Latest revised data use approximate first-release dates; original historical versions have not been verified.</p>
+    </section>
+  </Drawer>;
 }
 export function AssumptionsDrawer({decision,onClose}: {decision:Json;onClose:()=>void}) {
   const assumptions={...(decision.assumptions || {}),...(decision.planning_grid?.assumptions || {})};
