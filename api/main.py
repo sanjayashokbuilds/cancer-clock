@@ -82,7 +82,7 @@ def create_app(snapshot: Snapshot | None = None, static_dir: Path | None = None)
     @app.post('/api/simulate')
     def simulate(body: SimulationRequest, request: Request):
         store = data(request); check_code(store, body.org_code)
-        trust = store.indexes['decision_support'][body.org_code]
+        trust = store.decision(body.org_code)
         if trust['status'] != 'ready':
             raise HTTPException(409, trust.get('reason', 'This trust has no suitable calibration'))
         try:

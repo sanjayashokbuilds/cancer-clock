@@ -82,15 +82,15 @@ def test_map_route_is_cached_snapshot_data(snapshot, tmp_path):
 
 def write_grid_fixture(snapshot, directory):
     sources = {name + '.json': digest(snapshot.paths[name])
-               for name in ['simulation_calibration', 'bottlenecks', 'decision_support']}
+               for name in ['simulation_calibration', 'bottlenecks', 'decision_support', 'forecasts_latest']}
     files = {}
     for code in snapshot.codes:
         path = directory / f'{code}.json'
-        path.write_text(json.dumps(dict(schema_version=1, org_code=code,
+        path.write_text(json.dumps(dict(schema_version=2, org_code=code,
             issue_date=snapshot.issue_date, input_sha256=sources,
             status='unavailable', reason='Isolated grid validation fixture')))
         files[code] = digest(path)
-    manifest = dict(schema_version=1, partial=False, issue_date=snapshot.issue_date,
+    manifest = dict(schema_version=2, horizon_days=84, partial=False, issue_date=snapshot.issue_date,
                     input_sha256=sources, files=files, capacity_percent=[0, 1, 2, 3, 4, 5, 10, 15, 20])
     (directory / 'manifest.json').write_text(json.dumps(manifest))
     return manifest
@@ -103,7 +103,9 @@ def test_planning_grid_is_attached_only_after_source_and_file_validation(snapsho
     decision = candidate.decision('RTH')
     assert decision['planning_grid']['status'] == 'unavailable'
     assert decision['planning_grid']['reason'] == 'Isolated grid validation fixture'
-    assert decision['dose_response'] == snapshot.indexes['decision_support']['RTH']['dose_response']
+    assert decision['status'] == 'unavailable'
+    assert decision['absolute_simulator_evidence']['dose_response'] == snapshot.indexes['decision_support']['RTH']['dose_response']
+    assert 'dose_response' not in decision
     (tmp_path / 'RTH.json').write_text('{}')
     with pytest.raises(ValueError, match='file changed or missing: RTH'):
         candidate.validate_planning_grid(tmp_path)
@@ -125,12 +127,12 @@ def test_planning_grid_rejects_mixed_or_partial_batches(snapshot, tmp_path, chan
 
 @pytest.mark.parametrize('code, status', [('RNS', 'conflict'), ('RAL', 'conflict'),
     ('RA7', 'conflict'), ('RTH', 'consistent'), ('RET', 'unavailable'), ('RWF', 'unavailable')])
-def test_planning_screen_flags_known_mismatches_at_the_same_date(snapshot, code, status):
+def test_old_absolute_mismatch_is_diagnostic_only_at_the_same_date(snapshot, code, status):
     check = snapshot.decision(code)['planning_consistency']
     assert check['status'] == status
     assert check['comparison_date'] == '2027-01-10'
-    assert check['requires_review'] is (status != 'consistent')
-    assert check['interpretation'] == 'A quality screen, not validation of six-month projections.'
+    assert check['requires_review'] is False
+    assert 'does not gate forecast-anchored plans' in check['interpretation']
     if code == 'RNS':
         assert check['simulator_baseline']['median'] == pytest.approx(248.99958837853922)
         assert check['forecast']['median'] == pytest.approx(144.35784155412804)
@@ -163,3 +165,27 @@ def test_planning_screen_rejects_invalid_ranges_and_wrong_date_offsets():
     assert planning_consistency(forecast, decision, '2026-10-18')['status'] == 'unavailable'
     baseline['dates'] = []
     assert planning_consistency(forecast, decision, '2026-10-18')['status'] == 'unavailable'
+
+
+def test_ready_plans_preserve_forecast_anchors_and_only_gate_simulator_failures(snapshot):
+    """A former baseline disagreement must not be a remaining reason for exclusion."""
+    allowed_reasons = {'simulation_inputs_unavailable', 'history_fit_failure',
+                       'optimizer_failure', 'weakly_identified', 'forecast_unavailable'}
+    for code in snapshot.codes:
+        decision = snapshot.decision(code)
+        grid = decision['planning_grid']
+        assert decision['planning_consistency']['requires_review'] is False
+        assert decision['status'] == grid['status']
+        if grid['status'] != 'ready':
+            assert grid['eligibility']['reason_codes']
+            assert set(grid['eligibility']['reason_codes']) <= allowed_reasons
+            continue
+        assert grid['horizon_days'] == 84
+        assert grid['eligibility']['eligible'] is True
+        scenario = next(s for s in grid['scenarios'] if s['key'] == 'none')
+        baseline = scenario['plans']['diagnosis'][0]
+        assert baseline['backlog_62']['median'] == grid['forecast_path']['backlog_62']['median']
+        for point in snapshot.indexes['forecasts_latest'][code]['forecasts']:
+            index = grid['day_offsets'].index(point['horizon_weeks'] * 7)
+            assert baseline['backlog_62']['median'][index] == pytest.approx(point['point_forecast'], abs=.000501)
+        assert grid['dates'][-1] == '2027-01-10'

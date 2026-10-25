@@ -1,4 +1,4 @@
-"""Exact precomputed UI controls must retain the original scenario mathematics."""
+"""Forecast anchoring must preserve the paired simulator's intervention maths."""
 from __future__ import annotations
 
 import json
@@ -35,18 +35,10 @@ def test_combined_shock_multipliers_and_exact_prefix_replay() -> None:
         scenario_for({'strike': False, 'winter': False, 'surge': False}, 'treatment', 7)
 
 
-def test_new_grid_reproduces_existing_rth_endpoints_trajectories_and_marginals() -> None:
+def test_new_grid_retains_original_rth_absolute_paths_as_evidence_only() -> None:
     grid = json.loads((TARGET_DIR / 'RTH.json').read_text())
     original = next(t for t in json.loads((OUTPUTS_DIR / 'decision_support.json').read_text())['trusts'] if t['org_code'] == 'RTH')
     scenarios = {s['key']: s for s in grid['scenarios']}
-    strike = scenarios['strike']
-    for stage in ['diagnosis', 'treatment']:
-        for current, previous in zip(strike['plans'][stage], original['dose_response'][stage], strict=True):
-            assert current['extra_capacity_pct'] == previous['extra_capacity_pct']
-            for q in ['median', 'lower_80', 'upper_80']:
-                assert current['final_backlog'][q] == pytest.approx(previous[q], abs=.000501)
-        for q in ['median', 'lower_80', 'upper_80']:
-            assert strike['marginal_benefit'][stage][q] == pytest.approx(original['dose_response']['marginal_benefit'][stage][q], abs=.000501)
     mappings = [('baseline', 'none', 'diagnosis', 0), ('strike', 'strike', 'diagnosis', 0),
                 ('strike_plus_diagnosis', 'strike', 'diagnosis', 10),
                 ('strike_plus_treatment', 'strike', 'treatment', 10),
@@ -54,15 +46,21 @@ def test_new_grid_reproduces_existing_rth_endpoints_trajectories_and_marginals()
     for old_key, new_key, stage, pct in mappings:
         previous = next(p for p in original['scenario_comparison'] if p['key'] == old_key)
         current = next(p for p in scenarios[new_key]['plans'][stage] if p['extra_capacity_pct'] == pct)
-        assert grid['dates'] == previous['dates']
+        assert grid['dates'] == previous['dates'][:13]
         for q in ['median', 'lower_80', 'upper_80']:
-            np.testing.assert_allclose(current['backlog_62'][q], previous['backlog_62'][q], atol=.000501, rtol=0)
+            np.testing.assert_allclose(current['absolute_simulator']['backlog_62'][q],
+                                       previous['backlog_62'][q][:13], atol=1e-9, rtol=0)
+    # The main decision view ends at 12 weeks and cannot accidentally expose
+    # the old absolute day-182 endpoint as its headline result.
+    assert grid['horizon_days'] == 84
+    assert grid['dates'][-1] == '2027-01-10'
+    assert scenarios['none']['plans']['diagnosis'][0]['final_backlog']['median'] != original['scenario_comparison'][0]['final_backlog']['median']
 
 
 def test_complete_grid_uses_same_start_and_contains_no_uncomputed_controls() -> None:
     manifest = check()
-    assert manifest['ready_trusts'] == 124
-    assert manifest['unavailable_trusts'] == 6
+    assert manifest['ready_trusts'] == 109
+    assert manifest['unavailable_trusts'] == 21
     assert not manifest['partial']
     for code in manifest['files']:
         grid = json.loads((TARGET_DIR / f'{code}.json').read_text())

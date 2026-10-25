@@ -11,5 +11,7 @@ import './landing.css';
 import './map-selection.css';
 import './hospital-forecast.css';
 import './journey.css';
+import './plan-focus.css';
+import './story-type.css';
 
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

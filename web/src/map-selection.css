@@ -22,6 +22,12 @@
 .map-selection-key-items>span{display:flex;align-items:center;gap:8px;white-space:nowrap}
 .map-selection-key-items b{font-family:Arial,sans-serif;display:inline-block;min-width:15px;font-size:19px;font-weight:400;line-height:1}
 .map-selection .atlas-cluster-list{max-height:320px}
+.map-selection.is-flying .atlas-selection-ring{stroke-width:2;filter:drop-shadow(0 0 7px #67E8F980)}
+.map-selection.is-flying .atlas-selection-halo{opacity:1;animation:none}
+.map-selection .map-selection-flight-label{animation:map-selection-label-in .22s ease-out both}
+.map-selection-flight-label rect{fill:#101C2CF2;stroke:#67E8F94D;stroke-width:1}
+.map-selection-flight-label text{fill:#EAF5FC;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:500}
+@keyframes map-selection-label-in{from{opacity:0}to{opacity:1}}
 @media(max-width:1100px){.map-selection .map-selection-content{width:300px;left:28px}.map-selection-heading h2{font-size:32px}.map-selection-key{left:28px;width:300px}.map-selection .atlas-map{width:125%;left:-15%}}
 @media(max-width:760px){.map-selection{height:940px;min-height:940px}.map-selection .map-selection-content{left:24px;right:24px;top:38px;width:auto;max-width:370px;gap:20px}.map-selection-heading h2{font-size:30px}.map-selection-heading p{font-size:15px;margin-top:10px}.map-selection .atlas-map{width:230%;left:-133%;top:200px;height:670px}.map-selection .atlas-map-controls{top:270px;right:20px}.map-selection .atlas-left-shade{display:block;background:linear-gradient(180deg,#080F1B 2%,#080F1B99 24%,transparent 42%)}.map-selection-key{left:24px;bottom:26px;width:330px;max-width:calc(100% - 48px)}.map-selection-key-heading{margin-bottom:12px}.map-selection-key-items{font-size:12px}.map-selection .atlas-cluster-list{left:24px!important;right:24px!important;top:380px!important;width:auto;max-height:285px}}
-@media(prefers-reduced-motion:reduce){.map-selection .atlas-marker,.map-selection .atlas-selection-halo{animation:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.map-selection .atlas-marker,.map-selection .atlas-selection-halo,.map-selection .map-selection-flight-label{animation:none;opacity:1}}

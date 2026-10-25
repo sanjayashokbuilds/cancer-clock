@@ -38,6 +38,12 @@ export function zoomCamera(camera:MapCamera,change:number):MapCamera {
   const ratio=nextZoom/camera.zoom;
   return constrainCamera({zoom:nextZoom,x:camera.x*ratio,y:camera.y*ratio});
 }
+/** Bring a hospital toward the visible map centre without leaving Britain. */
+export function cameraForLocation(coordinates:number[],camera:MapCamera):MapCamera {
+  const zoom=Math.min(MAX_MAP_ZOOM,Math.max(2.2,camera.zoom+.25));
+  const [x,y]=project(coordinates,{zoom,x:0,y:0});
+  return constrainCamera({zoom,x:965-x,y:340-y});
+}
 export function project(coordinates:number[],camera:MapCamera={zoom:1,x:0,y:0}):number[] {const[x,y]=mercator(coordinates);return [965+(x-centre[0])*3450*camera.zoom+camera.x,320+(y-centre[1])*3450*camera.zoom+camera.y];}
 export function geometryPath(geometry:Json,camera:MapCamera):string {
   const line=(points:number[][])=>points.map((p,i)=>{const[x,y]=project(p,camera);return `${i?'L':'M'}${x.toFixed(1)},${y.toFixed(1)}`;}).join('');

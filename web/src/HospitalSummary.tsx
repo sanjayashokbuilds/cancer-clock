@@ -25,7 +25,7 @@ export default function HospitalSummary({selected, current, trustError, horizon,
   const drivers = [diagnosis && {stage:'Diagnosis', name:driverName(diagnosis)}, treatment && {stage:'Treatment', name:driverName(treatment)}].filter(Boolean) as {stage:string;name:string}[];
   const stages = [{name:'Referral', active:false}, {name:'Diagnosis', active:!!diagnosis}, {name:'Treatment', active:!!treatment}];
   const motionKey = `${selected.org_code}-${horizon}`;
-  const planningNeedsReview = current?.decision?.planning_consistency?.requires_review || (current?.decision && current.decision.status !== 'ready');
+  const planningNeedsReview = current?.decision && (current.decision.status !== 'ready' || current.decision.planning_grid?.status !== 'ready');
   const forecastDate = prediction?.target_date ? day(prediction.target_date) : 'Date unavailable';
 
   return <article className={`hospital-summary ${drivers.length > 1 ? 'has-two-drivers' : ''}`} aria-labelledby="selected-hospital-name" style={{'--outlook-color':horizon ? status.color : '#67E8F9'} as CSSProperties}>

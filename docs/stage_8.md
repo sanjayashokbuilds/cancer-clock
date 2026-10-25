@@ -2,6 +2,8 @@
 
 This records the original Stage 8 release. For the redesigned interface and
 recording status, see [the guided demo handoff](ui_redesign.md).
+The six-month decision contract below is archived evidence: current recovery
+plans and `/api/simulate` use the [paired 12-week method](recovery_plan_method.md).
 
 Built the FastAPI API and React/TypeScript decision dashboard. Stage 6 allocator
 and Stage 11 voice are skipped. The project runs locally from one Python server;

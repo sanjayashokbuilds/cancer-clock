@@ -27,9 +27,10 @@ are not needed to run the app.
 The opening page introduces the 62-day target using the supplied landing-page
 design and an illustrative animated clock. The England count and date come from
 the published snapshot. **Take me to Cancer Clock** scrolls to a quieter map.
-Choose a hospital by search or marker to scroll to its separate outlook; the map
-is no longer behind the figures. Switch between 4, 8 and 12 weeks there, then
-open a recovery plan. Details and Evidence hold the longer analysis.
+Choose a hospital by search or marker: the map zooms to it, then scrolls to a
+separate outlook led by its waiting-list chart and forecast. Switch between 4,
+8 and 12 weeks there, then open a recovery plan. Details and Evidence hold the
+longer analysis. The dark landing animation replays when you return to it.
 
 Individual map markers show the 8-week direction: **Estimated rise** (coral),
 **Unchanged** (yellow), **Estimated fall** (mint), or **No forecast** (slate).
@@ -38,18 +39,30 @@ severity, confidence or individual risk. Nearby trusts use numbered groups with 
 
 The recovery screen compares no extra capacity with the selected addition under
 the same disruptions. Exact cached additions are 0, 1, 2, 3, 4, 5, 10, 15 and 20%.
-All three disruption switches can be combined. Extra capacity starts in week four.
+Disruptions start switched off and can be added under “Add disruptions”.
+All three switches can be combined. Extra capacity starts in week four.
 The whole treatment stage changes even where radiotherapy or surgery names the
 observed pressure; this is not a measured modality-specific staffing effect.
 
-The six-month ranges include arrival/service variation and fitted-capacity
-uncertainty. They are sensitivity ranges, not validated prediction intervals.
-Age mix, queue split, conversion and service order remain assumptions. A separate
-quality screen flags disagreements between the simulator's unchanged-capacity
-path and the statistical forecast at the same 12-week date. Flagged hospitals
-need review before absolute recovery totals are presented as a decision headline.
-Their planning screen explains the aligned comparison and offers an explicitly
-labelled Oxford example, without substituting its results for another hospital.
+Recovery plans now cover **12 weeks from the forecast issue date**. The statistical
+forecast supplies the waiting-list level; paired queue simulations supply the
+change from selected pressures and extra capacity. Without changes, the planning
+path matches the forecast's 4/8/12-week points exactly. Weekly values interpolate
+between the latest report and those points.
+
+The plan range varies the simulated change around the fixed central forecast;
+it excludes forecast-level uncertainty and is not a validated prediction interval.
+Age mix, queue split, conversion and service order remain assumptions. Plans are
+withheld for missing simulation inputs, poor fit or weak capacity identification;
+a missing forecast also prevents anchoring. Absolute model disagreement is no
+longer a gate. Original six-month simulator levels remain in How this works.
+See [the method and availability review](docs/recovery_plan_method.md).
+
+Current plans: **109/130**, up from 66. Twenty trusts fail simulator input/fit/
+identification checks; RWF separately has no forecast. Oxford, strike +10%
+treatment at 12 weeks: **176.31 → 148.38**, conditional plan range **147.86–148.99**.
+Near 0–5%, the paired benefit is **2.82 people per extra 1%** of treatment capacity.
+The optional forecast-weighted capacity refit was not performed.
 
 See [recording guide and outstanding review](docs/ui_redesign.md),
 [uncertainty method](docs/uncertainty.md) and [interface sources](docs/ui_sources.md).
@@ -97,6 +110,9 @@ For frontend changes only: `cd web`, `npm ci`, `npm run build`. The API serves
 `web/dist`; source and built assets are both included in the ZIP. Packages exclude
 caches at every depth, local environments, raw downloads and secrets. The project
 now exceeds one browser upload batch; use your terminal Git workflow.
+
+For hosting the bundled app, install `requirements-web.txt`; full training
+dependencies are unnecessary. [Deployment settings](docs/deploy.md).
 
 Code MIT; NHS data OGL v3.0. Source URLs/hashes are bundled. HRT remains the primary
 track; Gemini, Tiger Data and Vultr are later integrations.

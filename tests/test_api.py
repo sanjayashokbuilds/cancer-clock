@@ -1,5 +1,8 @@
 """Snapshot API contracts, publication bounds and exact precomputed experiments."""
 import json
+from datetime import date, timedelta
+
+import numpy as np
 
 from fastapi.testclient import TestClient
 import pytest
@@ -39,8 +42,48 @@ def decision_file(tmp_path_factory):
 
 
 @pytest.fixture(scope='module')
-def snapshot(decision_file):
-    return Snapshot(decision_file)
+def planning_dir(decision_file, tmp_path_factory):
+    """An independent 12-week grid; old absolute outputs remain an evidence fixture."""
+    directory = tmp_path_factory.mktemp('plans')
+    sources = {name + '.json': digest(decision_file if name == 'decision_support' else OUTPUTS_DIR / (name + '.json'))
+               for name in ['simulation_calibration', 'bottlenecks', 'decision_support', 'forecasts_latest']}
+    forecasts = json.loads((OUTPUTS_DIR / 'forecasts_latest.json').read_text())
+    forecast = next(t for t in forecasts['trusts'] if t['org_code'] == 'RTH')
+    points = forecast['forecasts']; offsets = list(range(0, 85, 7))
+    anchors = [p['point_forecast'] for p in points]
+    central = np.interp(offsets, [0, 28, 56, 84], [anchors[0], *anchors]).tolist()
+    dates = [(date(2026, 10, 18) + timedelta(days=d)).isoformat() for d in offsets]
+    files = {}
+    for code in load_core_trusts().org_code:
+        item = dict(schema_version=2, org_code=code, issue_date='2026-10-18', input_sha256=sources,
+                    status='unavailable', reason='Fixture without fit',
+                    eligibility=dict(eligible=False, reason_codes=['simulator_unavailable']))
+        if code == 'RTH':
+            scenarios = []
+            for mask in range(8):
+                flags = {key: bool(mask & (1 << i)) for i, key in enumerate(['strike', 'winter', 'surge'])}
+                key = '_'.join(k for k, enabled in flags.items() if enabled) or 'none'
+                plans = []
+                for dose in CAPACITY_GRID:
+                    values = [max(0, value + (5 * mask - dose * 2) * offset / 84) for value, offset in zip(central, offsets)]
+                    q = dict(median=values, lower_80=values, upper_80=values)
+                    plans.append(dict(extra_capacity_pct=dose, backlog_62=q,
+                                      final_backlog={name: rows[-1] for name, rows in q.items()}))
+                scenarios.append(dict(key=key, flags=flags, plans=dict(diagnosis=plans, treatment=plans)))
+            item.update(status='ready', horizon_days=84, day_offsets=offsets, dates=dates,
+                        capacity_percent=list(CAPACITY_GRID), scenarios=scenarios,
+                        eligibility=dict(eligible=True, reason_codes=[]), assumptions={'scope':'Test fixture'},
+                        forecast_path=dict(dates=dates, day_offsets=offsets,
+                            backlog_62=dict(median=central, lower_80=central, upper_80=central)))
+        path = directory / (code + '.json'); path.write_text(json.dumps(item)); files[code] = digest(path)
+    (directory / 'manifest.json').write_text(json.dumps(dict(schema_version=2, partial=False,
+        issue_date='2026-10-18', horizon_days=84, capacity_percent=list(CAPACITY_GRID), input_sha256=sources, files=files)))
+    return directory
+
+
+@pytest.fixture(scope='module')
+def snapshot(decision_file, planning_dir):
+    return Snapshot(decision_file, planning_dir)
 
 
 @pytest.fixture(scope='module')
@@ -101,25 +144,43 @@ def test_decision_unavailable_is_explicit_and_retired_codes_fail(client):
         assert client.post('/api/simulate',json={'org_code':code}).status_code==404
 
 
-def test_cached_plans_and_dose_points_do_not_fabricate_trajectories(client, snapshot):
-    body=dict(org_code='RTH',scenario='strike',stage='treatment',extra_capacity_pct=10)
-    a=client.post('/api/simulate',json=body)
-    assert a.status_code==200 and a.json()['result_kind']=='trajectory'
-    before=snapshot.select_experiment.cache_info().hits
-    assert client.post('/api/simulate',json=body).json()==a.json()
-    assert snapshot.select_experiment.cache_info().hits==before+1
-    endpoint=client.post('/api/simulate',json={**body,'extra_capacity_pct':5}).json()
-    assert endpoint['result_kind']=='six_month_dose_point'
-    assert 'dates' not in endpoint['result'] and endpoint['assumptions']
-    assert endpoint['result']['median']==145
-    zero=client.post('/api/simulate',json={**body,'extra_capacity_pct':0}).json()
-    assert zero['stage']=='none' and zero['result']['key']=='strike'
+def test_cached_plans_are_twelve_week_paired_effect_trajectories(client, snapshot):
+    body = dict(org_code='RTH', scenario='strike', stage='treatment', extra_capacity_pct=10)
+    response = client.post('/api/simulate', json=body)
+    assert response.status_code == 200
+    data = response.json()
+    assert data['result_kind'] == 'trajectory' and data['horizon_days'] == 84
+    assert data['result']['dates'][-1] == '2027-01-10'
+    assert data['result']['day_offsets'] == list(range(0, 85, 7))
+    before = snapshot.select_experiment.cache_info().hits
+    assert client.post('/api/simulate', json=body).json() == data
+    assert snapshot.select_experiment.cache_info().hits == before + 1
+    smaller = client.post('/api/simulate', json={**body, 'extra_capacity_pct':5}).json()
+    assert smaller['result_kind'] == 'trajectory' and smaller['assumptions']
+    assert len(smaller['result']['dates']) == 13
+    zero = client.post('/api/simulate', json={**body, 'extra_capacity_pct':0}).json()
+    assert zero['stage'] == 'none' and zero['scenario_key'] == 'strike'
+    assert data['result']['final_backlog']['median'] < zero['result']['final_backlog']['median']
+    for scenario in ['baseline', 'winter_dip', 'referral_surge', 'strike_winter',
+                     'strike_surge', 'winter_surge', 'strike_winter_surge']:
+        assert client.post('/api/simulate', json={**body, 'scenario':scenario}).status_code == 200
+
+
+def test_old_absolute_results_are_evidence_only_and_cannot_supply_a_missing_grid(decision_file):
+    isolated = Snapshot(decision_file)
+    record = isolated.decision('RTH')
+    assert record['status'] == 'unavailable'
+    assert record['eligibility']['reason_codes'] == ['planning_grid_missing']
+    assert record['absolute_simulator_evidence']['status'] == 'ready'
+    assert 'dose_response' not in record and 'scenario_comparison' not in record
+    with pytest.raises(ValueError, match='has not been built'):
+        isolated.select_experiment('RTH', 'strike', 'treatment', 10)
 
 
 @pytest.mark.parametrize('change',[{'extra_capacity_pct':7},{'extra_capacity_pct':True},
     {'extra_capacity_pct':21},{'extra_capacity_pct':-1},{'extra_capacity_pct':'5'},
-    {'stage':'none','extra_capacity_pct':5},{'scenario':'winter_dip','extra_capacity_pct':5},
-    {'scenario':'referral_surge','extra_capacity_pct':5},{'horizon_days':365},
+    {'stage':'none','extra_capacity_pct':5},{'stage':'radiotherapy'},
+    {'horizon_days':365},
     {'scenario':'unknown'},{'org_code':'RTH/../../x'}])
 def test_simulation_rejects_uncached_or_invalid_requests(client, change):
     body=dict(org_code='RTH',scenario='strike',stage='treatment',extra_capacity_pct=5)

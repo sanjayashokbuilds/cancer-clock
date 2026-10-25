@@ -1,0 +1,8 @@
+# Serving the bundled snapshot only; training/rebuild dependencies are in requirements.txt.
+fastapi==0.162.0
+uvicorn==0.54.0
+pydantic==2.14.1
+starlette==1.10.0
+pandas==2.2.3
+numpy==2.3.5
+pyarrow==26.0.0

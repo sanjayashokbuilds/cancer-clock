@@ -25,3 +25,12 @@
 @media(max-width:1000px){.recovery-review{grid-template-columns:minmax(0,1.2fr) minmax(270px,1fr)}.recovery-review-main{padding:28px}.recovery-example{padding:27px}.recovery-review-main h2{font-size:31px}.review-secondary-actions{flex-wrap:wrap}.review-comparison-values{gap:20px}.review-comparison-values strong{font-size:47px}}
 @media(max-width:730px){.recovery-review{grid-template-columns:1fr;margin-top:22px;border-radius:23px}.recovery-review-main{padding:27px}.recovery-example{border-left:0;border-top:1px solid #91afcf24;padding:28px}.recovery-example-clock{display:none}.recovery-example h3 br{display:none}.recovery-example>p:not(.review-example-kicker){max-width:none}.review-example-flow{display:none}.review-example-button{max-width:360px}.recovery-example small{max-width:none}.recovery-review-main h2{max-width:none;font-size:30px}.review-secondary-actions .quiet-link{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.recovery-review,.recovery-example-clock>span{animation:none}.review-example-button{transition:none}.review-example-button:hover{transform:none}}
+
+/* A held plan explains the limitation once and gives one useful next step. */
+.recovery-hold{max-width:790px;margin:54px auto 0;padding:46px 50px 42px;border:1px solid #A8B5C726;border-radius:24px;background:#101A2B;animation:review-reveal .5s ease-out}
+.recovery-hold-icon{width:54px;height:54px;display:flex;align-items:center;justify-content:center;border:1px solid #67E8F92b;border-radius:50%;color:#67E8F9;margin-bottom:24px}
+.recovery-hold h2{font-family:var(--story-display,'Bricolage Grotesque',sans-serif);font-size:42px;font-weight:500;line-height:1.15;letter-spacing:-1.25px;max-width:23ch;margin:0 0 22px;color:#F4F7FC}
+.recovery-hold p{font-size:18px;line-height:1.7;max-width:60ch;color:#A8B5C7;margin:0}
+.recovery-hold .primary-button{margin-top:30px;min-width:235px;padding:15px 20px;justify-content:space-between;gap:27px}
+@media(max-width:730px){.recovery-hold{padding:29px 25px;margin-top:25px}.recovery-hold h2{font-size:33px}.recovery-hold p{font-size:16px}.recovery-hold .primary-button{width:100%;min-width:0}}
+@media(prefers-reduced-motion:reduce){.recovery-hold{animation:none}}

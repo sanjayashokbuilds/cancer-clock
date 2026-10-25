@@ -9,7 +9,8 @@ CAPACITY_GRID = (0, 1, 2, 3, 4, 5, 10, 15, 20)
 class SimulationRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     org_code: str = Field(pattern=r'^[A-Z0-9]{3}$')
-    scenario: Literal['baseline', 'strike', 'winter_dip', 'referral_surge'] = 'strike'
+    scenario: Literal['baseline', 'none', 'strike', 'winter_dip', 'winter', 'referral_surge',
+                      'surge', 'strike_winter', 'strike_surge', 'winter_surge', 'strike_winter_surge'] = 'baseline'
     stage: Literal['none', 'diagnosis', 'treatment'] = 'none'
     extra_capacity_pct: int = Field(default=0, ge=0, le=20)
 
@@ -24,6 +25,4 @@ class SimulationRequest(BaseModel):
     def supported_combination(self):
         if self.stage == 'none' and self.extra_capacity_pct:
             raise ValueError('Choose diagnosis or treatment when adding capacity')
-        if self.scenario != 'strike' and self.extra_capacity_pct:
-            raise ValueError('Added-capacity curves are precomputed for the five-day strike only')
         return self

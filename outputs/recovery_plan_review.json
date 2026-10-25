@@ -1,0 +1,380 @@
+{
+  "issue_date": "2026-10-18",
+  "horizon_days": 84,
+  "comparison_date": "2027-01-10",
+  "before": {
+    "available": 66,
+    "absolute_level_mismatch": 57,
+    "simulator_unavailable": 6,
+    "forecast_check_unavailable": 1
+  },
+  "after": {
+    "available": 109,
+    "held_back": 21
+  },
+  "released": [
+    "R0D",
+    "R1H",
+    "R1K",
+    "RA7",
+    "RAL",
+    "RAN",
+    "RAX",
+    "RC9",
+    "RCD",
+    "RCF",
+    "RCX",
+    "RD1",
+    "RD8",
+    "RDU",
+    "REM",
+    "RF4",
+    "RFS",
+    "RGP",
+    "RH8",
+    "RHM",
+    "RHU",
+    "RJC",
+    "RJR",
+    "RJZ",
+    "RK5",
+    "RKB",
+    "RKE",
+    "RL4",
+    "RM3",
+    "RMC",
+    "RN5",
+    "RNQ",
+    "RNS",
+    "RP5",
+    "RPC",
+    "RPY",
+    "RQ3",
+    "RQW",
+    "RQX",
+    "RRJ",
+    "RTD",
+    "RTR",
+    "RTX",
+    "RVW",
+    "RWA",
+    "RWG",
+    "RWP",
+    "RWY",
+    "RX1",
+    "RXF",
+    "RXK",
+    "RXP",
+    "RYR"
+  ],
+  "newly_held": [
+    "R1F",
+    "RA9",
+    "REP",
+    "RGR",
+    "RHW",
+    "RJ6",
+    "RL1",
+    "RLT",
+    "RP6",
+    "RWD"
+  ],
+  "held_back": [
+    {
+      "org_code": "R1F",
+      "name": "ISLE OF WIGHT NHS TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RA9",
+      "name": "TORBAY AND SOUTH DEVON NHS FOUNDATION TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RBD",
+      "name": "DORSET COUNTY HOSPITAL NHS FOUNDATION TRUST",
+      "before": "simulator_unavailable",
+      "after": "held_back",
+      "reason_codes": [
+        "simulation_inputs_unavailable"
+      ],
+      "reasons": [
+        "Missing monthly arrival proxy during calibration window"
+      ]
+    },
+    {
+      "org_code": "RBV",
+      "name": "THE CHRISTIE NHS FOUNDATION TRUST",
+      "before": "simulator_unavailable",
+      "after": "held_back",
+      "reason_codes": [
+        "simulation_inputs_unavailable"
+      ],
+      "reasons": [
+        "Completed-pathway conversion proxy outside [0,1] or nonpositive arrival proxy"
+      ]
+    },
+    {
+      "org_code": "REN",
+      "name": "THE CLATTERBRIDGE CANCER CENTRE NHS FOUNDATION TRUST",
+      "before": "simulator_unavailable",
+      "after": "held_back",
+      "reason_codes": [
+        "simulation_inputs_unavailable"
+      ],
+      "reasons": [
+        "Completed-pathway conversion proxy outside [0,1] or nonpositive arrival proxy"
+      ]
+    },
+    {
+      "org_code": "REP",
+      "name": "LIVERPOOL WOMEN'S NHS FOUNDATION TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RET",
+      "name": "THE WALTON CENTRE NHS FOUNDATION TRUST",
+      "before": "simulator_unavailable",
+      "after": "held_back",
+      "reason_codes": [
+        "simulation_inputs_unavailable"
+      ],
+      "reasons": [
+        "Fewer than two comparable months for the conversion proxy"
+      ]
+    },
+    {
+      "org_code": "RGM",
+      "name": "ROYAL PAPWORTH HOSPITAL NHS FOUNDATION TRUST",
+      "before": "simulator_unavailable",
+      "after": "held_back",
+      "reason_codes": [
+        "simulation_inputs_unavailable"
+      ],
+      "reasons": [
+        "Missing first-attendance or cancer treatment flow proxy"
+      ]
+    },
+    {
+      "org_code": "RGR",
+      "name": "WEST SUFFOLK NHS FOUNDATION TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "history_fit_failure"
+      ],
+      "reasons": [
+        "Queue model history fit exceeds the declared normalised RMSE threshold of 0.30"
+      ]
+    },
+    {
+      "org_code": "RHW",
+      "name": "ROYAL BERKSHIRE NHS FOUNDATION TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RJ1",
+      "name": "GUY'S AND ST THOMAS' NHS FOUNDATION TRUST",
+      "before": "absolute_level_mismatch",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RJ2",
+      "name": "LEWISHAM AND GREENWICH NHS TRUST",
+      "before": "simulator_unavailable",
+      "after": "held_back",
+      "reason_codes": [
+        "simulation_inputs_unavailable"
+      ],
+      "reasons": [
+        "Missing monthly arrival proxy during calibration window"
+      ]
+    },
+    {
+      "org_code": "RJ6",
+      "name": "CROYDON HEALTH SERVICES NHS TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "history_fit_failure",
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Queue model history fit exceeds the declared normalised RMSE threshold of 0.30",
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RJN",
+      "name": "EAST CHESHIRE NHS TRUST",
+      "before": "absolute_level_mismatch",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RL1",
+      "name": "THE ROBERT JONES AND AGNES HUNT ORTHOPAEDIC HOSPITAL NHS FOUNDATION TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RLT",
+      "name": "GEORGE ELIOT HOSPITAL NHS TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RN3",
+      "name": "GREAT WESTERN HOSPITALS NHS FOUNDATION TRUST",
+      "before": "absolute_level_mismatch",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RP6",
+      "name": "MOORFIELDS EYE HOSPITAL NHS FOUNDATION TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RVR",
+      "name": "EPSOM AND ST HELIER UNIVERSITY HOSPITALS NHS TRUST",
+      "before": "absolute_level_mismatch",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RWD",
+      "name": "UNITED LINCOLNSHIRE TEACHING HOSPITALS NHS TRUST",
+      "before": "available",
+      "after": "held_back",
+      "reason_codes": [
+        "weakly_identified"
+      ],
+      "reasons": [
+        "Published history does not identify both diagnosis and treatment capacity effects closely enough"
+      ]
+    },
+    {
+      "org_code": "RWF",
+      "name": "MAIDSTONE AND TUNBRIDGE WELLS NHS TRUST",
+      "before": "forecast_check_unavailable",
+      "after": "held_back",
+      "reason_codes": [
+        "forecast_unavailable"
+      ],
+      "reasons": [
+        "A complete matching 4-, 8- and 12-week forecast is unavailable"
+      ]
+    }
+  ],
+  "original_absolute_model_within_forecast_80": {
+    "inside": 66,
+    "comparable": 123,
+    "interpretation": "Unchanged original models; this diagnostic no longer gates plans."
+  },
+  "optional_forecast_weighted_recalibration_performed": false,
+  "oxford_strike_treatment_10": {
+    "org_code": "RTH",
+    "date": "2027-01-10",
+    "forecast_level": 174.77729633284451,
+    "no_extra_capacity": {
+      "lower_80": 176.27204235016617,
+      "median": 176.31454734364848,
+      "upper_80": 176.36533913532926
+    },
+    "plan": {
+      "lower_80": 147.85946569269154,
+      "median": 148.3835757898318,
+      "upper_80": 148.99238434321603
+    },
+    "paired_capacity_change": {
+      "lower_80": -28.483697675953607,
+      "median": -27.948354829149963,
+      "upper_80": -27.300689390967747
+    },
+    "paired_total_change": {
+      "lower_80": -26.91783064015297,
+      "median": -26.39372054301272,
+      "upper_80": -25.784911989628483
+    },
+    "marginal_benefit_0_to_5_percent": {
+      "lower_80": 2.762847385610888,
+      "median": 2.824618521330848,
+      "upper_80": 2.8763605551064044
+    }
+  },
+  "uncertainty": "Plan ranges vary paired simulation changes around fixed central forecasts; forecast-level uncertainty is excluded.",
+  "source_sha256": {
+    "forecasts_latest.json": "9a321c3458b79bb779cbc0898e131635abb066b909a020ed6b9446ad18147a39",
+    "decision_support.json": "0422c53c2b6c4d2d907403b9d2df2132bf75c145d0ddc416834809d312b826a0",
+    "planning_grid/manifest.json": "1bd1026591a65c554b102929998c55275f1f51bad4754b5d2254b3b9627da6c6"
+  }
+}

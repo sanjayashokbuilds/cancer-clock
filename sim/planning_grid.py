@@ -1,8 +1,4 @@
-"""Exact precomputed shock/capacity combinations for the presentation controls.
-
-This is an export of the existing queue model, capacity ensemble and random
-streams. It does not refit or adjust forecasts, calibration or decision outputs.
-"""
+"""Precompute forecast-anchored 12-week paired queue-model intervention effects."""
 from __future__ import annotations
 
 import argparse
@@ -19,15 +15,17 @@ from scipy.stats import poisson
 from config import OUTPUTS_DIR
 from models.features import load_sources
 from sim.calibrate import prepare
-from sim.decisions import DOSES, HORIZON, RUNS, SEED, simulate_fast, validate_calibration_inputs
+from sim.decisions import DOSES, HORIZON as LEGACY_RANDOM_HORIZON, RUNS, SEED, simulate_fast, validate_calibration_inputs
+from sim.forecast_plan import HORIZON_DAYS, eligibility, forecast_path, paired_plan
 from sim.scenarios import Scenario, summary
 from sim.simulator import initial_state
 from sim.uncertainty import capacity_draws
 
 TARGET_DIR = OUTPUTS_DIR / 'planning_grid'
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
+HORIZON = HORIZON_DAYS
 PARAMETER_KEYS = ['strike', 'winter', 'surge']
-SOURCE_FILES = ['simulation_calibration.json', 'bottlenecks.json', 'decision_support.json']
+SOURCE_FILES = ['simulation_calibration.json', 'bottlenecks.json', 'decision_support.json', 'forecasts_latest.json']
 
 
 def source_hashes() -> dict[str, str]:
@@ -51,14 +49,27 @@ def scenario_for(flags: dict[str, bool], stage: str = 'diagnosis', dose: int = 0
                     **{f'extra_{stage}_capacity': dose / 100})
 
 
-def build_trust(payload: tuple[dict, dict, dict[str, str]]) -> dict:
-    record, prepared, hashes = payload
+def build_trust(payload: tuple) -> dict:
+    record, prepared, hashes = payload[:3]
+    forecast = payload[3] if len(payload) > 3 else {}
+    previous_uncertainty = payload[4] if len(payload) > 4 else None
     common = dict(schema_version=SCHEMA_VERSION, org_code=record['org_code'],
                   issue_date=str(record.get('issue_date', prepared.get('issue_date', '')))[:10], input_sha256=hashes)
-    if record['status'] != 'calibrated' or prepared['status'] != 'ready':
-        return dict(**common, status='unavailable', reason=record.get('reason', prepared.get('reason', 'Missing calibration')))
+    # Simulation-input failures are meaningful without requiring a forecast.
+    gate = eligibility(record, prepared, previous_uncertainty)
+    if not gate['eligible']:
+        return dict(**common, status='unavailable', reason='; '.join(gate['reasons']), eligibility=gate)
+    try:
+        reference = forecast_path(forecast, common['issue_date'])
+    except ValueError as exc:
+        gate = eligibility(record, prepared, previous_uncertainty, str(exc))
+        return dict(**common, status='unavailable', reason='; '.join(gate['reasons']), eligibility=gate)
 
     ratios, uncertainty = capacity_draws(record, prepared, runs=RUNS, seed=SEED + 113)
+    gate = eligibility(record, prepared, uncertainty)
+    if not gate['eligible']:
+        return dict(**common, status='unavailable', reason='; '.join(gate['reasons']),
+                    eligibility=gate, parameter_uncertainty=uncertainty)
     rate = record['arrivals_per_day']; conversion = record['conversion_proxy']
     dc = rate * ratios[:, 0, None]; tc = rate * conversion * ratios[:, 1, None]
     initial = initial_state(rate, conversion, float(prepared['observed'][0]), record['prior']['diagnosis_share'])
@@ -69,23 +80,24 @@ def build_trust(payload: tuple[dict, dict, dict[str, str]]) -> dict:
     bridge_arrivals = rng.poisson(rate, (RUNS, bridge_days))
     bridge_noise = rng.lognormal(-.5 * .05 ** 2, .05, (2, RUNS, bridge_days))
     _, start = simulate_fast(fitted_end, bridge_arrivals, dc * bridge_noise[0], tc * bridge_noise[1], conversion)
-    u = rng.uniform(1e-10, 1 - 1e-10, (RUNS, HORIZON))
-    noise = rng.lognormal(-.5 * .05 ** 2, .05, (2, RUNS, HORIZON))
+    # Retain the previous stream layout, so the 12-week absolute paths can be
+    # checked against the archived six-month simulation without changing noise.
+    u = rng.uniform(1e-10, 1 - 1e-10, (RUNS, LEGACY_RANDOM_HORIZON))[:, :HORIZON]
+    noise = rng.lognormal(-.5 * .05 ** 2, .05, (2, RUNS, LEGACY_RANDOM_HORIZON))[:, :, :HORIZON]
     base_arrivals = poisson.ppf(u, rate)
     surge_arrivals = poisson.ppf(u, rate * Scenario(surge_days=28).multipliers(HORIZON)[0])
 
-    # Every intervention starts at day28. Reuse the identical prefix exactly;
-    # no interpolation or approximation is introduced by this split replay.
     split = Scenario().intervention_start_day
     prefix, prefix_end = simulate_fast(start, base_arrivals[:, :split],
         dc * noise[0, :, :split], tc * noise[1, :, :split], conversion)
-    sample = np.unique(np.r_[np.arange(0, HORIZON + 1, 7), HORIZON])
-    dates = [str((pd.Timestamp(record['issue_date']) + pd.Timedelta(days=int(day))).date()) for day in sample]
-    scenarios = []
+    sample = np.arange(0, HORIZON + 1, 7)
+    dates = reference['dates']
+    central = np.asarray(reference['backlog_62']['median'])
+    scenarios = []; no_change = None
     for key, flags in combinations():
         arrivals = surge_arrivals if flags['surge'] else base_arrivals
         plans = {'diagnosis': [], 'treatment': []}
-        marginal = {}; zero_final = None; zero_plan = None
+        marginal = {}; zero_draws = None; zero_display = None; zero_plan = None
         for stage in plans:
             for dose in DOSES:
                 if dose == 0 and zero_plan is not None:
@@ -96,37 +108,48 @@ def build_trust(payload: tuple[dict, dict, dict[str, str]]) -> dict:
                 tail, _ = simulate_fast(prefix_end, arrivals[:, split:],
                     dc * noise[0, :, split:] * df[split:],
                     tc * noise[1, :, split:] * tf[split:], conversion)
-                backlog = np.concatenate((prefix['backlog_62'][:, :split], tail['backlog_62']), axis=1)
-                final = backlog[:, -1]
-                plan = dict(extra_capacity_pct=dose, backlog_62=summary(backlog[:, sample]), final_backlog=summary(final))
+                backlog = np.concatenate((prefix['backlog_62'][:, :split], tail['backlog_62']), axis=1)[:, sample]
+                if dose == 0:
+                    zero_draws = backlog
+                    if key == 'none':
+                        no_change = backlog
+                translated, displayed = paired_plan(central, backlog, zero_draws, no_change)
+                plan = dict(extra_capacity_pct=dose, **translated)
                 plans[stage].append(plan)
                 if dose == 0:
-                    zero_final = final
+                    zero_display = displayed
                     zero_plan = plan
                 if dose == 5:
-                    marginal[stage] = summary((zero_final - final) / 5)
-        marginal['unit'] = 'fewer people per extra percentage point of capacity, averaged from 0 to 5%'
-        scenarios.append(dict(key=key, flags=flags, plans=plans, marginal_benefit=marginal))
-    return dict(**common, status='ready', runs=RUNS, horizon_days=HORIZON,
-        capacity_percent=DOSES, dates=dates, day_offsets=sample.tolist(),
+                    # This is the paired effect on the displayed 12-week count,
+                    # including the same non-negativity floor as the decision UI.
+                    marginal[stage] = summary((zero_display[:, -1] - displayed[:, -1]) / 5)
+        marginal['unit'] = 'fewer people at 12 weeks per extra percentage point of capacity, averaged from 0 to 5%'
+        pressure = zero_draws - no_change
+        scenarios.append(dict(key=key, flags=flags, plans=plans, marginal_benefit=marginal,
+            pressure_delta=summary(pressure), final_pressure_delta=summary(pressure[:, -1])))
+    return dict(**common, status='ready', eligibility=gate, runs=RUNS, horizon_days=HORIZON,
+        capacity_percent=DOSES, dates=dates, day_offsets=sample.tolist(), forecast_path=reference,
         scenarios=scenarios, prior_conflict=record.get('prior_direction_conflict', False),
-        acceptable_fit=record.get('acceptable_fit', False),
-        parameter_uncertainty=uncertainty,
-        interpretation='Conditional comparisons from the existing daily queue model. Not validated forecasts or causal capacity effects.',
-        assumptions=dict(intervention_start_day=28, extra_capacity_duration='continues to day182',
+        acceptable_fit=record.get('acceptable_fit', False), parameter_uncertainty=uncertainty,
+        interpretation='The forecast supplies the waiting-list level; paired queue-model differences supply the effect of a change. Conditional planning sensitivity, not a validated causal effect.',
+        assumptions=dict(intervention_start_day=28, extra_capacity_duration='continues to day84',
             strike_days=5, strike_factor=.952, winter_days=42, winter_capacity_loss=.10,
             surge_days=28, referral_increase=.20,
             combined_shocks='Strike and winter capacity multipliers multiply; referral surge affects arrivals. All begin on day28.',
-            comparison='Do nothing uses the same selected shocks and random draws with no extra capacity.',
-            ranges='10th–90th percentiles of process and calibrated capacity variation; structural assumptions remain fixed.',
-            serialization='Counts rounded to 0.001 people only after full-precision simulation and quantiles.'))
+            comparison='No extra capacity uses the same selected pressures. With no pressure or capacity change, the displayed path equals the statistical forecast.',
+            formula='displayed = max(0, forecast_point + simulator(plan, pressures) - simulator(no capacity, no pressures)); capacity delta = simulator(plan, pressures) - simulator(no capacity, same pressures)',
+            pairing='Capacity parameters, arrival uniforms and service-noise draws are identical across each comparison. Differences are formed per draw before any quantile.',
+            ranges='10th–90th percentiles of the paired change, translated around a fixed central forecast and floored at zero. These conditional sensitivity ranges exclude forecast-level uncertainty and are not combined predictive intervals.',
+            forecast_ranges='Original forecast 80% ranges are retained separately in forecast_path for evidence; no independence or correlation assumption combines them with intervention effects.',
+            absolute_outputs='The original six-month absolute simulation is retained in decision_support.json for Evidence only.',
+            serialization='Full-precision JSON numbers preserve equality with source forecast anchors; paired differences, floor and quantiles are computed before serialization.'))
 
 
 def rounded(value):
     if isinstance(value, float):
         if not np.isfinite(value):
             raise ValueError('Non-finite grid output')
-        return round(value, 3)
+        return value
     if isinstance(value, dict):
         return {key: rounded(item) for key, item in value.items()}
     if isinstance(value, list):
@@ -146,15 +169,23 @@ def validate_record(record: dict, hashes: dict[str, str] | None = None) -> None:
     if hashes is not None and record['input_sha256'] != hashes:
         raise ValueError('Planning grid sources differ; rebuild it')
     if record['status'] == 'unavailable':
-        if not record.get('reason'):
+        if not record.get('reason') or record.get('eligibility', {}).get('eligible', True):
             raise ValueError('Unavailable planning grid needs a reason')
         return
+    if not record.get('eligibility', {}).get('eligible'):
+        raise ValueError('Ready planning grid fails eligibility')
     if record['runs'] != RUNS or record['horizon_days'] != HORIZON or record['capacity_percent'] != DOSES:
         raise ValueError('Planning grid parameters differ')
-    if len(record['dates']) != len(record['day_offsets']) or record['day_offsets'] != list(range(0, 183, 7)):
+    if len(record['dates']) != len(record['day_offsets']) or record['day_offsets'] != list(range(0, HORIZON + 1, 7)):
         raise ValueError('Planning grid calendar differs')
     if [(s['key'], s['flags']) for s in record['scenarios']] != combinations():
         raise ValueError('Planning grid shock combinations differ')
+    if record['forecast_path']['dates'] != record['dates']:
+        raise ValueError('Forecast and planning calendars differ')
+    reference = np.asarray(record['forecast_path']['backlog_62']['median'])
+    unshocked = record['scenarios'][0]['plans']['diagnosis'][0]
+    if not np.array_equal(unshocked['backlog_62']['median'], reference):
+        raise ValueError('No-change planning path differs from forecast')
     for scenario in record['scenarios']:
         for stage in ['diagnosis', 'treatment']:
             plans = scenario['plans'][stage]
@@ -171,6 +202,18 @@ def validate_record(record: dict, hashes: dict[str, str] | None = None) -> None:
                 for quantile in q:
                     if q[quantile][-1] != plan['final_backlog'][quantile]:
                         raise ValueError('Planning grid endpoint differs from trajectory')
+                for effect_name in ['capacity_delta', 'total_delta']:
+                    effect = plan[effect_name]
+                    if any(len(effect[name]) != len(record['dates']) for name in ['median', 'lower_80', 'upper_80']):
+                        raise ValueError('Paired effect trajectory length differs')
+                    lo, mid, hi = [np.asarray(effect[name]) for name in ['lower_80', 'median', 'upper_80']]
+                    if not (np.isfinite(lo).all() and np.isfinite(mid).all() and np.isfinite(hi).all()
+                            and (lo <= mid).all() and (mid <= hi).all()):
+                        raise ValueError('Invalid paired change range')
+                    if any(effect[name][-1] != plan['final_' + effect_name][name] for name in effect):
+                        raise ValueError('Paired effect endpoint differs')
+                if plan['extra_capacity_pct'] == 0 and any(any(v != 0 for v in values) for values in plan['capacity_delta'].values()):
+                    raise ValueError('Zero extra capacity has a nonzero capacity effect')
         if scenario['plans']['diagnosis'][0] != scenario['plans']['treatment'][0]:
             raise ValueError('Zero-capacity baselines are not paired')
 
@@ -208,6 +251,8 @@ def run(codes: list[str] | None = None, workers: int = 4, resume: bool = True) -
     selected = [r for r in calibration['trusts'] if not codes or r['org_code'] in codes]
     if codes and set(codes) - {r['org_code'] for r in selected}:
         raise ValueError('Unknown trust code')
+    forecasts = {r['org_code']: r for r in json.loads((OUTPUTS_DIR / 'forecasts_latest.json').read_text())['trusts']}
+    decisions = {r['org_code']: r for r in json.loads((OUTPUTS_DIR / 'decision_support.json').read_text())['trusts']}
     sources = load_sources(); payloads = []; completed = 0
     for record in selected:
         path = TARGET_DIR / f'{record["org_code"]}.json'
@@ -223,7 +268,8 @@ def run(codes: list[str] | None = None, workers: int = 4, resume: bool = True) -
                 pass
         prepared = prepare(sources, record['org_code'], pd.Timestamp(calibration['issue_date']))
         prepared.setdefault('issue_date', calibration['issue_date'])
-        payloads.append((record, prepared, hashes))
+        payloads.append((record, prepared, hashes, forecasts.get(record['org_code'], {}),
+                         decisions.get(record['org_code'], {}).get('parameter_uncertainty')))
     errors = []
     with ProcessPoolExecutor(max_workers=workers) as pool:
         pending = {pool.submit(build_trust, p): p[0]['org_code'] for p in payloads}

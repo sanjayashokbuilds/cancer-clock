@@ -1,0 +1,24 @@
+/* One voice throughout the introduction, map and planning screens. */
+:root {
+  --story-display: 'LandingBricolage', 'LandingInstrument', sans-serif;
+  --story-text: 'LandingInstrument', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--story-text);
+}
+.clock-journey { font-family: var(--story-text); }
+.journey-header .brand,
+.map-selection-heading h2,
+.evidence-heading h1,
+.drawer-head h2,
+.recovery-review h2,
+.recovery-example h3 { font-family: var(--story-display); }
+.journey-header .brand { font-weight: 600; letter-spacing: -.35px; }
+.journey-header .atlas-nav button { font-size: 16px; font-weight: 500; }
+.map-selection-heading h2 { font-size: 46px; font-weight: 600; letter-spacing: -1.5px; line-height: 1.05; }
+.map-selection-heading p { font-size: 18px; line-height: 1.45; }
+.map-selection .atlas-search-field input { font-family: var(--story-text); font-size: 17px; }
+.map-selection-key-items, .map-selection-key-heading { font-size: 14px; }
+.line-chart text { font-family: var(--story-text); }
+.drawer { font-family: var(--story-text); }
+.drawer h3 { font-family: var(--story-display); font-weight: 600; font-size: 22px; }
+@media(max-width:1000px) { .journey-header .atlas-nav button { font-size: 14px; }.map-selection-heading h2 { font-size: 38px; } }
+@media(max-width:700px) { .journey-header .atlas-nav button { font-size: 12px; }.map-selection-heading h2 { font-size: 36px; }.map-selection-heading p { font-size: 16px; } }

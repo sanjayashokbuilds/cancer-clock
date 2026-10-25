@@ -11,7 +11,7 @@ from pathlib import Path
 import pandas as pd
 
 from config import OUTPUTS_DIR, PROCESSED_DIR, STATIC_DIR
-from pipeline.mergers import load_harmonized
+from pipeline.mergers import harmonize, load_harmonized
 from pipeline.universe import core_locations, load_core_trusts
 
 BANDS = [('within_31_days', '≤31 days'), ('in_32_to_38_days', '32–38 days'),
@@ -53,15 +53,14 @@ def forecast_direction(forecasts: list[dict], latest_backlog: float | None) -> s
 
 
 def planning_consistency(forecast: dict, decision: dict, issue_date: str) -> dict:
-    """Screen the same 12-week date without adjusting either model's output.
+    """Retain the old absolute-level comparison for Evidence only.
 
-    The six-month simulator endpoint is deliberately not compared with a
-    twelve-week forecast. An absent exact baseline sample stays unavailable.
-    This flag is presentation-only and does not calibrate either model.
+    The public recovery level now comes from the statistical forecast. A
+    disagreement with the old absolute queue simulation cannot hold it back.
     """
     target = (date.fromisoformat(issue_date) + timedelta(weeks=12)).isoformat()
     rule = 'central baseline outside forecast80range'
-    interpretation = 'A quality screen, not validation of six-month projections.'
+    interpretation = 'Diagnostic comparison of the old absolute queue model only; it does not gate forecast-anchored plans.'
 
     def valid_quantiles(values: dict | None) -> bool:
         if values is None:
@@ -97,13 +96,13 @@ def planning_consistency(forecast: dict, decision: dict, issue_date: str) -> dic
     common = dict(comparison_date=target, forecast=forecast_q,
                   simulator_baseline=simulator_q, rule=rule, interpretation=interpretation)
     if forecast_q is None or simulator_q is None:
-        return dict(**common, status='unavailable', requires_review=True,
-            message='The recovery model cannot be checked against the forecast at the same 12-week date. Review it before using an absolute waiting-list outcome.')
+        return dict(**common, status='unavailable', requires_review=False,
+            message='The old absolute queue model cannot be compared at this date. Recovery-plan availability is checked separately from its historical fit and identification.')
     if not forecast_q['lower_80'] <= simulator_q['median'] <= forecast_q['upper_80']:
-        return dict(**common, status='conflict', requires_review=True,
-            message='The recovery model and the 12-week forecast disagree. Review the model before using an absolute waiting-list outcome.')
+        return dict(**common, status='conflict', requires_review=False,
+            message='The old absolute queue model is outside the forecast range. Recovery plans use the forecast level and paired queue-model effects, so this level difference no longer excludes the hospital.')
     return dict(**common, status='consistent', requires_review=False,
-        message='No mismatch was flagged at 12 weeks. This does not validate the six-month projections.')
+        message='The old absolute queue-model median is inside the 12-week forecast range. This diagnostic is not a validation of recovery-plan effects.')
 
 
 class Snapshot:
@@ -123,6 +122,7 @@ class Snapshot:
         # Alternate decision fixtures are independent snapshots. They must opt
         # into a planning directory rather than silently loading production data.
         self.planning_paths = {}
+        self.planning_availability = {}
         directory = planning_dir or (OUTPUTS_DIR / 'planning_grid' if decision_file is None else None)
         if directory is not None:
             self.validate_planning_grid(directory)
@@ -179,18 +179,20 @@ class Snapshot:
         if not manifest_path.is_file():
             return
         manifest = read_json(manifest_path)
-        if manifest.get('schema_version') != 1 or manifest.get('partial') is not False:
+        if manifest.get('schema_version') != 2 or manifest.get('partial') is not False:
             raise ValueError('Planning grid is incomplete or uses an unsupported schema')
         if manifest.get('issue_date') != self.issue_date:
             raise ValueError('Planning grid uses a different snapshot issue date')
         expected = {name + '.json': digest(self.paths[name])
-                    for name in ['simulation_calibration', 'bottlenecks', 'decision_support']}
+                    for name in ['simulation_calibration', 'bottlenecks', 'decision_support', 'forecasts_latest']}
         if manifest.get('input_sha256') != expected:
             raise ValueError('Planning grid sources changed; regenerate the complete grid')
         files = manifest.get('files', {})
         if set(files) != self.codes:
             raise ValueError('Planning grid cohort mismatch')
-        paths = {}
+        paths = {}; availability = {}
+        if manifest.get('horizon_days') != 84:
+            raise ValueError('Planning grid must match the 12-week forecast horizon')
         for code, expected_hash in files.items():
             path = directory / f'{code}.json'
             if not path.is_file() or digest(path) != expected_hash:
@@ -198,26 +200,50 @@ class Snapshot:
             record = read_json(path)
             if record.get('org_code') != code or record.get('issue_date') != self.issue_date:
                 raise ValueError(f'Planning grid record does not match its trust or date: {code}')
+            if record.get('schema_version') != 2:
+                raise ValueError(f'Planning grid schema differs from the manifest: {code}')
             if record.get('input_sha256') != expected:
                 raise ValueError(f'Planning grid record uses different sources: {code}')
             if record.get('status') not in {'ready', 'unavailable'}:
                 raise ValueError(f'Unexpected planning grid status: {code}')
             if record['status'] == 'ready':
+                if record.get('horizon_days') != 84 or record.get('day_offsets') != list(range(0, 85, 7)):
+                    raise ValueError(f'Planning grid does not use the 12-week calendar: {code}')
+                if not record.get('eligibility', {}).get('eligible', False):
+                    raise ValueError(f'Planning grid is ready without simulator eligibility: {code}')
                 if record.get('capacity_percent') != manifest.get('capacity_percent'):
                     raise ValueError(f'Planning grid doses differ from the manifest: {code}')
                 if len(record.get('scenarios', [])) != 8:
                     raise ValueError(f'Planning grid shock combinations are incomplete: {code}')
             paths[code] = path
+            availability[code] = dict(status=record['status'], reason=record.get('reason'), eligibility=record.get('eligibility', {}))
         self.planning_paths = paths
+        self.planning_availability = availability
 
-    @lru_cache(maxsize=256)
+    @lru_cache(maxsize=16)
     def decision(self, code: str) -> dict:
-        """Serve a cached exact scenario grid; no fitting or simulation on request."""
-        result = {**self.meta, **self.indexes['decision_support'][code]}
+        """Serve forecast-anchored plans; keep absolute simulations in Evidence."""
+        absolute = self.indexes['decision_support'][code]
+        fields = ['org_code', 'name', 'prior_conflict', 'acceptable_fit', 'treatment_label',
+                  'treatment_label_caveat', 'bottleneck_label', 'assumptions']
+        result = {**self.meta, **{key: absolute[key] for key in fields if key in absolute}}
+        result['absolute_simulator_evidence'] = absolute
+        # Historical six-month experiment settings belong only to the evidence.
+        result['assumptions'] = {key: value for key, value in absolute.get('assumptions', {}).items()
+                                 if key not in {'scenario_grid', 'experiment', 'interpretation'}}
         result['planning_consistency'] = planning_consistency(
-            self.indexes['forecasts_latest'][code], self.indexes['decision_support'][code], self.issue_date)
-        if code in self.planning_paths:
-            result['planning_grid'] = read_json(self.planning_paths[code])
+            self.indexes['forecasts_latest'][code], absolute, self.issue_date)
+        result['method'] = ('Recovery plans use the forecast for the level and the queue model '
+                            'for the effect of a change, so the two never contradict.')
+        grid = read_json(self.planning_paths[code]) if code in self.planning_paths else None
+        if grid is None:
+            result.update(status='unavailable', reason='The forecast-anchored planning grid has not been built.',
+                          eligibility=dict(eligible=False, reason_codes=['planning_grid_missing'],
+                              reasons=['The forecast-anchored planning grid has not been built.']))
+        else:
+            result.update(status=grid['status'], reason=grid.get('reason'),
+                          eligibility=grid.get('eligibility', {}), planning_grid=grid,
+                          horizon_days=84)
         return result
 
     def make_trusts(self) -> dict:
@@ -240,7 +266,7 @@ class Snapshot:
                 bottleneck_label=evidence['label'], confidence=evidence['confidence'],
                 evidence_status=evidence['evidence_status'],
                 forecast_status=forecast['status'], growth_signal=point.get('growth_signal', 'unclear'),
-                decision_status=decision['status'], prior_conflict=decision.get('prior_conflict', False),
+                decision_status=self.planning_availability.get(code, {}).get('status', 'unavailable'), prior_conflict=decision.get('prior_conflict', False),
                 treatment_label=decision.get('treatment_label', 'Treatment capacity')))
         return dict(**self.meta, trusts=result)
 
@@ -306,8 +332,15 @@ class Snapshot:
                 national='Observed official England totals only. No national forecast is supplied.'))
 
     def make_histories(self) -> dict[str, dict]:
-        frame = load_harmonized('cwt_trust_month')
-        frame = frame.loc[frame.published_on.le(pd.Timestamp(self.issue_date)) & frame.cancer_type.eq('ALL CANCERS')]
+        # Read only the completed-pathway evidence shown by this route. Filtering
+        # before harmonisation preserves the ALL CANCERS sums while avoiding a
+        # full per-cancer, per-modality dataframe in every API worker.
+        columns = ['org_code', 'org_name', 'period', 'published_on', 'cancer_type',
+                   'd62_usc_total', *['d62_usc_' + suffix for suffix, _ in BANDS]]
+        raw = pd.read_parquet(PROCESSED_DIR / 'cwt_trust_month.parquet', columns=columns,
+                              filters=[('cancer_type', '=', 'ALL CANCERS')])
+        frame = harmonize(raw, 'cwt_trust_month')
+        frame = frame.loc[frame.published_on.le(pd.Timestamp(self.issue_date))]
         result = {}
         for code in sorted(self.codes):
             months = []
@@ -338,23 +371,27 @@ class Snapshot:
             model_forecasts=dict(enabled=False, reason='No validated complete-England model forecast'),
             interpretation='Official observed England backlog. National No-DTT/With-DTT is not an observed trust-level split.')
 
-    @lru_cache(maxsize=512)
+    @lru_cache(maxsize=128)
     def select_experiment(self, code: str, scenario: str, stage: str, dose: int) -> dict:
-        trust = self.indexes['decision_support'][code]
-        if not dose:
-            stage = 'none'
-        key = scenario if stage == 'none' else f'strike_plus_{stage}'
-        plan = next((p for p in trust['scenario_comparison']
-                     if p['key'] == key and p.get('extra_capacity_pct', 0) == dose), None)
-        common = dict(**self.meta, org_code=code, scenario=scenario, stage=stage,
-            extra_capacity_pct=dose, horizon_days=182, precomputed=True,
+        """Return an exact 12-week paired-effect plan, never an old absolute path."""
+        trust = self.decision(code)
+        grid = trust.get('planning_grid')
+        if trust['status'] != 'ready' or not grid:
+            raise ValueError(trust.get('reason') or 'Recovery planning is unavailable for this hospital')
+        key = {'baseline': 'none', 'winter_dip': 'winter', 'referral_surge': 'surge'}.get(scenario, scenario)
+        selected = next((entry for entry in grid['scenarios'] if entry['key'] == key), None)
+        chosen_stage = 'diagnosis' if dose == 0 else stage
+        if selected is None or chosen_stage not in {'diagnosis', 'treatment'}:
+            raise ValueError('That experiment has not been precomputed')
+        plan = next((entry for entry in selected['plans'][chosen_stage]
+                     if entry['extra_capacity_pct'] == dose), None)
+        if plan is None:
+            raise ValueError('That experiment has not been precomputed')
+        return dict(**self.meta, org_code=code, scenario=scenario, scenario_key=key,
+            stage='none' if dose == 0 else stage, extra_capacity_pct=dose,
+            horizon_days=84, precomputed=True, result_kind='trajectory',
             prior_conflict=trust.get('prior_conflict', False),
-            treatment_label=trust.get('treatment_label'), assumptions=trust['assumptions'])
-        if plan is not None:
-            return dict(**common, result_kind='trajectory', result=plan)
-        if scenario == 'strike' and stage in {'diagnosis', 'treatment'}:
-            point = next((p for p in trust['dose_response'][stage] if p['extra_capacity_pct'] == dose), None)
-            if point is not None:
-                return dict(**common, result_kind='six_month_dose_point', result=point,
-                    note='Only the six-month endpoint is precomputed at this dose; no trajectory is interpolated.')
-        raise ValueError('That experiment has not been precomputed')
+            treatment_label=trust.get('treatment_label'), assumptions=grid['assumptions'],
+            method=trust['method'], forecast_path=grid['forecast_path'],
+            pressure_delta=selected.get('pressure_delta'),
+            result={**plan, 'dates': grid['dates'], 'day_offsets': grid['day_offsets']})
