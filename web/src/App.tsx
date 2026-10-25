@@ -10,6 +10,7 @@ import Evidence, { DemoDetails, MapDetails } from './Evidence';
 type View='home'|'map'|'hospital'|'plan'|'evidence';
 type OpenDrawer='map'|'hospital'|'assumptions'|'demo'|null;
 const validViews=['home','map','hospital','plan','evidence'];
+const demoUrl='https://www.youtube.com/watch?v=L5Cd3Bld5f8';
 export default function App() {
   const initial=useRef(new URLSearchParams(window.location.search));
   const requested=initial.current.get('view') || 'home';
@@ -102,9 +103,9 @@ export default function App() {
   const openPlan=()=>navigate('plan');
   const retryData=()=>{setError('');cache.current.clear();setRetry(r=>r+1);};
   return <div className={`clock-journey ${isEvidence?'showing-evidence':''}`}><a className="skip-link" href="#map">Skip to the hospital map</a>
-    {!isEvidence&&<Landing total={national.latest?.total??map?.national?.latest?.total??null} reportedDate={national.latest?.week_ending??map?.latest_observed_week??null} onExplore={()=>navigate('map')} onEvidence={()=>navigate('evidence')} onAbout={()=>setDrawer('demo')}/>}
+    {!isEvidence&&<Landing total={national.latest?.total??map?.national?.latest?.total??null} reportedDate={national.latest?.week_ending??map?.latest_observed_week??null} demoUrl={demoUrl} onExplore={()=>navigate('map')} onEvidence={()=>navigate('evidence')} onAbout={()=>setDrawer('demo')}/>}
     <div className="journey-tool">
-      <header className="app-header atlas-header journey-header"><button className="brand" onClick={()=>navigate('home')} aria-label="Cancer Clock home"><span className="brand-mark"><Icon name="clock" size={29}/></span><span>Cancer Clock</span></button><nav className="atlas-nav" aria-label="Main navigation"><button className={activeSection==='map'?'active':''} onClick={()=>navigate('map')}>Find a hospital</button>{hasSelection&&<button className={activeSection==='hospital'?'active':''} onClick={()=>navigate('hospital')}>Hospital outlook</button>}{hasSelection&&<button className={activeSection==='plan'?'active':''} onClick={openPlan}>Recovery plan</button>}<button className={isEvidence?'active':''} onClick={()=>navigate('evidence')}>Evidence</button></nav><button className="journey-about" onClick={()=>setDrawer('demo')}>About <Icon name="info" size={16}/></button></header>
+      <header className="app-header atlas-header journey-header"><button className="brand" onClick={()=>navigate('home')} aria-label="Cancer Clock home"><span className="brand-mark"><Icon name="clock" size={29}/></span><span>Cancer Clock</span></button><nav className="atlas-nav" aria-label="Main navigation"><button className={activeSection==='map'?'active':''} onClick={()=>navigate('map')}>Find a hospital</button>{hasSelection&&<button className={activeSection==='hospital'?'active':''} onClick={()=>navigate('hospital')}>Hospital outlook</button>}{hasSelection&&<button className={activeSection==='plan'?'active':''} onClick={openPlan}>Recovery plan</button>}<button className={isEvidence?'active':''} onClick={()=>navigate('evidence')}>Evidence</button></nav><a className="journey-about quiet-link" href={demoUrl} target="_blank" rel="noopener noreferrer" aria-label="Play demo on YouTube (opens in a new tab)">Play demo <Icon name="play" size={16}/></a></header>
       <main id="main">
         {isEvidence?<div id="evidence" tabIndex={-1} className="journey-section">{error?<section className="app-error panel" role="alert"><h2>We couldn’t open the evidence.</h2><p>{error}</p><button className="primary-button" onClick={retryData}>Try again</button></section>:!map?<section className="opening-screen" role="status"><h2>Opening the evidence…</h2></section>:<Evidence data={backtest} national={national} onBack={()=>navigate('map')}/>}</div>:<>
           <div id="map" tabIndex={-1} className="journey-section journey-map-section">

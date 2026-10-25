@@ -5,6 +5,7 @@ import './landing.css';
 type Props = {
   total: number | null;
   reportedDate: string | null;
+  demoUrl: string;
   onExplore: () => void;
   onEvidence: () => void;
   onAbout: () => void;
@@ -26,7 +27,7 @@ function ringArc(start: number, end: number) {
   return `M${a[0]},${a[1]} A${outer},${outer} 0 ${large} 1 ${b[0]},${b[1]} L${c[0]},${c[1]} A${inner},${inner} 0 ${large} 0 ${d[0]},${d[1]} Z`;
 }
 
-export default function Landing({total, reportedDate, onExplore, onEvidence, onAbout}: Props) {
+export default function Landing({total, reportedDate, demoUrl, onExplore, onEvidence, onAbout}: Props) {
   const reduced = useReducedMotion();
   const root = useRef<HTMLElement>(null);
   const [elapsed, setElapsed] = useState(reduced ? 4700 : 0);
@@ -84,6 +85,7 @@ export default function Landing({total, reportedDate, onExplore, onEvidence, onA
       <nav className="landing-topnav" aria-label="Introduction navigation">
         <button type="button" onClick={onExplore}>England</button>
         <button type="button" onClick={onEvidence}>How we know</button>
+        <a href={demoUrl} target="_blank" rel="noopener noreferrer" aria-label="Play demo on YouTube (opens in a new tab)">Play demo</a>
       </nav>
     </header>
     <div className="landing-hero" key={cycle}>
